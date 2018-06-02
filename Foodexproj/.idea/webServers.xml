@@ -5,6 +5,9 @@
       <webServer id="c7629314-6b98-48bb-8b89-84d0df5b57dc" name="hostolt" url="http://localhost">
         <fileTransfer mountedRoot="D:\Users\gatsj\Documents\git\Foodex\hostolt" accessType="MOUNT" />
       </webServer>
+      <webServer id="cb5732ed-0024-488d-b455-ca8d67cf31d7" name="XAMPP foodex" url="http://localhost">
+        <fileTransfer mountedRoot="D:\xampp\htdocs\foodex" accessType="MOUNT" />
+      </webServer>
     </option>
   </component>
 </project>

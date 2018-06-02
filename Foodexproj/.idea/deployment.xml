@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="IninetFeverkillFoodex">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="XAMPP foodex">
     <serverData>
       <paths name="IninetFeverkillFoodex">
         <serverdata>
           <mappings>
             <mapping deploy="/bme/foodex" local="$PROJECT_DIR$" web="/bme/foodex" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="XAMPP foodex">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

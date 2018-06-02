@@ -101,23 +101,28 @@ abstract class AbstractProvider
      */
     public function __construct(array $options = [], array $collaborators = [])
     {
-        foreach ($options as $option => $value) {
-            if (property_exists($this, $option)) {
+        foreach ($options as $option => $value)
+        {
+            if (property_exists($this, $option))
+            {
                 $this->{$option} = $value;
             }
         }
 
-        if (empty($collaborators['grantFactory'])) {
+        if (empty($collaborators['grantFactory']))
+        {
             $collaborators['grantFactory'] = new GrantFactory();
         }
         $this->setGrantFactory($collaborators['grantFactory']);
 
-        if (empty($collaborators['requestFactory'])) {
+        if (empty($collaborators['requestFactory']))
+        {
             $collaborators['requestFactory'] = new RequestFactory();
         }
         $this->setRequestFactory($collaborators['requestFactory']);
 
-        if (empty($collaborators['httpClient'])) {
+        if (empty($collaborators['httpClient']))
+        {
             $client_options = $this->getAllowedClientOptions($options);
 
             $collaborators['httpClient'] = new HttpClient(
@@ -140,7 +145,8 @@ abstract class AbstractProvider
         $client_options = ['timeout', 'proxy'];
 
         // Only allow turning off ssl verification if it's for a proxy
-        if (!empty($options['proxy'])) {
+        if (!empty($options['proxy']))
+        {
             $client_options[] = 'verify';
         }
 
@@ -298,20 +304,23 @@ abstract class AbstractProvider
      */
     protected function getAuthorizationParameters(array $options)
     {
-        if (empty($options['state'])) {
+        if (empty($options['state']))
+        {
             $options['state'] = $this->getRandomState();
         }
 
-        if (empty($options['scope'])) {
+        if (empty($options['scope']))
+        {
             $options['scope'] = $this->getDefaultScopes();
         }
 
         $options += [
-            'response_type'   => 'code',
+            'response_type' => 'code',
             'approval_prompt' => 'auto'
         ];
 
-        if (is_array($options['scope'])) {
+        if (is_array($options['scope']))
+        {
             $separator = $this->getScopeSeparator();
             $options['scope'] = implode($separator, $options['scope']);
         }
@@ -321,7 +330,8 @@ abstract class AbstractProvider
 
         // Business code layer might set a different redirect_uri parameter
         // depending on the context, leave it as-is
-        if (!isset($options['redirect_uri'])) {
+        if (!isset($options['redirect_uri']))
+        {
             $options['redirect_uri'] = $this->redirectUri;
         }
 
@@ -349,9 +359,9 @@ abstract class AbstractProvider
      */
     public function getAuthorizationUrl(array $options = [])
     {
-        $base   = $this->getBaseAuthorizationUrl();
+        $base = $this->getBaseAuthorizationUrl();
         $params = $this->getAuthorizationParameters($options);
-        $query  = $this->getAuthorizationQuery($params);
+        $query = $this->getAuthorizationQuery($params);
 
         return $this->appendQuery($base, $query);
     }
@@ -366,9 +376,11 @@ abstract class AbstractProvider
     public function authorize(
         array $options = [],
         callable $redirectHandler = null
-    ) {
+    )
+    {
         $url = $this->getAuthorizationUrl($options);
-        if ($redirectHandler) {
+        if ($redirectHandler)
+        {
             return $redirectHandler($url, $this);
         }
 
@@ -389,7 +401,8 @@ abstract class AbstractProvider
     {
         $query = trim($query, '?&');
 
-        if ($query) {
+        if ($query)
+        {
             $glue = strstr($url, '?') === false ? '?' : '&';
             return $url . $glue . $query;
         }
@@ -437,7 +450,8 @@ abstract class AbstractProvider
      */
     protected function verifyGrant($grant)
     {
-        if (is_string($grant)) {
+        if (is_string($grant))
+        {
             return $this->grantFactory->getGrant($grant);
         }
 
@@ -455,7 +469,8 @@ abstract class AbstractProvider
     {
         $url = $this->getBaseAccessTokenUrl($params);
 
-        if ($this->getAccessTokenMethod() === self::METHOD_GET) {
+        if ($this->getAccessTokenMethod() === self::METHOD_GET)
+        {
             $query = $this->getAccessTokenQuery($params);
             return $this->appendQuery($url, $query);
         }
@@ -484,7 +499,8 @@ abstract class AbstractProvider
     {
         $options = ['headers' => ['content-type' => 'application/x-www-form-urlencoded']];
 
-        if ($this->getAccessTokenMethod() === self::METHOD_POST) {
+        if ($this->getAccessTokenMethod() === self::METHOD_POST)
+        {
             $options['body'] = $this->getAccessTokenBody($params);
         }
 
@@ -499,8 +515,8 @@ abstract class AbstractProvider
      */
     protected function getAccessTokenRequest(array $params)
     {
-        $method  = $this->getAccessTokenMethod();
-        $url     = $this->getAccessTokenUrl($params);
+        $method = $this->getAccessTokenMethod();
+        $url = $this->getAccessTokenUrl($params);
         $options = $this->getAccessTokenOptions($params);
 
         return $this->getRequest($method, $url, $options);
@@ -518,16 +534,16 @@ abstract class AbstractProvider
         $grant = $this->verifyGrant($grant);
 
         $params = [
-            'client_id'     => $this->clientId,
+            'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
-            'redirect_uri'  => $this->redirectUri,
+            'redirect_uri' => $this->redirectUri,
         ];
 
-        $params   = $grant->prepareRequestParameters($params, $options);
-        $request  = $this->getAccessTokenRequest($params);
+        $params = $grant->prepareRequestParameters($params, $options);
+        $request = $this->getAccessTokenRequest($params);
         $response = $this->getParsedResponse($request);
         $prepared = $this->prepareAccessTokenResponse($response);
-        $token    = $this->createAccessToken($prepared, $grant);
+        $token = $this->createAccessToken($prepared, $grant);
 
         return $token;
     }
@@ -602,9 +618,12 @@ abstract class AbstractProvider
      */
     public function getParsedResponse(RequestInterface $request)
     {
-        try {
+        try
+        {
             $response = $this->getResponse($request);
-        } catch (BadResponseException $e) {
+        }
+        catch (BadResponseException $e)
+        {
             $response = $e->getResponse();
         }
 
@@ -626,7 +645,8 @@ abstract class AbstractProvider
     {
         $content = json_decode($content, true);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE)
+        {
             throw new UnexpectedValueException(sprintf(
                 "Failed to parse JSON response: %s",
                 json_last_error_msg()
@@ -644,7 +664,7 @@ abstract class AbstractProvider
      */
     protected function getContentType(ResponseInterface $response)
     {
-        return join(';', (array) $response->getHeader('content-type'));
+        return join(';', (array)$response->getHeader('content-type'));
     }
 
     /**
@@ -656,10 +676,11 @@ abstract class AbstractProvider
      */
     protected function parseResponse(ResponseInterface $response)
     {
-        $content = (string) $response->getBody();
+        $content = (string)$response->getBody();
         $type = $this->getContentType($response);
 
-        if (strpos($type, 'urlencoded') !== false) {
+        if (strpos($type, 'urlencoded') !== false)
+        {
             parse_str($content, $parsed);
             return $parsed;
         }
@@ -667,14 +688,19 @@ abstract class AbstractProvider
         // Attempt to parse the string as JSON regardless of content type,
         // since some providers use non-standard content types. Only throw an
         // exception if the JSON could not be parsed when it was expected to.
-        try {
+        try
+        {
             return $this->parseJson($content);
-        } catch (UnexpectedValueException $e) {
-            if (strpos($type, 'json') !== false) {
+        }
+        catch (UnexpectedValueException $e)
+        {
+            if (strpos($type, 'json') !== false)
+            {
                 throw $e;
             }
 
-            if ($response->getStatusCode() == 500) {
+            if ($response->getStatusCode() == 500)
+            {
                 throw new UnexpectedValueException(
                     'An OAuth server error was encountered that did not contain a JSON body',
                     0,
@@ -707,7 +733,8 @@ abstract class AbstractProvider
      */
     protected function prepareAccessTokenResponse(array $result)
     {
-        if ($this->getAccessTokenResourceOwnerId() !== null) {
+        if ($this->getAccessTokenResourceOwnerId() !== null)
+        {
             $result['resource_owner_id'] = $this->getValueByKey(
                 $result,
                 $this->getAccessTokenResourceOwnerId()
@@ -768,7 +795,8 @@ abstract class AbstractProvider
 
         $response = $this->getParsedResponse($request);
 
-        if (false === is_array($response)) {
+        if (false === is_array($response))
+        {
             throw new UnexpectedValueException(
                 'Invalid response received from Authorization Server. Expected JSON.'
             );
@@ -816,7 +844,8 @@ abstract class AbstractProvider
      */
     public function getHeaders($token = null)
     {
-        if ($token) {
+        if ($token)
+        {
             return array_merge(
                 $this->getDefaultHeaders(),
                 $this->getAuthorizationHeaders($token)

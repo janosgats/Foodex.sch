@@ -1,20 +1,22 @@
 <?php
 set_include_path(getcwd());
 
-include 'Eszkozok/includer.php';
+//include 'Eszkozok/includer.php';
 
 require 'vendor/autoload.php';
 
 //Eszkozok\Includer::include_oauth2_client();
 
+include 'Eszkozok/AuthSchProvider.php';
 
-$provider = new \League\OAuth2\Client\Provider\GenericProvider([
+$provider = new \Eszkozok\AuthSchProvider([
     'clientId' => '***REMOVED***',    // The client ID assigned to you by the provider
     'clientSecret' => '***REMOVED***',   // The client password assigned to you by the provider
     'redirectUri' => 'https://feverkill.com/bme/foodex/login.php',
     'urlAuthorize' => 'https://auth.sch.bme.hu/site/login',
     'urlAccessToken' => 'https://auth.sch.bme.hu/oauth2/token',
-    'urlResourceOwnerDetails' => 'https://auth.sch.bme.hu/oauth2/resource'
+    'urlResourceOwnerDetails' => 'https://auth.sch.bme.hu/api/profile',
+    'scopes' => ['sn','displayName']
 ]);
 
 //var_dump($provider);
@@ -53,8 +55,12 @@ else
 
     try
     {
+
+        echo "előtte";
         // Try to get an access token using the authorization code grant.
         $accessToken = $provider->getAccessToken('authorization_code', ['code' => $_GET['code']]);
+
+        echo "utána";
 
         // We have an access token, which we may use in authenticated
         // requests against the service provider's API.
@@ -65,18 +71,34 @@ else
 
         // Using the access token, we may look up details about the
         // resource owner.
+
+         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://auth.sch.bme.hu/api/profile/?access_token=" . $accessToken);
+        // Set so curl_exec returns the result instead of outputting it.
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Get the response and close the channel.
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        echo "<br><br><br><br><br>";
+        echo "CURL RESPONSE: " . $response;
+        echo "<br><br><br><br><br><br><br>";
         $resourceOwner = $provider->getResourceOwner($accessToken);
 
         var_export($resourceOwner->toArray());
-
+        echo "<br><br><br><br><br><br><br>";
         // The provider provides a way to get an authenticated API request for
         // the service, using the access token; it returns an object conforming
         // to Psr\Http\Message\RequestInterface.
         $request = $provider->getAuthenticatedRequest(
             'GET',
-            'http://brentertainment.com/oauth2/lockdin/resource',
+            'https://auth.sch.bme.hu/api/profile',
             $accessToken
         );
+
+        $client = new \GuzzleHttp\Client();
+        $response = $client->send($request);
+        var_dump($response);
 
     }
     catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e)
