@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+set_include_path(getcwd());
+include_once 'Eszkozok/Eszk.php';
+
+if(isset($_SESSION['profilint_id']))
+{
+    Eszkozok\Eszk::RedirectUnderRoot('profil');
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -22,7 +35,7 @@
         </a>
         </div>
 
-    <form action="login.php" method="get">
+    <form action="login.php" method="post">
     <input type="input" name="muvelet" value="startlogin" hidden>
 
     <div style="horiz-align: center; text-align: center; padding-top: 10vh">
