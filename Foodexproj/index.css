@@ -1,8 +1,27 @@
 body {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
-  margin: 70px;
   background: #f1f1f1;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.outer {
+  display: table;
+  position: absolute;
+  height: 80%;
+  width: 100%;
+}
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+.inner {
+  margin-left: auto;
+  margin-right: auto;
+  /*whatever width you want*/
+}
+.fxlogo {
+  width: 276.25px;
 }
 .button {
   display: inline-block;

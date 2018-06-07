@@ -1,9 +1,12 @@
 <?php
-
 namespace Eszkozok
 {
+    //echo 'include path: ' . get_include_path();
 
-    set_include_path(getcwd());
+    use GuzzleHttp\Exception\ConnectException;
+    use Profil\Profil;
+
+
 //require_once '../vendor/autoload.php';
 //include_once './AuthSchProvider.php';
 
@@ -22,6 +25,63 @@ namespace Eszkozok
 
             return $conn;
         }
+
+        public static function GetBejelentkezettProfilAdat()
+        {
+
+            if (!isset($_SESSION['profilint_id']))
+                self::RedirectUnderRoot('');
+
+            $internal_id = $_SESSION['profilint_id'];
+
+
+            $ProfilNev = "";
+            $UjMuszakJog = 0;
+            try
+            {
+                $conn = self::initMySqliObject();
+
+                if (!$conn)
+                    throw new \Exception('$conn is \'false\'');
+
+                $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
+                if (!$stmt)
+                    throw new \Exception('$stmt is \'false\'');
+
+                $stmt->bind_param('s', $internal_id);
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows == 1)//Még nem regisztrált
+                    {
+                        $row = $result->fetch_assoc();
+
+                        if (isset($row['nev']))
+                            $ProfilNev = $row['nev'];
+                        if (isset($row['ujmuszakjog']))
+                            $UjMuszakJog = $row['ujmuszakjog'];
+
+                    }
+                    else
+                    {
+                        unset($_SESSION['profilint_id']);
+                        throw new \Exception('$result->num_rows != 1');
+                    }
+                }
+            }
+            catch (\Exception $e)
+            {
+                self::dieToErrorPage('1220: ' . $e->getMessage());
+            }
+
+            $end = get_included_files();
+            set_include_path(dirname(end($end)));
+            include_once "../profil/Profil.php";
+            return new Profil($ProfilNev, $UjMuszakJog);
+        }
+
         public static function initNewAuthSchProvider()
         {
             $redirectUri = "https://feverkill.com/bme/foodex/login.php";
@@ -129,7 +189,7 @@ namespace Eszkozok
                 if ($_SESSION["InvalidStateCounter"] > 4)
                 {
                     unset($_SESSION["InvalidStateCounter"]);
-                    exit('Invalid state');
+                    self::dieToErrorPage('991: Invalid state');
                 }
                 else
                     self::RedirectUnderRoot('login.php');
@@ -205,7 +265,8 @@ namespace Eszkozok
                 {
 
                     // Failed to get the access token or user details.
-                    exit($e->getMessage());
+
+                    self::dieToErrorPage('996: ' . $e->getMessage());
 
                 }
 
@@ -229,11 +290,11 @@ namespace Eszkozok
 
                 $conn = self::initMySqliObject();
 
-                if(!$conn)
+                if (!$conn)
                     throw new \Exception('$conn is \'false\'');
 
                 $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
-                if(!$stmt)
+                if (!$stmt)
                     throw new \Exception('$stmt is \'false\'');
 
                 $stmt->bind_param('s', $internal_id);
@@ -344,11 +405,70 @@ namespace Eszkozok
         public static function RedirectUnderRoot($relurl)
         {
             ob_clean();
-            $url = self::GetRootURL() . $relurl;
+            $rooturl = self::GetRootURL();
+            $url = $rooturl . $relurl;
+
+            try
+            {
+                $tort = explode('?', $relurl);
+                $relurlcsakurl = $tort[0];
+
+                $urlparamnelkul = $rooturl . $relurlcsakurl;
+
+
+                $params = [];
+
+                if (count($tort) > 1)
+                    $params = explode('&', $tort[1]);
+
+                $parampairs = [];
+                for ($i = 0; $i < count($params); ++$i)
+                {
+                    $parampairs[$i] = explode('=', $params[$i]);
+                }
+
+            }
+            catch (\Exception $e)
+            {
+                echo $e->getMessage();
+            }
+
+
             header('Location: ' . $url);
             ?>
             <script>
                 window.location.replace(<?php echo $url;?>);
+            </script>
+            <form id="formtosubmitabc9871215487" action="<?php echo $urlparamnelkul; ?>" style="display: none">
+                <?php
+                if (isset($parampairs))
+                {
+                    foreach ($parampairs as $pair)
+                    {
+                        if (isset($pair[0]) && isset($pair[1]))
+                        {
+                            ?>
+                            <input type="input" name="<?php echo $pair[0]; ?>" value="<?php echo $pair[1]; ?>" hidden>
+                            <?php
+                        }
+                    }
+                }
+                ?>
+            </form>
+            <script>
+                function redirectfromsubmitter()
+                {
+                    document.getElementById("formtosubmitabc9871215487").submit();
+                }
+                window.onload = function ()
+                {
+                    setTimeout(redirectfromsubmitter, 1);
+                    setTimeout(redirectfromsubmitter, 30);
+                    setTimeout(redirectfromsubmitter, 200);
+                    setTimeout(redirectfromsubmitter, 700);
+                    setTimeout(redirectfromsubmitter, 2000);
+                    setTimeout(redirectfromsubmitter, 5000);
+                };
             </script>
             <?php
             die('Navigate to: <a href="' . $url . '">' . $url . '</a>!');
