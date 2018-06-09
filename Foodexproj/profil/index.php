@@ -34,7 +34,7 @@ Bejelentkezve: <?php echo $AktProfil->getNev(); ?>
 if($AktProfil->getUjMuszakJog() == 1)
 {
     ?>
-    <a href = "#"> Új műszak kiírása</a>
+    <a href = "../ujmuszak"> Új műszak kiírása</a>
     <?php
 }
 ?>

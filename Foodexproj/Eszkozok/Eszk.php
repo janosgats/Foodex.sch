@@ -291,11 +291,11 @@ namespace Eszkozok
                 $conn = self::initMySqliObject();
 
                 if (!$conn)
-                    throw new \Exception('$conn is \'false\'');
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
 
                 $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
                 if (!$stmt)
-                    throw new \Exception('$stmt is \'false\'');
+                    throw new \Exception('SQL hiba: $stmt is \'false\'');
 
                 $stmt->bind_param('s', $internal_id);
 

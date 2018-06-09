@@ -315,7 +315,7 @@
     <br><br><br>
 
     <div class="context primary-text-color" style="padding-top: 0; margin-top: 0">
-        <p><?php if (IsParamSet('code')) echo '<span style="display: inline;font-style: italic">kód: ' . htmlspecialchars(urldecode(GetParam('code'))) . '<br></span>'; ?></p>
+        <p><?php if (IsParamSet('code')) echo '<span style="display: inline;font-style: italic">' . htmlspecialchars(urldecode(GetParam('code'))) . '<br></span>'; ?></p>
     </div>
 </div>
 
