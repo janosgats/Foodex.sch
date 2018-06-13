@@ -35,6 +35,10 @@ namespace Eszkozok
             $internal_id = $_SESSION['profilint_id'];
 
 
+            return self::GetTaroltProfilAdat($internal_id);
+        }
+        public static function GetTaroltProfilAdat($internal_id)
+        {
             $ProfilNev = "";
             $UjMuszakJog = 0;
             try
@@ -79,7 +83,7 @@ namespace Eszkozok
             $end = get_included_files();
             set_include_path(dirname(end($end)));
             include_once "../profil/Profil.php";
-            return new Profil($ProfilNev, $UjMuszakJog);
+            return new Profil($internal_id, $ProfilNev, $UjMuszakJog);
         }
 
         public static function initNewAuthSchProvider()
@@ -404,73 +408,80 @@ namespace Eszkozok
 
         public static function RedirectUnderRoot($relurl)
         {
-            ob_clean();
-            $rooturl = self::GetRootURL();
-            $url = $rooturl . $relurl;
-
             try
             {
-                $tort = explode('?', $relurl);
-                $relurlcsakurl = $tort[0];
+                ob_clean();
+                $rooturl = self::GetRootURL();
+                $url = $rooturl . $relurl;
 
-                $urlparamnelkul = $rooturl . $relurlcsakurl;
-
-
-                $params = [];
-
-                if (count($tort) > 1)
-                    $params = explode('&', $tort[1]);
-
-                $parampairs = [];
-                for ($i = 0; $i < count($params); ++$i)
+                try
                 {
-                    $parampairs[$i] = explode('=', $params[$i]);
+                    $tort = explode('?', $relurl);
+                    $relurlcsakurl = $tort[0];
+
+                    $urlparamnelkul = $rooturl . $relurlcsakurl;
+
+
+                    $params = [];
+
+                    if (count($tort) > 1)
+                        $params = explode('&', $tort[1]);
+
+                    $parampairs = [];
+                    for ($i = 0; $i < count($params); ++$i)
+                    {
+                        $parampairs[$i] = explode('=', $params[$i]);
+                    }
+
+                }
+                catch (\Exception $e)
+                {
+                    echo $e->getMessage();
                 }
 
+                ob_clean();
+                header('Location: ' . $url);
+                ?>
+                <script>
+                    window.location.replace(<?php echo $url;?>);
+                </script>
+                <form id="formtosubmitabc9871215487" action="<?php echo $urlparamnelkul; ?>" style="display: none">
+                    <?php
+                    if (isset($parampairs))
+                    {
+                        foreach ($parampairs as $pair)
+                        {
+                            if (isset($pair[0]) && isset($pair[1]))
+                            {
+                                ?>
+                                <input type="input" name="<?php echo $pair[0]; ?>" value="<?php echo $pair[1]; ?>"
+                                       hidden>
+                                <?php
+                            }
+                        }
+                    }
+                    ?>
+                </form>
+                <script>
+                    function redirectfromsubmitter()
+                    {
+                        document.getElementById("formtosubmitabc9871215487").submit();
+                    }
+                    window.onload = function ()
+                    {
+                        setTimeout(redirectfromsubmitter, 1);
+                        setTimeout(redirectfromsubmitter, 30);
+                        setTimeout(redirectfromsubmitter, 200);
+                        setTimeout(redirectfromsubmitter, 700);
+                        setTimeout(redirectfromsubmitter, 2000);
+                        setTimeout(redirectfromsubmitter, 5000);
+                    };
+                </script>
+                <?php
             }
             catch (\Exception $e)
             {
-                echo $e->getMessage();
             }
-
-
-            header('Location: ' . $url);
-            ?>
-            <script>
-                window.location.replace(<?php echo $url;?>);
-            </script>
-            <form id="formtosubmitabc9871215487" action="<?php echo $urlparamnelkul; ?>" style="display: none">
-                <?php
-                if (isset($parampairs))
-                {
-                    foreach ($parampairs as $pair)
-                    {
-                        if (isset($pair[0]) && isset($pair[1]))
-                        {
-                            ?>
-                            <input type="input" name="<?php echo $pair[0]; ?>" value="<?php echo $pair[1]; ?>" hidden>
-                            <?php
-                        }
-                    }
-                }
-                ?>
-            </form>
-            <script>
-                function redirectfromsubmitter()
-                {
-                    document.getElementById("formtosubmitabc9871215487").submit();
-                }
-                window.onload = function ()
-                {
-                    setTimeout(redirectfromsubmitter, 1);
-                    setTimeout(redirectfromsubmitter, 30);
-                    setTimeout(redirectfromsubmitter, 200);
-                    setTimeout(redirectfromsubmitter, 700);
-                    setTimeout(redirectfromsubmitter, 2000);
-                    setTimeout(redirectfromsubmitter, 5000);
-                };
-            </script>
-            <?php
             die('Navigate to: <a href="' . $url . '">' . $url . '</a>!');
         }
 

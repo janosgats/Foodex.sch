@@ -6,10 +6,13 @@ namespace Profil;
 
 class Profil
 {
-    private $Nev = "";
+    private $InternalID = '';
+    private $Nev = '';
     private $UjMuszakJog = 0;
-    public function __construct($nev, $ujmuszakjog)
+
+    public function __construct($internalid, $nev, $ujmuszakjog)
     {
+        $this->InternalID = $internalid;
         $this->Nev = $nev;
         $this->UjMuszakJog = $ujmuszakjog;
     }
@@ -18,8 +21,14 @@ class Profil
     {
         return $this->Nev;
     }
+
     public function getUjMuszakJog()
     {
         return $this->UjMuszakJog;
+    }
+
+    public function getInternalID()
+    {
+        return $this->InternalID;
     }
 }

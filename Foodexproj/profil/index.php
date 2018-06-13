@@ -39,7 +39,7 @@ if($AktProfil->getUjMuszakJog() == 1)
 }
 ?>
 <br>
-<a href = "#"> Jelentkezés műszakra</a>
+<a href = "../jelentkezes"> Jelentkezés műszakra</a>
 </body>
 
 </html>

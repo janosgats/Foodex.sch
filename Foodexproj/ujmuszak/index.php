@@ -19,7 +19,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
 <head>
     <meta charset="UTF-8">
-    <title>Új műszak kiírása</title>
+    <title>Fx - Új műszak kiírása</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 </head>
