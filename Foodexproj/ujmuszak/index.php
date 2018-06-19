@@ -22,6 +22,8 @@ if ($AktProfil->getUjMuszakJog() != 1)
     <title>Fx - Új műszak kiírása</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
+
+    <link rel="stylesheet" href="../backgradient.css">
 </head>
 
 <body>
@@ -48,62 +50,68 @@ if ($AktProfil->getUjMuszakJog() != 1)
         color: red;
     }</style>
 
+
+<a href="../profil" style="font-size: larger"> Vissza a profilba</a>
+<br><br>
+
 <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
-<div class="bootstrap-iso">
+<div class="bootstrap-iso" style="background: transparent">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <form action="" class="form-horizontal" method="get">
 
-                    <p style="display: inline">Név: </p>
-                    <input id="musznev" name="musznev" type="text" placeholder="pl. Pizzásch 1">
-                    <br>
+                    <p style="display: inline;">Név: </p>
+                    <input id="musznev" name="musznev" type="text" style="background: transparent"
+                           placeholder="pl. Pizzásch 1">
+                    <br><br>
 
                     <p style="display: inline">Létszám: </p>
-                    <input id="letszam" name="letszam" type="text" placeholder="pl. 2">
-                    <br>
+                    <input id="letszam" name="letszam" type="text" style="background: transparent" placeholder="pl. 2">
+                    <br><br>
 
                     <div class="form-group ">
                         <label class="control-label col-sm-2 requiredField" for="idokezd">Kezdet: </label>
 
                         <div class="col-sm-3">
                             <div class="input-group date">
-                                <input class="form-control" id="idokezd" name="idokezd" placeholder="YYYY/MM/DD HH:mm"
+                                <input class="form-control" id="idokezd" name="idokezd" style="background: transparent" placeholder="YYYY/MM/DD HH:mm"
                                        type="text"/>
 
                                 <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
                     </div>
-
+                    <br>
                     <div class="form-group ">
                         <label class="control-label col-sm-2 requiredField" for="idoveg">Vég: </label>
 
                         <div class="col-sm-3">
                             <div class="input-group">
 
-                                <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY/MM/DD HH:mm"
+                                <input class="form-control" id="idoveg" name="idoveg" style="background: transparent" placeholder="YYYY/MM/DD HH:mm"
                                        type="text"/>
 
                                 <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
                     </div>
-
-
-                    <p style="display: inline">Közösségi pont: </p>
-                    <input id="pont" name="pont" type="text" placeholder="pl. 3">
                     <br>
 
+                    <p style="display: inline">Közösségi pont: </p>
+                    <input id="pont" name="pont" type="text" style="background: transparent" placeholder="pl. 3">
+                    <br>
+                    <br>
 
                     <div class="form-group">
                         <div class="col-sm-10 col-sm-offset-2">
 
-                            <button class="btn btn-primary " name="kiiras" onclick="submitMuszak()" type="button">
+                            <button class="btn btn-primary " name="kiiras" style="background: transparent" onclick="submitMuszak()" type="button">
                                 Műszak kiírása
                             </button>
                         </div>
                     </div>
+
                 </form>
             </div>
         </div>

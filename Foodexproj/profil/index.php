@@ -20,15 +20,14 @@ if (!isset($_SESSION['profilint_id']))
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
+    <link rel="stylesheet" href="../backgradient.css">
 </head>
 
 <body>
 
 
 Bejelentkezve: <?php echo $AktProfil->getNev(); ?>
-<form action="logout.php">
-    <button class="button" type="submit">Kijelentkezés</button>
-</form>
+<br>
 
 <?php
 if($AktProfil->getUjMuszakJog() == 1)
@@ -40,6 +39,12 @@ if($AktProfil->getUjMuszakJog() == 1)
 ?>
 <br>
 <a href = "../jelentkezes"> Jelentkezés műszakra</a>
+
+<br>
+<br>
+<form action="logout.php">
+    <button class="button" style="background: transparent" type="submit" >Kijelentkezés</button>
+</form>
 </body>
 
 </html>

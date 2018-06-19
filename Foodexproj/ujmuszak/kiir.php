@@ -102,7 +102,7 @@ try
 
     $stmt = $conn->prepare("INSERT INTO `fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`) VALUES (?, ?, ?, ?, ?, ?);");
     if (!$stmt)
-        throw new \Exception('SQL hiba: $stmt is \'false\'');
+        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
     $stmt->bind_param('ssssii', $AktMuszak->kiirta, $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont);
 
@@ -116,11 +116,12 @@ try
     }
     else
     {
-        throw new \Exception('Az SQL parancs végrehajtása nem sikerült.');
+        throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
     }
 }
 catch (\Exception $e)
 {
     ob_clean();
-    Eszkozok\Eszk::dieToErrorPage('2085: ' . $e->getMessage());
+    //Eszkozok\Eszk::dieToErrorPage('2085: ' . $e->getMessage());
+    echo $e->getMessage();
 }

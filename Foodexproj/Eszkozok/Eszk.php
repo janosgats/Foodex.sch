@@ -1,6 +1,7 @@
 <?php
 namespace Eszkozok
 {
+
     //echo 'include path: ' . get_include_path();
 
     use GuzzleHttp\Exception\ConnectException;
@@ -12,6 +13,152 @@ namespace Eszkozok
 
     class Eszk
     {
+
+        public static function getNameOfDayOfWeek($nth_day, $teljesnev)
+        {
+            switch ($nth_day)
+            {
+                case 1:
+                    if ($teljesnev)
+                        return 'Hétfő';
+                    else
+                        return 'H';
+                case 2:
+                    if ($teljesnev)
+                        return 'Kedd';
+                    else
+                        return 'K';
+                case 3:
+                    if ($teljesnev)
+                        return 'Szerda';
+                    else
+                        return 'Sze';
+                case 4:
+                    if ($teljesnev)
+                        return 'Csütörtök';
+                    else
+                        return 'Cs';
+                case 5:
+                    if ($teljesnev)
+                        return 'Péntek';
+                    else
+                        return 'P';
+                case 6:
+                    if ($teljesnev)
+                        return 'Szombat';
+                    else
+                        return 'Szo';
+                case 7:
+                    if ($teljesnev)
+                        return 'Vasárnap';
+                    else
+                        return 'V';
+            }
+            return '';
+        }
+
+        public static function getNevTombFromInternalIdTomb($internid)
+        {
+            try
+            {
+                $kimenet = array();
+
+                $conn = self::initMySqliObject();
+
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+                for ($index = 0; $index < count($internid); ++$index)
+                {
+
+                    $stmt = $conn->prepare("SELECT `nev` FROM `fxaccok` WHERE `internal_id` = ?;");
+                    if (!$stmt)
+                        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                    $stmt->bind_param('s', $internid[$index]);
+
+
+                    if ($stmt->execute())
+                    {
+                        $result = $stmt->get_result();
+
+                        if ($result->num_rows == 0)
+                        {
+                            $kimenet[$index] = 'N/A';
+                        }
+                        else if($result->num_rows == 1)
+                        {
+                            $row = $result->fetch_assoc();
+
+                            $kimenet[$index] = $row['nev'];
+                        }
+                        else
+                        {
+                            throw new \Exception('Tobb, mint egy acc ugyan azzal az internal_id-vel.');
+                        }
+                    }
+                    else
+                    {
+                        throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
+                    }
+                }
+
+                return $kimenet;
+            }
+            catch (\Exception $e)
+            {
+                self::dieToErrorPage('8531: ' . $e->getMessage());
+            }
+        }
+
+        public static function getJelentkezokListaja($muszakid)
+        {
+            try
+            {
+                $kimenet = array();
+
+                $conn = self::initMySqliObject();
+
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+
+                $stmt = $conn->prepare("SELECT `jelentkezo` FROM `fxjelentk` WHERE `muszid` = ? AND `status` = 1 ORDER BY `ID` ASC;");
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                $stmt->bind_param('s', $muszakid);
+
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0)
+                    {
+                        $index = 0;
+                        while ($row = $result->fetch_assoc())
+                        {
+                            $kimenet[$index] = $row['jelentkezo'];
+                            ++$index;
+                        }
+                    }
+                }
+                else
+                {
+                    throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
+                }
+
+                return $kimenet;
+
+            }
+            catch (\Exception $e)
+            {
+                ob_clean();
+                self::dieToErrorPage('8512: ' . $e->getMessage());
+            }
+        }
+
         public static function initMySqliObject()
         {
             $servername = "gjani.sch.bme.hu:3306";
@@ -37,6 +184,7 @@ namespace Eszkozok
 
             return self::GetTaroltProfilAdat($internal_id);
         }
+
         public static function GetTaroltProfilAdat($internal_id)
         {
             $ProfilNev = "";

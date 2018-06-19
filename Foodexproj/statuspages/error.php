@@ -8,7 +8,7 @@
     <link rel="stylesheet" media="screen"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
 
-    <title>Feature, ha mondom</title>
+    <title>Feature, ha mondom!</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
