@@ -1,15 +1,16 @@
 <?php
 
-namespace Eszkozok;
-
-
-class Muszak
+namespace Eszkozok
 {
-    public $ID;
-    public $kiirta = '';
-    public $musznev = '';
-    public $idokezd = '';
-    public $idoveg = '';
-    public $letszam = '';
-    public $pont = '';
+
+    class Muszak
+    {
+        public $ID;
+        public $kiirta = '';
+        public $musznev = '';
+        public $idokezd = '';
+        public $idoveg = '';
+        public $letszam = '';
+        public $pont = '';
+    }
 }

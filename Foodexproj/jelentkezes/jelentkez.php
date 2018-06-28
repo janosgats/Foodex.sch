@@ -4,6 +4,8 @@ include_once '../Eszkozok/Eszk.php';
 include_once '../Eszkozok/param.php';
 include_once '../3rdparty/reCaptcha/autoload.php';
 
+include_once __DIR__ . '/../Eszkozok/SMTPSender.php';
+
 function isReCaptchaValid()
 {
     $secret = '***REMOVED***';
@@ -97,6 +99,17 @@ function doJelentkezes()
             }
             else if (GetParam('muszmuv') == 'lead')
             {
+                $leadottMuszak = \Eszkozok\Eszk::getMuszakFromMuszakIdWithConn($muszakID, $conn);
+
+
+                $eredetivarolista = \Eszkozok\Eszk::getJelentkezokListajaWithConn($muszakID, $conn);
+                $eredetiKeret = array();
+
+                for ($i = 0; $i < $leadottMuszak->letszam && $i < count($eredetivarolista); ++$i)
+                {
+                    $eredetiKeret[] = $eredetivarolista[$i];
+                }
+
                 $stmt = $conn->prepare("UPDATE `fxjelentk` SET `status` = 0, `leadido` = NOW() WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
                 if (!$stmt)
                     throw new \Exception('$stmt is \'false\'');
@@ -106,17 +119,30 @@ function doJelentkezes()
 
                 if ($stmt->execute())
                 {
+                    $ujvarolista = \Eszkozok\Eszk::getJelentkezokListajaWithConn($muszakID, $conn);
 
+                    $elobbreKerultek = array();//Nekik kell e-mailt küldeni
+
+                    for ($i = 0; $i < $leadottMuszak->letszam && $i < count($ujvarolista) && $i < count($eredetiKeret); ++$i)
+                    {
+                        if (!in_array($ujvarolista[$i], $eredetiKeret))
+                            $elobbreKerultek[] = $ujvarolista[$i];
+                    }
+
+                    $emailTomb = \Eszkozok\Eszk::getColumnAdatTombFromInternalIdTombWithConn($elobbreKerultek, 'email', $conn);
+                    SMTPSender::SendVarolistaKeretbeKerultTomb($leadottMuszak->musznev, $emailTomb);
                 }
                 else
                     throw new \Exception('Az SQL parancs végrehajtása nem sikerült: Leadás');
 
             }
         }
-        catch (\Exception $e)
+        catch
+        (\Exception $e)
         {
             \Eszkozok\Eszk::dieToErrorPage('3217: ' . $e->getMessage());
         }
+        $conn->close();
     }
 
 }

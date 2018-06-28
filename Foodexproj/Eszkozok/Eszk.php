@@ -7,12 +7,72 @@ namespace Eszkozok
     use GuzzleHttp\Exception\ConnectException;
     use Profil\Profil;
 
+    include_once __DIR__ . '/Muszak.php';
 
-//require_once '../vendor/autoload.php';
+    require_once __DIR__ . '/../vendor/autoload.php';
+
 //include_once './AuthSchProvider.php';
 
     class Eszk
     {
+        /**
+         * @return TRUE, ha a $szo maganhangzoval, vagy úgy ejtendő számmal kezdődik
+         * @param $szo a tesztelendő karakterlánc
+         */
+        public static function startsWidthMaganhangzo($szo)
+        {
+            $betu = mb_strtolower(mb_substr($szo, 0, 1));
+
+            if ($betu == 'a' ||
+                $betu == 'á' ||
+                $betu == 'e' ||
+                $betu == 'é' ||
+                $betu == 'i' ||
+                $betu == 'í' ||
+                $betu == 'o' ||
+                $betu == 'ó' ||
+                $betu == 'ö' ||
+                $betu == 'ő' ||
+                $betu == 'u' ||
+                $betu == 'ú' ||
+                $betu == 'ü' ||
+                $betu == 'ű' ||
+                $betu == '1' ||
+                $betu == '5'
+            )
+                return true;
+            else
+                return false;
+        }
+
+        public static function isEmailValid($email)
+        {
+            // Remove all illegal characters from email
+            $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+            // Validate e-mail
+            if (filter_var($email, FILTER_VALIDATE_EMAIL))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static function executeAsyncShellCommand($command)
+        {
+            // If windows, else
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+            {
+                system($command . " > NUL");
+            }
+            else
+            {
+                shell_exec("/usr/bin/nohup " . $command . " >/dev/null 2>&1 &");
+            }
+        }
 
         public static function getNameOfDayOfWeek($nth_day, $teljesnev)
         {
@@ -57,25 +117,90 @@ namespace Eszkozok
             return '';
         }
 
-        public static function getNevTombFromInternalIdTomb($internid)
+
+        public static function getMuszakFromMuszakId($muszakid)
+        {
+            $conn = self::initMySqliObject();
+            self::getMuszakFromMuszakIdWithConn($muszakid, $conn);
+        }
+
+        public static function getMuszakFromMuszakIdWithConn($muszakid, $conn)
         {
             try
             {
-                $kimenet = array();
-
-                $conn = self::initMySqliObject();
+                $ki = new Muszak();
 
                 if (!$conn)
                     throw new \Exception('SQL hiba: $conn is \'false\'');
 
-                for ($index = 0; $index < count($internid); ++$index)
+                $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` WHERE `ID` = ?;");
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                $stmt->bind_param('i', $muszakid);
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows == 1)
+                    {
+                        $row = $result->fetch_assoc();
+
+
+                        $ki->ID = $muszakid;
+                        $ki->kiirta = $row['kiirta'];
+                        $ki->musznev = $row['musznev'];
+                        $ki->idokezd = $row['idokezd'];
+                        $ki->idoveg = $row['idoveg'];
+                        $ki->letszam = $row['letszam'];
+                        $ki->pont = $row['pont'];
+
+                        return $ki;
+                    }
+                    else
+                    {
+                        throw new \Exception('$result->num_rows == 1');
+                    }
+                }
+                else
+                {
+                    throw new \Exception('$stmt->execute() is false');
+                }
+            }
+            catch (\Exception $e)
+            {
+                self::dieToErrorPage('8591: ' . $e->getMessage());
+            }
+        }
+
+        public static function getColumnAdatTombFromInternalIdTomb($internidTomb, $oszlopnev)
+        {
+            $conn = self::initMySqliObject();
+            self::getColumnAdatTombFromInternalIdTombWithConn($internidTomb, $oszlopnev, $conn);
+        }
+
+        public static function getColumnAdatTombFromInternalIdTombWithConn($internidTomb, $oszlopnev, $conn)
+        {
+            try
+            {
+                $oszlopnev = $conn->escape_string($oszlopnev);//Mert oszlop nevet nem lehet bindelni
+
+                $kimenet = array();
+
+
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+                for ($index = 0; $index < count($internidTomb); ++$index)
                 {
 
-                    $stmt = $conn->prepare("SELECT `nev` FROM `fxaccok` WHERE `internal_id` = ?;");
+
+                    $stmt = $conn->prepare("SELECT $oszlopnev FROM `fxaccok` WHERE `internal_id` = ?;");
                     if (!$stmt)
                         throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-                    $stmt->bind_param('s', $internid[$index]);
+                    $stmt->bind_param('s', $internidTomb[$index]);
 
 
                     if ($stmt->execute())
@@ -85,16 +210,19 @@ namespace Eszkozok
                         if ($result->num_rows == 0)
                         {
                             $kimenet[$index] = 'N/A';
-                        } else if ($result->num_rows == 1)
+                        }
+                        else if ($result->num_rows == 1)
                         {
                             $row = $result->fetch_assoc();
 
-                            $kimenet[$index] = $row['nev'];
-                        } else
+                            $kimenet[$index] = $row[$oszlopnev];
+                        }
+                        else
                         {
                             throw new \Exception('Tobb, mint egy acc ugyan azzal az internal_id-vel.');
                         }
-                    } else
+                    }
+                    else
                     {
                         throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
                     }
@@ -110,11 +238,17 @@ namespace Eszkozok
 
         public static function getJelentkezokListaja($muszakid)
         {
+            $conn = self::initMySqliObject();
+
+            getJelentkezokListajaWithConn($muszakid, $conn);
+        }
+
+        public static function getJelentkezokListajaWithConn($muszakid, $conn)
+        {
             try
             {
                 $kimenet = array();
 
-                $conn = self::initMySqliObject();
 
                 if (!$conn)
                     throw new \Exception('SQL hiba: $conn is \'false\'');
@@ -140,7 +274,8 @@ namespace Eszkozok
                             ++$index;
                         }
                     }
-                } else
+                }
+                else
                 {
                     throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
                 }
@@ -161,7 +296,8 @@ namespace Eszkozok
             if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
             {
                 $servername = "gjani.sch.bme.hu:3306";
-            } else if (strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)
+            }
+            else if (strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false || strpos($_SERVER["HTTP_HOST"], 'localhost') !== false)
             {
                 $servername = "gjani.ddns.net:3306";
                 $servername = "localhost:3306";//Mert a ddns-es címmel elérve nagyon lassú
@@ -225,8 +361,11 @@ namespace Eszkozok
                             $ProfilNev = $row['nev'];
                         if (isset($row['ujmuszakjog']))
                             $UjMuszakJog = $row['ujmuszakjog'];
+                        if (isset($row['ujmuszakjog']))
+                            $email = $row['email'];
 
-                    } else
+                    }
+                    else
                     {
                         unset($_SESSION['profilint_id']);
                         throw new \Exception('$result->num_rows != 1');
@@ -241,7 +380,7 @@ namespace Eszkozok
             $end = get_included_files();
             set_include_path(dirname(end($end)));
             include_once "../profil/Profil.php";
-            return new Profil($internal_id, $ProfilNev, $UjMuszakJog);
+            return new Profil($internal_id, $ProfilNev, $UjMuszakJog, $email);
         }
 
         public static function initNewAuthSchProvider()
@@ -250,17 +389,19 @@ namespace Eszkozok
             $clientId = "***REMOVED***";
             $clientSecret = "***REMOVED***";
 
-            if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
+            if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
             {
                 $redirectUri = "http://gjani.sch.bme.hu/foodex/login.php";
                 $clientId = "***REMOVED***";
                 $clientSecret = "***REMOVED***";
-            } else if (strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)//Contains()
+            }
+            else if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)//Contains()
             {
                 $redirectUri = "http://gjani.ddns.net/foodex/login.php";
                 $clientId = "***REMOVED***";
                 $clientSecret = "***REMOVED***";
-            } else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
+            }
+            else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
             {
                 $redirectUri = "https://feverkill.com/bme/foodex/login.php";
                 $clientId = "***REMOVED***";
@@ -275,7 +416,7 @@ namespace Eszkozok
                 'urlAuthorize' => 'https://auth.sch.bme.hu/site/login',
                 'urlAccessToken' => 'https://auth.sch.bme.hu/oauth2/token',
                 'urlResourceOwnerDetails' => 'https://auth.sch.bme.hu/api/profile',
-                'scopes' => ['displayName', 'eduPersonEntitlement']
+                'scopes' => ['displayName', 'eduPersonEntitlement', 'mail']
             ]);
         }
 
@@ -334,7 +475,8 @@ namespace Eszkozok
                 exit;
 
                 // Check given state against previously stored one to mitigate CSRF attack
-            } elseif (empty($_GET['state']) || (isset($_SESSION['oauth2state']) && $_GET['state'] !== $_SESSION['oauth2state']))
+            }
+            elseif (empty($_GET['state']) || (isset($_SESSION['oauth2state']) && $_GET['state'] !== $_SESSION['oauth2state']))
             {
 
                 if (isset($_SESSION['oauth2state']))
@@ -355,10 +497,12 @@ namespace Eszkozok
                 {
                     unset($_SESSION["InvalidStateCounter"]);
                     self::dieToErrorPage('991: Invalid state');
-                } else
+                }
+                else
                     self::RedirectUnderRoot('login.php');
 
-            } else
+            }
+            else
             {
                 try
                 {
@@ -394,7 +538,8 @@ namespace Eszkozok
                             <?php
                             self::FxTagMuvelet($resp);
 
-                        } else
+                        }
+                        else
                         {
 
                             ?>
@@ -443,12 +588,19 @@ namespace Eszkozok
             try
             {
                 if (!isset($resresp['internal_id']))
-                    throw new \Exception("internal_id is not set in $resresp");
+                    throw new \Exception('internal_id is not set in $resresp');
 
                 $internal_id = $resresp['internal_id'];
 
-                if (isset($resresp["displayName"]))
+                $displayName = null;
+                if (isset($resresp['displayName']))
                     $displayName = $resresp['displayName'];
+
+
+                $email = null;
+                if (isset($resresp['mail']))
+                    $email = $resresp['mail'];
+
 
                 $conn = self::initMySqliObject();
 
@@ -465,28 +617,23 @@ namespace Eszkozok
                 {
                     $result = $stmt->get_result();
 
-                    if ($result->num_rows == 0)//Még nem regisztrált
-                    {
+                    if ($result->num_rows == 0)
+                    {//Még nem regisztrált, új acc
                         $ujmuszakjog = 0;
 
-                        if (isset($displayName))
-                        {
-                            $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `ujmuszakjog`) VALUES (?, ?, ?);");
-                            $stmt->bind_param('ssi', $internal_id, $displayName, $ujmuszakjog);
-                        } else
-                        {
-                            $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `ujmuszakjog`) VALUES (?, ?);");
-                            $stmt->bind_param('si', $internal_id, $ujmuszakjog);
-                        }
+                        $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `ujmuszakjog`, `email`) VALUES (?, ?, ?, ?);");
+                        $stmt->bind_param('ssis', $internal_id, $displayName, $ujmuszakjog, $email);
 
 
                         if ($stmt->execute())
                         {
 
-                        } else
+                        }
+                        else
                             throw new \Exception('');
 
-                    } else
+                    }
+                    else
                     {//Már regisztrált acc
 
                         if (isset($displayName))
@@ -496,10 +643,9 @@ namespace Eszkozok
                             //  var_dump($row);
                             //   var_dump($row['nev']);
                             //  var_dump($displayName);
-                            if ($row['nev'] !== $displayName)
-                            {//Frissítjük a nevet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
 
-                                // echo "NÉVELTÉRÉS!";
+                            if ($displayName != null && $displayName !== $row['nev'])
+                            {//Frissítjük a nevet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
 
                                 $stmt = $conn->prepare("UPDATE `fxaccok` SET `nev` = ? WHERE `fxaccok`.`internal_id` = ?");
                                 $stmt->bind_param('ss', $displayName, $internal_id);
@@ -508,15 +654,34 @@ namespace Eszkozok
                                 if ($stmt->execute())
                                 {
 
-                                } else
-                                    throw new \Exception('');
+                                }
+                                else
+                                    throw new \Exception('Hiba a displayName frissítése során');
+
+
+                            }
+
+                            if ($email != null && $email !== $row['email'])
+                            {//Frissítjük az e-mail címet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
+
+                                $stmt = $conn->prepare("UPDATE `fxaccok` SET `email` = ? WHERE `fxaccok`.`internal_id` = ?");
+                                $stmt->bind_param('ss', $email, $internal_id);
+
+
+                                if ($stmt->execute())
+                                {
+
+                                }
+                                else
+                                    throw new \Exception('Hiba az email frissítése során');
 
 
                             }
 
                         }
                     }
-                } else
+                }
+                else
                 {
                     throw new \Exception('$stmt->execute() returns false');
                 }
@@ -643,7 +808,8 @@ namespace Eszkozok
             if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)
             {
                 $ret .= "foodex/";
-            } else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
+            }
+            else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
             {
                 $ret .= "bme/foodex/";
             }

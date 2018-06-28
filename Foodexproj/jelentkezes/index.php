@@ -26,7 +26,7 @@ doJelentkezes();
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
-    <link rel="stylesheet" href="../backgradient.css">
+<!--    <link rel="stylesheet" href="../backgradient.css">-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -39,9 +39,9 @@ doJelentkezes();
     <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
-<body>
+<body style="background: #151515">
 
-<a href="../profil" style="font-size: larger; text-decoration: none"> << Profil</a>
+<a href="../profil" style="font-size: larger; text-decoration: none;color: yellow"> << Profil</a>
 
 <div id="osszhastablazat" class="tablaDiv" style="margin-top: 1.5%;">
 
@@ -97,14 +97,14 @@ doJelentkezes();
                         if (date("Y-m-d H:i:s") > $idokezd->format('Y-m-d H:i:s'))
                             $jelentkIdoszakVan = 0;
 
-                        $jelintidtomb = \Eszkozok\Eszk::getJelentkezokListaja($row['ID']);
+                        $jelintidtomb = \Eszkozok\Eszk::getJelentkezokListajaWithConn($row['ID'], $conn);
 
                         if (in_array($_SESSION['profilint_id'], $jelintidtomb))
                             $felvetel = 0;
                         else
                             $felvetel = 1;
 
-                        $jelnevtomb = \Eszkozok\Eszk::getNevTombFromInternalIdTomb($jelintidtomb);
+                        $jelnevtomb = \Eszkozok\Eszk::getColumnAdatTombFromInternalIdTombWithConn($jelintidtomb, 'nev',$conn);
 
 
                         $jelnevstring = '';
