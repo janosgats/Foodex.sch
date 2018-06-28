@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84755cb6-d501-466d-8123-16f202aae52a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Eszkozok/param.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/backgradient.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jelentkezes/jelentkez.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/deployment.xml" afterPath="$PROJECT_DIR$/.idea/deployment.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Eszkozok/Eszk.php" afterPath="$PROJECT_DIR$/Eszkozok/Eszk.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jelentkezes/index.php" afterPath="$PROJECT_DIR$/jelentkezes/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jelentkezes/main.css" afterPath="$PROJECT_DIR$/jelentkezes/main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/profil/index.php" afterPath="$PROJECT_DIR$/profil/index.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statuspages/error.php" afterPath="$PROJECT_DIR$/statuspages/error.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ujmuszak/index.php" afterPath="$PROJECT_DIR$/ujmuszak/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ujmuszak/kiir.php" afterPath="$PROJECT_DIR$/ujmuszak/kiir.php" />
     </list>
     <ignored path="Foodexproj.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,7 +40,7 @@
       <file leaf-file-name="backgradient.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/backgradient.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.230769">
+            <state vertical-scroll-proportion="-1.6153846">
               <caret line="8" column="14" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
               <folding />
             </state>
@@ -58,9 +50,11 @@
       <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jelentkezes/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-0.65384614">
               <caret line="221" column="30" selection-start-line="221" selection-start-column="30" selection-end-line="221" selection-end-column="30" />
-              <folding />
+              <folding>
+                <marker date="1530140099364" expanded="true" signature="1691:1770" placeholder="SELECT * FRO..fxmuszakok..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -68,7 +62,7 @@
       <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jelentkezes/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-0.65384614">
               <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
               <folding />
             </state>
@@ -78,11 +72,9 @@
       <file leaf-file-name="regform.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../../../Desktop/Feverkill/FeverkillWeb/FeverkillWeb/FTP/register/regform.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-0.65384614">
               <caret line="143" column="63" selection-start-line="143" selection-start-column="45" selection-end-line="143" selection-end-column="63" />
-              <folding>
-                <marker date="1529437232216" expanded="true" signature="955:1020" placeholder="INSERT INTO felhviselk..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -92,10 +84,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="63" column="25" selection-start-line="63" selection-start-column="25" selection-end-line="63" selection-end-column="25" />
-              <folding>
-                <marker date="1510688568446" expanded="true" signature="2467:2587" placeholder="SELECT `AUTO..TABLES..." />
-                <marker date="1510688568446" expanded="true" signature="2871:2962" placeholder="INSERT INTO reglicek..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -113,37 +102,49 @@
       <file leaf-file-name="jelentkez.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jelentkezes/jelentkez.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-24.846153">
+            <state vertical-scroll-proportion="0.0">
               <caret line="46" column="67" selection-start-line="46" selection-start-column="67" selection-end-line="46" selection-end-column="67" />
-              <folding>
-                <marker date="1529442363861" expanded="true" signature="1516:1601" placeholder="SELECT `ID` ..fxjelentk..." />
-                <marker date="1529442363861" expanded="true" signature="2253:2344" placeholder="INSERT INTO `fxjelentk`..." />
-                <marker date="1529442363861" expanded="true" signature="2929:3040" placeholder="UPDATE `fxje..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="error.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="error.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statuspages/error.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25036818">
-              <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+            <state vertical-scroll-proportion="-0.65384614">
+              <caret line="323" column="0" selection-start-line="323" selection-start-column="0" selection-end-line="323" selection-end-column="0" />
               <folding>
-                <marker date="1529444416035" expanded="true" signature="8019:8179" placeholder="..." />
-                <marker date="1529444416035" expanded="true" signature="8571:8605" placeholder="..." />
+                <marker date="1530145924508" expanded="true" signature="8744:8778" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="kiir.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ujmuszak/kiir.php">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="96" column="33" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
+            <state vertical-scroll-proportion="-18.653847">
+              <caret line="29" column="27" selection-start-line="29" selection-start-column="27" selection-end-line="29" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Eszk.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5295481">
+              <caret line="166" column="90" selection-start-line="166" selection-start-column="90" selection-end-line="166" selection-end-column="90" />
               <folding>
-                <marker date="1529431046042" expanded="true" signature="2619:2731" placeholder="INSERT INTO `fxmuszakok`..." />
+                <element signature="e#83#125#0#PHP" expanded="true" />
+                <marker date="1530146413432" expanded="true" signature="2006:2057" placeholder="SELECT `nev`..fxaccok..." />
+                <marker date="1530146413432" expanded="true" signature="3630:3720" placeholder="SELECT `jele..fxjelentk..." />
+                <marker date="1530146413432" expanded="true" signature="6277:6320" placeholder="SELECT * FRO..fxaccok..." />
+                <marker date="1530146413432" expanded="true" signature="15914:15957" placeholder="SELECT * FRO..fxaccok..." />
+                <marker date="1530146413432" expanded="true" signature="16488:16564" placeholder="INSERT INTO `fxaccok`..." />
+                <marker date="1530146413432" expanded="true" signature="16774:16840" placeholder="INSERT INTO `fxaccok`..." />
+                <marker date="1530146413432" expanded="true" signature="17762:17826" placeholder="UPDATE `fxac..." />
               </folding>
             </state>
           </provider>
@@ -194,7 +195,6 @@
         <option value="$PROJECT_DIR$/ujmuszak/index.php" />
         <option value="$PROJECT_DIR$/profil/index.php" />
         <option value="$PROJECT_DIR$/ujmuszak/kiir.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/Eszk.php" />
         <option value="$PROJECT_DIR$/Eszkozok/param.php" />
         <option value="$PROJECT_DIR$/../../../../Desktop/Feverkill/FeverkillWeb/FeverkillWeb/FTP/register/regform.php" />
         <option value="$PROJECT_DIR$/jelentkezes/modal.css" />
@@ -203,6 +203,7 @@
         <option value="$PROJECT_DIR$/backgradient.css" />
         <option value="$PROJECT_DIR$/jelentkezes/jelentkez.php" />
         <option value="$PROJECT_DIR$/statuspages/error.php" />
+        <option value="$PROJECT_DIR$/Eszkozok/Eszk.php" />
       </list>
     </option>
   </component>
@@ -230,6 +231,11 @@
         </path_mappings>
       </server>
       <server host="gjani.sch.bme.hu" id="5fd6eca6-15f4-4c63-b1b0-f4aee1a38662" name="gjani.sch.bme.hu" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$" remote-root="D:/xampp/htdocs/foodex" />
+        </path_mappings>
+      </server>
+      <server host="gjani.ddns.net" id="3dae57e3-c207-4de0-a43a-d5a3ce733709" name="gjani.ddns.net" use_path_mappings="true">
         <path_mappings>
           <mapping local-root="$PROJECT_DIR$" remote-root="D:/xampp/htdocs/foodex" />
         </path_mappings>
@@ -287,6 +293,39 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Problems" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="Foodexproj">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="Foodexproj">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT=".idea">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="Tests" />
+      </pane>
+      <pane id="Scratches">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -303,20 +342,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Foodexproj" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="index.less" />
-              <option name="myItemType" value="com.intellij.plugins.watcher.projectView.NestingTreeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -423,39 +448,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Problems" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Foodexproj">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Foodexproj">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT=".idea">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="Tests" />
-      </pane>
-      <pane id="Scratches">
-        <subPane />
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -465,8 +457,8 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
-    <property name="last_opened_file_path" value="D:/xampp/php/php.exe" />
-    <property name="settings.editor.selected.configurable" value="SQL Dialects" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.PHP" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="SearchEverywhereHistoryKey" value="clientId&#9;null&#9;null" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
@@ -481,13 +473,13 @@
     </key>
   </component>
   <component name="RunManager" selected="PHP Web Application.Foodex on XAMPP">
+    <configuration default="false" name="index.php" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost/index.php">
+      <method />
+    </configuration>
     <configuration default="true" type="CompoundRunConfigurationType" factoryName="Compound Run Configuration">
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
-    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
       <method />
     </configuration>
     <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -518,18 +510,6 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
-      <node-options />
-      <working-directory>$PROJECT_DIR$</working-directory>
-      <pass-parent-env>true</pass-parent-env>
-      <envs />
-      <ui>bdd</ui>
-      <extra-mocha-options />
-      <test-kind>DIRECTORY</test-kind>
-      <test-directory />
-      <recursive>false</recursive>
-      <method />
-    </configuration>
     <configuration default="false" name="foodex" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="https://feverkill.com/bme/foodex">
       <method />
     </configuration>
@@ -551,11 +531,17 @@
         </option>
       </method>
     </configuration>
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.foodex" />
       <item index="1" class="java.lang.String" itemvalue="PHP Web Application.Foodex on Ininet" />
       <item index="2" class="java.lang.String" itemvalue="PHP Web Application.Foodex on XAMPP" />
+      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.index.php" />
     </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.index.php" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="SvnConfiguration">
@@ -580,28 +566,28 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13219616" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13177083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.4968017" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39869988" sideWeight="0.5021322" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32241014" sideWeight="0.503125" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20670995" sideWeight="0.49791667" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20613107" sideWeight="0.49791667" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47453955" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50317127" sideWeight="0.496875" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39869988" sideWeight="0.4978678" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31744313" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32286024" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -620,15 +606,42 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="46" />
+      <option name="time" value="54" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://D:/xampp/htdocs/foodex/index.php">
+    <entry file="file://$PROJECT_DIR$/../../../../Desktop/Feverkill/FeverkillWeb/FeverkillWeb/FTP/SZCSHost/greCaptcha/ReCaptcha/RequestMethod/Post.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.238">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="67" column="26" selection-start-line="67" selection-start-column="26" selection-end-line="67" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jelentkezes/jelentkez.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="46" column="67" selection-start-line="46" selection-start-column="67" selection-end-line="46" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statuspages/error.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1530145924508" expanded="true" signature="8744:8778" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ujmuszak/kiir.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="96" column="33" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -709,24 +722,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/Google Drive/BIZT/Feverkill/FeverkillWeb/FeverkillWeb/FTP/register/LicAkt.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29310346">
-          <caret line="15" column="41" selection-start-line="15" selection-start-column="41" selection-end-line="15" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../../../Desktop/Feverkill/FeverkillWeb/FeverkillWeb/FTP/adatbazis1.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.6931036">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../Downloads/fxtestdbserverExport.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45046082">
-          <caret line="23" column="97" selection-start-line="23" selection-start-column="78" selection-end-line="23" selection-end-column="97" />
         </state>
       </provider>
     </entry>
@@ -748,13 +747,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-24.346153">
           <caret line="48" column="9" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../Downloads/form_MlKtmY4x.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.153846">
-          <caret line="14" column="81" selection-start-line="0" selection-start-column="0" selection-end-line="83" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -842,13 +834,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.346153">
-          <caret line="25" column="6" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/profil/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-28.115385">
@@ -884,34 +869,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="519" column="16" selection-start-line="519" selection-start-column="16" selection-end-line="519" selection-end-column="16" />
-          <folding>
-            <element signature="e#83#125#0#PHP" expanded="true" />
-            <marker date="1529431117677" expanded="true" signature="2006:2057" placeholder="SELECT `nev`..fxaccok..." />
-            <marker date="1529431117677" expanded="true" signature="3697:3787" placeholder="SELECT `jele..fxjelentk..." />
-            <marker date="1529431117677" expanded="true" signature="5847:5890" placeholder="SELECT * FRO..fxaccok..." />
-            <marker date="1529431117677" expanded="true" signature="15231:15274" placeholder="SELECT * FRO..fxaccok..." />
-            <marker date="1529431117677" expanded="true" signature="15805:15881" placeholder="INSERT INTO `fxaccok`..." />
-            <marker date="1529431117677" expanded="true" signature="16115:16181" placeholder="INSERT INTO `fxaccok`..." />
-            <marker date="1529431117677" expanded="true" signature="17147:17175" placeholder="UPDATE `fxac..." />
-            <marker date="1529431117677" expanded="true" signature="17147:17210" placeholder="UPDATE `fxac..." />
-            <marker date="1529431117677" expanded="true" signature="17147:17211" placeholder="UPDATE `fxac..." />
-            <marker date="1529431117677" expanded="true" signature="17860:17938" placeholder="..." />
-            <marker date="1529431117677" expanded="true" signature="20588:20638" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ujmuszak/kiir.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="96" column="33" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
-          <folding>
-            <marker date="1529431046042" expanded="true" signature="2619:2731" placeholder="INSERT INTO `fxmuszakok`..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -934,10 +896,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="63" column="25" selection-start-line="63" selection-start-column="25" selection-end-line="63" selection-end-column="25" />
-          <folding>
-            <marker date="1510688568446" expanded="true" signature="2467:2587" placeholder="SELECT `AUTO..TABLES..." />
-            <marker date="1510688568446" expanded="true" signature="2871:2962" placeholder="INSERT INTO reglicek..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -948,45 +907,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backgradient.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.230769">
-          <caret line="8" column="14" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jelentkezes/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="221" column="30" selection-start-line="221" selection-start-column="30" selection-end-line="221" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jelentkezes/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../Desktop/Feverkill/FeverkillWeb/FeverkillWeb/FTP/register/regform.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="143" column="63" selection-start-line="143" selection-start-column="45" selection-end-line="143" selection-end-column="63" />
-          <folding>
-            <marker date="1529437232216" expanded="true" signature="955:1020" placeholder="INSERT INTO felhviselk..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nemkortag.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.17586207">
           <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -994,29 +918,82 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4827586">
           <caret line="102" column="15" selection-start-line="102" selection-start-column="15" selection-end-line="102" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jelentkezes/jelentkez.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-24.846153">
+        <state vertical-scroll-proportion="0.0">
           <caret line="46" column="67" selection-start-line="46" selection-start-column="67" selection-end-line="46" selection-end-column="67" />
-          <folding>
-            <marker date="1529442363861" expanded="true" signature="1516:1601" placeholder="SELECT `ID` ..fxjelentk..." />
-            <marker date="1529442363861" expanded="true" signature="2253:2344" placeholder="INSERT INTO `fxjelentk`..." />
-            <marker date="1529442363861" expanded="true" signature="2929:3040" placeholder="UPDATE `fxje..." />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.653847">
+          <caret line="29" column="27" selection-start-line="29" selection-start-column="27" selection-end-line="29" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jelentkezes/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.65384614">
+          <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../Desktop/Feverkill/FeverkillWeb/FeverkillWeb/FTP/register/regform.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.65384614">
+          <caret line="143" column="63" selection-start-line="143" selection-start-column="45" selection-end-line="143" selection-end-column="63" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statuspages/error.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25036818">
-          <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+        <state vertical-scroll-proportion="-0.65384614">
+          <caret line="323" column="0" selection-start-line="323" selection-start-column="0" selection-end-line="323" selection-end-column="0" />
           <folding>
-            <marker date="1529444416035" expanded="true" signature="8019:8179" placeholder="..." />
-            <marker date="1529444416035" expanded="true" signature="8571:8605" placeholder="..." />
+            <marker date="1530145924508" expanded="true" signature="8744:8778" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jelentkezes/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.65384614">
+          <caret line="221" column="30" selection-start-line="221" selection-start-column="30" selection-end-line="221" selection-end-column="30" />
+          <folding>
+            <marker date="1530140099364" expanded="true" signature="1691:1770" placeholder="SELECT * FRO..fxmuszakok..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backgradient.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.6153846">
+          <caret line="8" column="14" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5295481">
+          <caret line="166" column="90" selection-start-line="166" selection-start-column="90" selection-end-line="166" selection-end-column="90" />
+          <folding>
+            <element signature="e#83#125#0#PHP" expanded="true" />
+            <marker date="1530146413432" expanded="true" signature="2006:2057" placeholder="SELECT `nev`..fxaccok..." />
+            <marker date="1530146413432" expanded="true" signature="3630:3720" placeholder="SELECT `jele..fxjelentk..." />
+            <marker date="1530146413432" expanded="true" signature="6277:6320" placeholder="SELECT * FRO..fxaccok..." />
+            <marker date="1530146413432" expanded="true" signature="15914:15957" placeholder="SELECT * FRO..fxaccok..." />
+            <marker date="1530146413432" expanded="true" signature="16488:16564" placeholder="INSERT INTO `fxaccok`..." />
+            <marker date="1530146413432" expanded="true" signature="16774:16840" placeholder="INSERT INTO `fxaccok`..." />
+            <marker date="1530146413432" expanded="true" signature="17762:17826" placeholder="UPDATE `fxac..." />
           </folding>
         </state>
       </provider>

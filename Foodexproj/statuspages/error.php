@@ -274,8 +274,7 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST')
         {
             return $_POST[$parameterneve];
-        }
-        else
+        } else
         {
             return $_GET[$parameterneve];
         }
@@ -286,8 +285,7 @@
         if ($_SERVER['REQUEST_METHOD'] === 'POST')
         {
             return isset($_POST[$parameterneve]);
-        }
-        else
+        } else
         {
             return isset($_GET[$parameterneve]);
         }
@@ -315,22 +313,27 @@
     <br><br><br>
 
     <div class="context primary-text-color" style="padding-top: 0; margin-top: 0">
-        <p><?php if (IsParamSet('code')) echo '<span style="display: inline;font-style: italic">' . htmlspecialchars(urldecode(GetParam('code'))) . '<br></span>'; ?></p>
+        <p>
+            <?php if (IsParamSet('code'))
+
+                $code = GetParam('code');
+            $code = urldecode($code);
+            $code = htmlspecialchars($code, ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8');
+            echo '<span style="display: inline;font-style: italic">' . $code . '<br></span>'; ?>
+        </p>
     </div>
 </div>
 
 
 <script>
-    function ErrorPage(container, pageType, templateName)
-    {
+    function ErrorPage(container, pageType, templateName) {
         this.$container = $(container);
         this.$contentContainer = this.$container.find(templateName == 'sign' ? '.sign-container' : '.content-container');
         this.pageType = pageType;
         this.templateName = templateName;
     }
 
-    ErrorPage.prototype.centerContent = function ()
-    {
+    ErrorPage.prototype.centerContent = function () {
         var containerHeight = this.$container.outerHeight()
             , contentContainerHeight = this.$contentContainer.outerHeight()
             , top = (containerHeight - contentContainerHeight) / 2
@@ -339,33 +342,27 @@
         this.$contentContainer.css('top', top + offset);
     };
 
-    ErrorPage.prototype.initialize = function ()
-    {
+    ErrorPage.prototype.initialize = function () {
         var self = this;
 
         this.centerContent();
-        this.$container.on('resize', function (e)
-        {
+        this.$container.on('resize', function (e) {
             e.preventDefault();
             e.stopPropagation();
             self.centerContent();
         });
 
         // fades in content on the plain template
-        if (this.templateName == 'plain')
-        {
-            window.setTimeout(function ()
-            {
+        if (this.templateName == 'plain') {
+            window.setTimeout(function () {
                 self.$contentContainer.addClass('in');
             }, 500);
         }
 
         // swings sign in on the sign template
-        if (this.templateName == 'sign')
-        {
+        if (this.templateName == 'sign') {
             $('.sign-container').animate({textIndent: 0}, {
-                step: function (now)
-                {
+                step: function (now) {
                     $(this).css({
                         transform: 'rotate(' + now + 'deg)',
                         'transform-origin': 'top center'
@@ -378,67 +375,55 @@
     };
 
 
-    ErrorPage.prototype.createTimeRangeTag = function (start, end)
-    {
+    ErrorPage.prototype.createTimeRangeTag = function (start, end) {
         return (
             '<time utime=' + start + ' simple_format="MMM DD, YYYY HH:mm">' + start + '</time> - <time utime=' + end + ' simple_format="MMM DD, YYYY HH:mm">' + end + '</time>.'
         )
     };
 
 
-    ErrorPage.prototype.handleStatusFetchSuccess = function (pageType, data)
-    {
-        if (pageType == '503')
-        {
+    ErrorPage.prototype.handleStatusFetchSuccess = function (pageType, data) {
+        if (pageType == '503') {
             $('#replace-with-fetched-data').html(data.status.description);
-        } else
-        {
-            if (!!data.scheduled_maintenances.length)
-            {
+        } else {
+            if (!!data.scheduled_maintenances.length) {
                 var maint = data.scheduled_maintenances[0];
                 $('#replace-with-fetched-data').html(this.createTimeRangeTag(maint.scheduled_for, maint.scheduled_until));
                 $.fn.localizeTime();
             }
-            else
-            {
+            else {
                 $('#replace-with-fetched-data').html('<em>(there are no active scheduled maintenances)</em>');
             }
         }
     };
 
 
-    ErrorPage.prototype.handleStatusFetchFail = function (pageType)
-    {
+    ErrorPage.prototype.handleStatusFetchFail = function (pageType) {
         $('#replace-with-fetched-data').html('<em>(enter a valid Statuspage url)</em>');
     };
 
 
-    ErrorPage.prototype.fetchStatus = function (pageUrl, pageType)
-    {
+    ErrorPage.prototype.fetchStatus = function (pageUrl, pageType) {
         //console.log('in app.js fetch');
         if (!pageUrl || !pageType || pageType == '404') return;
 
         var url = ''
             , self = this;
 
-        if (pageType == '503')
-        {
+        if (pageType == '503') {
             url = pageUrl + '/api/v2/status.json';
         }
-        else
-        {
+        else {
             url = pageUrl + '/api/v2/scheduled-maintenances/active.json';
         }
 
         $.ajax({
             type: "GET",
             url: url,
-        }).success(function (data, status)
-        {
+        }).success(function (data, status) {
             //console.log('success');
             self.handleStatusFetchSuccess(pageType, data);
-        }).fail(function (xhr, msg)
-        {
+        }).fail(function (xhr, msg) {
             //console.log('fail');
             self.handleStatusFetchFail(pageType);
         });
@@ -448,8 +433,7 @@
     ep.initialize();
 
     // hack to make sure content stays centered >_<
-    $(window).on('resize', function ()
-    {
+    $(window).on('resize', function () {
         $('body').trigger('resize')
     });
 

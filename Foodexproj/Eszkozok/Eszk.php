@@ -85,19 +85,16 @@ namespace Eszkozok
                         if ($result->num_rows == 0)
                         {
                             $kimenet[$index] = 'N/A';
-                        }
-                        else if($result->num_rows == 1)
+                        } else if ($result->num_rows == 1)
                         {
                             $row = $result->fetch_assoc();
 
                             $kimenet[$index] = $row['nev'];
-                        }
-                        else
+                        } else
                         {
                             throw new \Exception('Tobb, mint egy acc ugyan azzal az internal_id-vel.');
                         }
-                    }
-                    else
+                    } else
                     {
                         throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
                     }
@@ -143,8 +140,7 @@ namespace Eszkozok
                             ++$index;
                         }
                     }
-                }
-                else
+                } else
                 {
                     throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
                 }
@@ -154,22 +150,37 @@ namespace Eszkozok
             }
             catch (\Exception $e)
             {
-                ob_clean();
                 self::dieToErrorPage('8512: ' . $e->getMessage());
             }
         }
 
         public static function initMySqliObject()
         {
+
             $servername = "gjani.sch.bme.hu:3306";
+            if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
+            {
+                $servername = "gjani.sch.bme.hu:3306";
+            } else if (strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)
+            {
+                $servername = "gjani.ddns.net:3306";
+                $servername = "localhost:3306";//Mert a ddns-es címmel elérve nagyon lassú
+            }
+
+
             $username = "fxtestuser";
             $password = "fxtest1234";
             $dbname = "fxtestdb";
+
 
             $conn = new \mysqli($servername, $username, $password, $dbname);
 
             $conn->set_charset("utf8");
 
+            if ($conn->connect_errno)
+            {
+                self::dieToErrorPage('3217: ' . $conn->connect_error);
+            }
             return $conn;
         }
 
@@ -215,8 +226,7 @@ namespace Eszkozok
                         if (isset($row['ujmuszakjog']))
                             $UjMuszakJog = $row['ujmuszakjog'];
 
-                    }
-                    else
+                    } else
                     {
                         unset($_SESSION['profilint_id']);
                         throw new \Exception('$result->num_rows != 1');
@@ -245,8 +255,12 @@ namespace Eszkozok
                 $redirectUri = "http://gjani.sch.bme.hu/foodex/login.php";
                 $clientId = "***REMOVED***";
                 $clientSecret = "***REMOVED***";
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
+            } else if (strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)//Contains()
+            {
+                $redirectUri = "http://gjani.ddns.net/foodex/login.php";
+                $clientId = "***REMOVED***";
+                $clientSecret = "***REMOVED***";
+            } else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
             {
                 $redirectUri = "https://feverkill.com/bme/foodex/login.php";
                 $clientId = "***REMOVED***";
@@ -320,8 +334,7 @@ namespace Eszkozok
                 exit;
 
                 // Check given state against previously stored one to mitigate CSRF attack
-            }
-            elseif (empty($_GET['state']) || (isset($_SESSION['oauth2state']) && $_GET['state'] !== $_SESSION['oauth2state']))
+            } elseif (empty($_GET['state']) || (isset($_SESSION['oauth2state']) && $_GET['state'] !== $_SESSION['oauth2state']))
             {
 
                 if (isset($_SESSION['oauth2state']))
@@ -342,12 +355,10 @@ namespace Eszkozok
                 {
                     unset($_SESSION["InvalidStateCounter"]);
                     self::dieToErrorPage('991: Invalid state');
-                }
-                else
+                } else
                     self::RedirectUnderRoot('login.php');
 
-            }
-            else
+            } else
             {
                 try
                 {
@@ -383,8 +394,7 @@ namespace Eszkozok
                             <?php
                             self::FxTagMuvelet($resp);
 
-                        }
-                        else
+                        } else
                         {
 
                             ?>
@@ -463,8 +473,7 @@ namespace Eszkozok
                         {
                             $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `ujmuszakjog`) VALUES (?, ?, ?);");
                             $stmt->bind_param('ssi', $internal_id, $displayName, $ujmuszakjog);
-                        }
-                        else
+                        } else
                         {
                             $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `ujmuszakjog`) VALUES (?, ?);");
                             $stmt->bind_param('si', $internal_id, $ujmuszakjog);
@@ -474,12 +483,10 @@ namespace Eszkozok
                         if ($stmt->execute())
                         {
 
-                        }
-                        else
+                        } else
                             throw new \Exception('');
 
-                    }
-                    else
+                    } else
                     {//Már regisztrált acc
 
                         if (isset($displayName))
@@ -501,8 +508,7 @@ namespace Eszkozok
                                 if ($stmt->execute())
                                 {
 
-                                }
-                                else
+                                } else
                                     throw new \Exception('');
 
 
@@ -510,8 +516,7 @@ namespace Eszkozok
 
                         }
                     }
-                }
-                else
+                } else
                 {
                     throw new \Exception('$stmt->execute() returns false');
                 }
@@ -611,12 +616,10 @@ namespace Eszkozok
                     ?>
                 </form>
                 <script>
-                    function redirectfromsubmitter()
-                    {
+                    function redirectfromsubmitter() {
                         document.getElementById("formtosubmitabc9871215487").submit();
                     }
-                    window.onload = function ()
-                    {
+                    window.onload = function () {
                         setTimeout(redirectfromsubmitter, 1);
                         setTimeout(redirectfromsubmitter, 30);
                         setTimeout(redirectfromsubmitter, 200);
@@ -637,11 +640,10 @@ namespace Eszkozok
         {
             $ret = $_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER["HTTP_HOST"] . "/";
 
-            if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
+            if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)
             {
                 $ret .= "foodex/";
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
+            } else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
             {
                 $ret .= "bme/foodex/";
             }
