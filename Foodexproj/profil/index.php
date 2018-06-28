@@ -41,6 +41,8 @@ if($AktProfil->getUjMuszakJog() == 1)
 <a href = "../jelentkezes"> Jelentkezés műszakra</a>
 
 <br>
+<p>Értesítési címed: <b><?php echo $AktProfil->getEmail(); ?></b></p>
+<br>
 <br>
 <form action="logout.php">
     <button class="button" style="background: transparent" type="submit" >Kijelentkezés</button>
