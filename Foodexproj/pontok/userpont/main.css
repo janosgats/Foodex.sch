@@ -89,6 +89,10 @@ div.example {
     font-weight: bold;
     /*text-shadow: 1px 1px orangered;*/
 }
+.tablaElsosor {
+    font-weight: bold;
+    /*text-shadow: 1px 1px orangered;*/
+}
 
 .oszlopReszletek {
 
@@ -110,11 +114,11 @@ div.example {
 
 }
 
-.oszlopVarolista {
+.oszlopKiirta {
 
 }
 
-.oszlopVarolista p {
+.oszlopKiirta p {
     display: inline;
     margin: 0;
 }

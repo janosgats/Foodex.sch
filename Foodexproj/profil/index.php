@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-include_once '../Eszkozok/Eszk.php';
-include_once 'Profil.php';
+require_once '../Eszkozok/Eszk.php';
+require_once 'Profil.php';
 
 if (!isset($_SESSION['profilint_id']))
     Eszkozok\Eszk::RedirectUnderRoot('');
@@ -39,6 +39,8 @@ if($AktProfil->getUjMuszakJog() == 1)
 ?>
 <br>
 <a href = "../jelentkezes"> Jelentkezés műszakra</a>
+<br>
+<a href = "../pontok"> Pontok megtekintése</a>
 
 <br>
 <p>Értesítési címed: <b><?php echo $AktProfil->getEmail(); ?></b></p>

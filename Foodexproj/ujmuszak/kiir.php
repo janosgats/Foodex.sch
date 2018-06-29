@@ -2,8 +2,8 @@
 session_start();
 
 set_include_path(getcwd());
-include_once '../Eszkozok/Eszk.php';
-include_once '../Eszkozok/Muszak.php';
+require_once '../Eszkozok/Eszk.php';
+require_once '../Eszkozok/Muszak.php';
 
 
 function GetParam($parameterneve)

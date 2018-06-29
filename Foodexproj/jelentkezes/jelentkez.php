@@ -1,7 +1,7 @@
 <?php
 
-include_once '../Eszkozok/Eszk.php';
-include_once '../Eszkozok/param.php';
+require_once '../Eszkozok/Eszk.php';
+require_once '../Eszkozok/param.php';
 include_once '../3rdparty/reCaptcha/autoload.php';
 
 include_once __DIR__ . '/../Eszkozok/SMTPSender.php';
@@ -60,7 +60,6 @@ function doJelentkezes()
 
             if (GetParam('muszmuv') == 'felvesz')
             {
-
 
                 $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
                 if (!$stmt)

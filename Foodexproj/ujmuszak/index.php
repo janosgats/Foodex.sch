@@ -2,7 +2,7 @@
 session_start();
 
 set_include_path(getcwd());
-include_once '../Eszkozok/Eszk.php';
+require_once '../Eszkozok/Eszk.php';
 
 if (!isset($_SESSION['profilint_id']))
     Eszkozok\Eszk::RedirectUnderRoot('');
