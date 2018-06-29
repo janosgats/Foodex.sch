@@ -2,7 +2,7 @@
 
 require_once('../vendor/autoload.php');
 
-include_once('../Eszkozok/Eszk.php');
+require_once('../Eszkozok/Eszk.php');
 
 class SMTPSender
 {

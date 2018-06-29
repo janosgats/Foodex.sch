@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-include_once '../Eszkozok/Eszk.php';
-include_once '../Eszkozok/param.php';
+require_once '../Eszkozok/Eszk.php';
+require_once '../Eszkozok/param.php';
 include_once '../profil/Profil.php';
 include_once 'jelentkez.php';
 
@@ -139,7 +139,7 @@ doJelentkezes();
                                     <i
                                         class="fa fa-plus-square-o fa-2x"></i></p>
                             </td>
-                            <td class="tablaCella oszlopIdo">
+                            <td class="tablaCella oszlopPont">
                                 <p><?php echo $idostringbuff; ?></p>
                             </td>
                             <td class="tablaCella oszlopLetszam">

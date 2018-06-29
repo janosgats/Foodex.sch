@@ -7,7 +7,7 @@ namespace Eszkozok
     use GuzzleHttp\Exception\ConnectException;
     use Profil\Profil;
 
-    include_once __DIR__ . '/Muszak.php';
+    require_once __DIR__ . '/Muszak.php';
 
     require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -320,6 +320,60 @@ namespace Eszkozok
             return $conn;
         }
 
+        public static function GetTaroltMuszakAdatWithConn($muszid, $conn)
+        {
+
+            $Ki = new Muszak();
+
+            try
+            {
+                if (!$conn)
+                    throw new \Exception('$conn is \'false\'');
+
+                $stmt = $conn->prepare("SELECT * FROM fxmuszakok WHERE ID = ?");
+                if (!$stmt)
+                    throw new \Exception('$stmt is \'false\'');
+
+                $stmt->bind_param('i', $muszid);
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows == 1)
+                    {
+                        $row = $result->fetch_assoc();
+
+                        if (isset($row['ID']))
+                            $Ki->ID = $row['ID'];
+                        if (isset($row['kiirta']))
+                            $Ki->kiirta = $row['kiirta'];
+                        if (isset($row['musznev']))
+                            $Ki->musznev = $row['musznev'];
+                        if (isset($row['idokezd']))
+                            $Ki->idokezd = $row['idokezd'];
+                        if (isset($row['idoveg']))
+                            $Ki->idoveg = $row['idoveg'];
+                        if (isset($row['letszam']))
+                            $Ki->letszam = $row['letszam'];
+                        if (isset($row['pont']))
+                            $Ki->pont = $row['pont'];
+
+                    }
+                    else
+                    {
+                        throw new \Exception('$result->num_rows != 1');
+                    }
+                }
+            }
+            catch (\Exception $e)
+            {
+                self::dieToErrorPage('1233: ' . $e->getMessage());
+            }
+
+            return $Ki;
+        }
+
         public static function GetBejelentkezettProfilAdat()
         {
 
@@ -352,8 +406,11 @@ namespace Eszkozok
                 if ($stmt->execute())
                 {
                     $result = $stmt->get_result();
-
-                    if ($result->num_rows == 1)//Még nem regisztrált
+                    if ($result->num_rows == 0)
+                    {
+                        throw new \Exception('A felhasználó nem található!');
+                    }
+                    else if ($result->num_rows == 1)
                     {
                         $row = $result->fetch_assoc();
 
@@ -367,7 +424,6 @@ namespace Eszkozok
                     }
                     else
                     {
-                        unset($_SESSION['profilint_id']);
                         throw new \Exception('$result->num_rows != 1');
                     }
                 }
@@ -379,7 +435,7 @@ namespace Eszkozok
 
             $end = get_included_files();
             set_include_path(dirname(end($end)));
-            include_once "../profil/Profil.php";
+            require_once __DIR__ . '/../profil/Profil.php';
             return new Profil($internal_id, $ProfilNev, $UjMuszakJog, $email);
         }
 
