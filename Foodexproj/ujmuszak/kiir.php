@@ -6,29 +6,8 @@ require_once '../Eszkozok/Eszk.php';
 require_once '../Eszkozok/Muszak.php';
 
 
-function GetParam($parameterneve)
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'POST')
-    {
-        return $_POST[$parameterneve];
-    }
-    else
-    {
-        return $_GET[$parameterneve];
-    }
-}
+require_once __DIR__ . '/../Eszkozok/param.php';
 
-function IsParamSet($parameterneve)
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'POST')
-    {
-        return isset($_POST[$parameterneve]);
-    }
-    else
-    {
-        return isset($_GET[$parameterneve]);
-    }
-}
 
 function verifyDate($date, $strict = true)
 {
@@ -63,23 +42,30 @@ try
     $AktMuszak = new \Eszkozok\Muszak();
     $AktMuszak->kiirta = $internal_id;
 
-    if (IsParamSet('musznev'))
-        $AktMuszak->musznev = GetParam('musznev');
-    if (IsParamSet('letszam'))
-        $AktMuszak->letszam = GetParam('letszam');
-    if (IsParamSet('pont'))
-        $AktMuszak->pont = GetParam('pont');
-    if (IsParamSet('idokezd'))
-        $AktMuszak->idokezd = GetParam('idokezd');
-    if (IsParamSet('idoveg'))
-        $AktMuszak->idoveg = GetParam('idoveg');
+    if (IsURLParamSet('musznev'))
+        $AktMuszak->musznev = GetURLParam('musznev');
+    if (IsURLParamSet('letszam'))
+        $AktMuszak->letszam = GetURLParam('letszam');
+    if (IsURLParamSet('pont'))
+        $AktMuszak->pont = GetURLParam('pont');
+    if (IsURLParamSet('mospont'))
+        $AktMuszak->mospont = GetURLParam('mospont');
+    if (IsURLParamSet('idokezd'))
+        $AktMuszak->idokezd = GetURLParam('idokezd');
+    if (IsURLParamSet('idoveg'))
+        $AktMuszak->idoveg = GetURLParam('idoveg');
 
     if (!is_numeric($AktMuszak->pont))
         throw new \Exception('A közösségi pontszám nem egy szám.');
+    if (!is_numeric($AktMuszak->mospont))
+        throw new \Exception('A mosogatásért járó pontszám nem egy szám.');
     if (!is_numeric($AktMuszak->letszam))
         throw new \Exception('A létszám nem egy szám.');
+
     if ($AktMuszak->pont < 0)
         throw new \Exception('A közösségi pontszám nagyobb, vagy egyenlő kell, hogy legyen, mint 0.');
+    if ($AktMuszak->mospont < 0)
+        throw new \Exception('A mosogatásért járó pontszám nagyobb, vagy egyenlő kell, hogy legyen, mint 0.');
     if ($AktMuszak->letszam < 1)
         throw new \Exception('A létszám nagyobb kell, hogy legyen, mint 0.');
 
@@ -100,13 +86,11 @@ try
     if (!$conn)
         throw new \Exception('SQL hiba: $conn is \'false\'');
 
-    $stmt = $conn->prepare("INSERT INTO `fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`) VALUES (?, ?, ?, ?, ?, ?);");
+    $stmt = $conn->prepare("INSERT INTO `fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`, `mospont`) VALUES (?, ?, ?, ?, ?, ?, ?);");
     if (!$stmt)
         throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-    $stmt->bind_param('ssssii', $AktMuszak->kiirta, $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont);
-
-
+    $stmt->bind_param('ssssiss', $AktMuszak->kiirta, $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont);
 
 
     if ($stmt->execute())
@@ -123,5 +107,5 @@ catch (\Exception $e)
 {
     ob_clean();
     //Eszkozok\Eszk::dieToErrorPage('2085: ' . $e->getMessage());
-    echo $e->getMessage();
+    echo 'Hiba: ' . $e->getMessage();
 }

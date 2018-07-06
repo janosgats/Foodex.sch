@@ -89,21 +89,13 @@ div.example {
     font-weight: bold;
     /*text-shadow: 1px 1px orangered;*/
 }
+.oszlopNev p {
+    display: inline-block;
+}
+
 .tablaElsosor {
     font-weight: bold;
     /*text-shadow: 1px 1px orangered;*/
-}
-
-.oszlopReszletek {
-
-}
-
-.oszlopReszletek p {
-    cursor: pointer;
-}
-
-.oszlopReszletek p:hover {
-    color: yellow;
 }
 
 .oszlopPont {
@@ -123,6 +115,17 @@ div.example {
     margin: 0;
 }
 
+.oszlopMosogatas {
+
+}
+
+.oszlopMosogatas p {
+    cursor: pointer;
+}
+
+.oszlopMosogatas p:hover {
+    color: yellow;
+}
 .varolistaElso {
     color: gold;
 }

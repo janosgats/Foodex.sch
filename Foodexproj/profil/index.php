@@ -40,6 +40,8 @@ if($AktProfil->getUjMuszakJog() == 1)
 <br>
 <a href = "../jelentkezes"> Jelentkezés műszakra</a>
 <br>
+<a href = "../pontok/userpont/?mosjelentk=1"> Mosogattam!</a>
+<br>
 <a href = "../pontok"> Pontok megtekintése</a>
 
 <br>

@@ -102,6 +102,10 @@ if ($AktProfil->getUjMuszakJog() != 1)
                     <input id="pont" name="pont" type="text" style="background: transparent" placeholder="pl. 3">
                     <br>
                     <br>
+                    <p style="display: inline">Pont mosogatásért: </p>
+                    <input id="mospont" name="pont" type="text" style="background: transparent" placeholder="pl. 0.5">
+                    <br>
+                    <br>
 
                     <div class="form-group">
                         <div class="col-sm-10 col-sm-offset-2">
@@ -176,7 +180,8 @@ if ($AktProfil->getUjMuszakJog() != 1)
             idokezd: document.getElementById("idokezd").value,
             idoveg: document.getElementById("idoveg").value,
             letszam: document.getElementById("letszam").value,
-            pont: document.getElementById("pont").value
+            pont: document.getElementById("pont").value,
+            mospont: document.getElementById("mospont").value
         });
     }
 

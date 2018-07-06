@@ -1,6 +1,6 @@
 <?php
 
-function GetParam($parameterneve)
+function GetURLParam($parameterneve)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
@@ -12,7 +12,7 @@ function GetParam($parameterneve)
     }
 }
 
-function IsParamSet($parameterneve)
+function IsURLParamSet($parameterneve)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
@@ -21,5 +21,17 @@ function IsParamSet($parameterneve)
     else
     {
         return isset($_GET[$parameterneve]);
+    }
+}
+
+function SetURLParam($parameterneve, $ertek)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST')
+    {
+        $_POST[$parameterneve] = $ertek;
+    }
+    else
+    {
+        $_GET[$parameterneve] = $ertek;
     }
 }

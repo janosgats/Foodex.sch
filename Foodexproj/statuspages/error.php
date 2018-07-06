@@ -269,27 +269,7 @@
 
     <?php
 
-    function GetParam($parameterneve)
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST')
-        {
-            return $_POST[$parameterneve];
-        } else
-        {
-            return $_GET[$parameterneve];
-        }
-    }
-
-    function IsParamSet($parameterneve)
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST')
-        {
-            return isset($_POST[$parameterneve]);
-        } else
-        {
-            return isset($_GET[$parameterneve]);
-        }
-    }
+    require_once __DIR__ . '/../Eszkozok/param.php';
 
     ?>
 
@@ -314,12 +294,15 @@
 
     <div class="context primary-text-color" style="padding-top: 0; margin-top: 0">
         <p>
-            <?php if (IsParamSet('code'))
-
-                $code = GetParam('code');
-            $code = urldecode($code);
-            $code = htmlspecialchars($code, ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8');
-            echo '<span style="display: inline;font-style: italic">' . $code . '<br></span>'; ?>
+            <?php
+            if (IsURLParamSet('code'))
+            {
+                $code = GetURLParam('code');
+                $code = urldecode($code);
+                $code = htmlspecialchars($code, ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8');
+                echo '<span style="display: inline;font-style: italic">' . $code . '<br></span>';
+            }
+            ?>
         </p>
     </div>
 </div>
