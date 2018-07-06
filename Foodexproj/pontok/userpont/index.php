@@ -24,6 +24,78 @@ else if (!IsURLParamSet('int_id'))
 
 $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'));
 
+if ($MosogatasJelentkezes)
+{
+    if (IsURLParamSet('muv') && (GetURLParam('muv') == 'ujmosjel' || GetURLParam('muv') == 'ujmoslead'))
+    {
+        if (IsURLParamSet('mosmuszid'))
+        {
+            try
+            {
+                $mosmuszid = GetURLParam('mosmuszid');
+
+                $conn = \Eszkozok\Eszk::initMySqliObject();
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+
+                if (\Eszkozok\Eszk::BenneVanEAKeretbenWithConn($mosmuszid, $_SESSION['profilint_id'], $conn))
+                {
+                    $stmt = $conn->prepare("SELECT COUNT(1) FROM `fxmuszakok` WHERE  `idoveg` < NOW() AND `ID` = ?;");
+                    if (!$stmt)
+                        throw new \Exception('SQL hiba: $stmt 1 is \'false\'' . ' :' . $conn->error);
+
+                    $stmt->bind_param('i', $mosmuszid);
+
+                    if ($stmt->execute())
+                    {
+                        $resultMuszak = $stmt->get_result();
+                        if ($resultMuszak->num_rows == 1)
+                        {//Az acc a műszakkeretnek tagja, és már a műszak végideje is elmúlt
+
+                            if (GetURLParam('muv') == 'ujmosjel')
+                                $stmt = $conn->prepare("UPDATE `fxjelentk` SET  `mosogat` = '1' WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
+                            else if (GetURLParam('muv') == 'ujmoslead')
+                                $stmt = $conn->prepare("UPDATE `fxjelentk` SET  `mosogat` = '0' WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
+
+
+                            if (!$stmt)
+                                throw new \Exception('SQL hiba: $stmt 2 is \'false\'');
+
+                            $intid = $_SESSION['profilint_id'];
+                            $stmt->bind_param('si', $intid, $mosmuszid);
+
+                            if ($stmt->execute())
+                            {
+
+                            }
+                            else
+                                throw new \Exception('$stmt->execute() 2 nem sikerült');
+                        }
+                    }
+                    else
+                        throw new \Exception('$stmt->execute() 1 nem sikerült' . ' :' . $conn->error);
+
+                }
+            }
+            catch (\Exception $e)
+            {
+                self::dieToErrorPage('3003: ' . $e->getMessage());
+            }
+            finally
+            {
+                try
+                {
+                    $conn->close();
+                }
+                catch (\Exception $e)
+                {
+                }
+            }
+        }
+    }
+
+}
 
 //var_dump($MegjelenitettProfil);
 
@@ -254,13 +326,15 @@ $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id')
                                                 if ($jelMosogatasok[$rowMuszak['ID']] == 1)
                                                 {
                                                     ?>
-                                                    <p><i class="fa fa-minus-square-o fa-2x"></i></p>
+                                                    <a href="?mosjelentk=1&muv=ujmoslead&mosmuszid=<?php echo htmlspecialchars($rowMuszak['ID']); ?>" style="text-decoration: none; color: inherit"><p><i
+                                                                class="fa fa-minus-square-o fa-2x"></i></p></a>
                                                     <?php
                                                 }
                                                 else
                                                 {
                                                     ?>
-                                                    <p><i class="fa fa-plus-square-o fa-2x"></i></p>
+                                                    <a href="?mosjelentk=1&muv=ujmosjel&mosmuszid=<?php echo htmlspecialchars($rowMuszak['ID']); ?>" style="text-decoration: none; color: inherit"><p><i
+                                                                class="fa fa-plus-square-o fa-2x"></i></p></a>
                                                     <?php
                                                 }
 

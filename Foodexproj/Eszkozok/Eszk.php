@@ -15,6 +15,73 @@ namespace Eszkozok
 
     class Eszk
     {
+
+        /**
+         * @returns TRUE, ha a $muszid műszak keretlétszámába benne van az $int_id account
+         */
+        static public function BenneVanEAKeretben($muszid, $int_id)
+        {
+            $conn = self::initMySqliObject();
+
+            $ki = self::BenneVanEAKeretbenWithConn($muszid, $int_id, $conn);
+
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
+        }
+
+        /**
+         * @returns TRUE, ha a $muszid műszak keretlétszámába benne van az $int_id account
+         */
+        static public function BenneVanEAKeretbenWithConn($muszid, $int_id, $conn)
+        {
+            try
+            {
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+
+                $MuszakLetszam = self::GetTaroltMuszakAdatWithConn($muszid, $conn)->letszam;
+
+
+                $stmt = $conn->prepare("SELECT * FROM `fxjelentk` WHERE `muszid` = ? AND `status` = 1 ORDER BY `ID` ASC;");
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                $stmt->bind_param('i', $muszid);
+
+                if ($stmt->execute())
+                {
+                    $resultKeret = $stmt->get_result();
+                    if ($resultKeret->num_rows > 0)
+                    {
+                        for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && $i < $MuszakLetszam; ++$i)
+                        {
+                            if ($int_id == $rowKeret['jelentkezo'])
+                                return true;
+
+                        }
+                    }
+                }
+                else
+                    throw new \Exception('$stmt->execute() nem sikerült' . ' :' . $conn->error);
+
+            }
+            catch (\Exception $e)
+            {
+                ob_clean();
+                self::dieToErrorPage('4015: ' . $e->getMessage());
+            }
+
+            return false;
+        }
+
         /**
          * @return TRUE, ha a $szo maganhangzoval, vagy úgy ejtendő számmal kezdődik
          * @param $szo a tesztelendő karakterlánc
@@ -121,7 +188,17 @@ namespace Eszkozok
         public static function getMuszakFromMuszakId($muszakid)
         {
             $conn = self::initMySqliObject();
-            self::getMuszakFromMuszakIdWithConn($muszakid, $conn);
+            $ki = self::getMuszakFromMuszakIdWithConn($muszakid, $conn);
+
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
         }
 
         public static function getMuszakFromMuszakIdWithConn($muszakid, $conn)
@@ -177,7 +254,16 @@ namespace Eszkozok
         public static function getColumnAdatTombFromInternalIdTomb($internidTomb, $oszlopnev)
         {
             $conn = self::initMySqliObject();
-            self::getColumnAdatTombFromInternalIdTombWithConn($internidTomb, $oszlopnev, $conn);
+            $ki = self::getColumnAdatTombFromInternalIdTombWithConn($internidTomb, $oszlopnev, $conn);
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
         }
 
         public static function getColumnAdatTombFromInternalIdTombWithConn($internidTomb, $oszlopnev, $conn)
@@ -240,7 +326,17 @@ namespace Eszkozok
         {
             $conn = self::initMySqliObject();
 
-            getJelentkezokListajaWithConn($muszakid, $conn);
+            $ki = getJelentkezokListajaWithConn($muszakid, $conn);
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
+
         }
 
         public static function getJelentkezokListajaWithConn($muszakid, $conn)
@@ -360,6 +456,10 @@ namespace Eszkozok
                             $Ki->pont = $row['pont'];
 
                     }
+                    else if ($result->num_rows == 0)
+                    {
+                        throw new \Exception('Nem található ilyen műszak! (' . htmlspecialchars($muszid) . ')');
+                    }
                     else
                     {
                         throw new \Exception('$result->num_rows != 1');
@@ -432,9 +532,17 @@ namespace Eszkozok
             {
                 self::dieToErrorPage('1220: ' . $e->getMessage());
             }
+            finally
+            {
+                try
+                {
+                    $conn->close();
+                }
+                catch (\Exception $e)
+                {
+                }
+            }
 
-            $end = get_included_files();
-            set_include_path(dirname(end($end)));
             require_once __DIR__ . '/../profil/Profil.php';
             return new Profil($internal_id, $ProfilNev, $UjMuszakJog, $email);
         }
