@@ -10,13 +10,13 @@ function isReCaptchaValid()
 {
     $secret = '***REMOVED***';
 
-    if (IsParamSet('g-recaptcha-response'))
+    if (IsURLParamSet('g-recaptcha-response'))
     {
 
         $recaptcha = new \ReCaptcha\ReCaptcha($secret);
 
 
-        $resp = $recaptcha->verify(GetParam('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
+        $resp = $recaptcha->verify(GetURLParam('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
 
         if ($resp->isSuccess())
         {
@@ -40,7 +40,7 @@ function doJelentkezes()
     if (!isset($_SESSION['profilint_id']))
         Eszkozok\Eszk::RedirectUnderRoot('');
 
-    if (!IsParamSet('g-recaptcha-response'))
+    if (!IsURLParamSet('g-recaptcha-response'))
         return;
 //Ha a 'g-recaptcha-response' paraméter meg van adva, megy tovább az ellenőrzés és végrehajtás...
 
@@ -48,9 +48,9 @@ function doJelentkezes()
     if (!isReCaptchaValid())
         \Eszkozok\Eszk::dieToErrorPage('3211: A ReCaptcha megoldása (már) nem érvényes!');
 
-    if (IsParamSet('muszid') && IsParamSet('muszmuv'))
+    if (IsURLParamSet('muszid') && IsURLParamSet('muszmuv'))
     {
-        $muszakID = GetParam('muszid');
+        $muszakID = GetURLParam('muszid');
         try
         {
             $conn = \Eszkozok\Eszk::initMySqliObject();
@@ -58,7 +58,7 @@ function doJelentkezes()
             if (!$conn)
                 throw new \Exception('SQL hiba: $conn is \'false\'');
 
-            if (GetParam('muszmuv') == 'felvesz')
+            if (GetURLParam('muszmuv') == 'felvesz')
             {
 
                 $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
@@ -96,7 +96,7 @@ function doJelentkezes()
                 }
 
             }
-            else if (GetParam('muszmuv') == 'lead')
+            else if (GetURLParam('muszmuv') == 'lead')
             {
                 $leadottMuszak = \Eszkozok\Eszk::getMuszakFromMuszakIdWithConn($muszakID, $conn);
 

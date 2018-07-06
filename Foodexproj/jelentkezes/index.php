@@ -26,7 +26,7 @@ doJelentkezes();
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
-<!--    <link rel="stylesheet" href="../backgradient.css">-->
+    <!--    <link rel="stylesheet" href="../backgradient.css">-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -104,7 +104,7 @@ doJelentkezes();
                         else
                             $felvetel = 1;
 
-                        $jelnevtomb = \Eszkozok\Eszk::getColumnAdatTombFromInternalIdTombWithConn($jelintidtomb, 'nev',$conn);
+                        $jelnevtomb = \Eszkozok\Eszk::getColumnAdatTombFromInternalIdTombWithConn($jelintidtomb, 'nev', $conn);
 
 
                         $jelnevstring = '';
@@ -128,14 +128,14 @@ doJelentkezes();
                         }
                         ?>
 
-                        <!--                        ShowModal(id,kiirta, musznev, idokezd, idoveg, letszam, pont, jelaktiv)-->
+                        <!--                        ShowModal(id,kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv)-->
 
                         <tr class="tablaSor">
                             <td class="tablaCella oszlopNev">
                                 <p><?php echo htmlspecialchars($row['musznev']); ?></p>
                             </td>
                             <td class="tablaCella oszlopReszletek">
-                                <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d >>> H:i'); ?>', '<?php echo $idoveg->format('Y-m-d >>> H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
+                                <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
                                     <i
                                         class="fa fa-plus-square-o fa-2x"></i></p>
                             </td>
@@ -186,13 +186,25 @@ doJelentkezes();
         <div class="modal-body" id=modalbody">
             <p id="modalkiirta">Kiírta: </p>
 
-            <p id="modalidokezd">Kezdet: </p>
+            <div style="display: inline-block; margin: 0; padding: 0; text-align: justify">
+                <p id="modalidokezd" style="white-space:pre;margin: 0; padding: 0">Kezdet: </p>
 
-            <p id="modalidoveg">Vég: </p>
+                <div
+                    style="display: flex; width: 100%;justify-content: space-between;text-align: justify; margin: 0; padding: 0;">
+
+                    <p id="modalidovegSZOVEG" style="margin-bottom: 0; padding-bottom: 0; ;display: inline">Vég: </p>
+
+                    <p id="modalidovegERTEK"
+                       style="white-space:pre;margin-bottom: 0; padding-bottom: 0;display: inline"></p>
+
+                </div>
+            </div>
 
             <p id="modalletszam">Maximális létszám: </p>
 
             <p id="modalpont">Közösségi pont: </p>
+
+            <p id="modalmospont">Pont mosogatásért: </p>
         </div>
         <div class="modal-footer">
             <div id="jelentkezgombdiv" style="text-align: center;">
@@ -219,8 +231,7 @@ doJelentkezes();
 </div>
 
 <script>
-    function greDataCallback()
-    {
+    function greDataCallback() {
         document.getElementById('modalsubmitbtn').removeAttribute('disabled');
         document.getElementById('modalbtntooltip').classList.remove('tooltip');
         document.getElementById('modalbtntooltiptext').style.display = 'none';
@@ -236,49 +247,42 @@ doJelentkezes();
 
     // When the user clicks the button, open the modal
 
-    function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, jelaktiv, felvetel)
-    {
+    function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv, felvetel) {
         document.getElementById('modalheadertext').innerHTML = musznev + ' Jelentkezés';
         document.getElementById('modalkiirta').innerHTML = 'Kiírta: ' + kiirta;
         document.getElementById('modalidokezd').innerHTML = 'Kezdet: ' + idokezd;
-        document.getElementById('modalidoveg').innerHTML = 'Vég: ' + idoveg;
+        document.getElementById('modalidovegERTEK').innerHTML = idoveg;
         document.getElementById('modalletszam').innerHTML = 'Maximális létszám: ' + letszam;
         document.getElementById('modalpont').innerHTML = 'Közösségi pont: ' + pont;
+        document.getElementById('modalmospont').innerHTML = 'Pont mosogatásért: ' + mospont;
         document.getElementById('modalmuszakid').value = id;
 
-        if (felvetel == 0)
-        {
+        if (felvetel == 0) {
             document.getElementById('modalmuvelet').value = 'lead';
             document.getElementById('modalsubmitbtn').innerHTML = 'Leadom!';
         }
-        else
-        {
+        else {
             document.getElementById('modalmuvelet').value = 'felvesz';
             document.getElementById('modalsubmitbtn').innerHTML = 'Viszem!';
         }
 
-        if (jelaktiv == 0)
-        {
+        if (jelaktiv == 0) {
             document.getElementById('jelentkezgombdiv').style.display = 'none';
         }
-        else
-        {
+        else {
             document.getElementById('jelentkezgombdiv').style.display = 'block';
         }
         modal.style.display = "block";
     }
 
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function ()
-    {
+    span.onclick = function () {
         modal.style.display = "none";
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event)
-    {
-        if (event.target == modal)
-        {
+    window.onclick = function (event) {
+        if (event.target == modal) {
             modal.style.display = "none";
         }
     }

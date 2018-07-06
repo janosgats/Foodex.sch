@@ -60,7 +60,7 @@ if (!isset($_SESSION['profilint_id']))
 
             $stmt = $conn->prepare("SELECT `internal_id`,`nev` FROM `fxaccok` ORDER BY `nev` ASC;");
             if (!$stmt)
-                throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+                throw new \Exception('SQL hiba: $stmt 2 is \'false\'' . ' :' . $conn->error);
 
 
             if ($stmt->execute())
@@ -73,7 +73,7 @@ if (!isset($_SESSION['profilint_id']))
                     {
                         $pontszam = 0;
 
-                        $stmt = $conn->prepare("SELECT `muszid` FROM `fxjelentk` WHERE `jelentkezo` = ? AND status = 1;");
+                        $stmt = $conn->prepare("SELECT `muszid`, `mosogat` FROM `fxjelentk` WHERE `jelentkezo` = ? AND status = 1;");
                         if (!$stmt)
                             throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
@@ -85,15 +85,19 @@ if (!isset($_SESSION['profilint_id']))
                             if ($resultJelentk->num_rows > 0)
                             {
                                 $jelMuszakIDk = array();//Jelentkezett műszakok ID-i a rowAcc-hoz
+                                $jelMosogatasok = array();
 
                                 while ($rowJelentk = $resultJelentk->fetch_assoc())
                                 {
-                                    $jelMuszakIDk[] = $conn->escape_string($rowJelentk['muszid']);
+                                    $aktmuszidBuff = $conn->escape_string($rowJelentk['muszid']);
+                                    $jelMuszakIDk[] = $aktmuszidBuff;
+                                    $jelMosogatasok[$aktmuszidBuff] = $conn->escape_string($rowJelentk['mosogat']);
                                 }
 
-                               // var_dump($jelMuszakIDk);
+                                // var_dump($jelMuszakIDk);
 
                                 $vittMuszakIDk = array();
+                                $vittMosogatasok = array();
 
                                 foreach ($jelMuszakIDk as $muszidakt)
                                 {
@@ -103,7 +107,7 @@ if (!isset($_SESSION['profilint_id']))
 
                                     $stmt = $conn->prepare("SELECT * FROM `fxjelentk` WHERE `muszid` = ? AND `status` = 1 ORDER BY `ID` ASC;");
                                     if (!$stmt)
-                                        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+                                        throw new \Exception('SQL hiba: $stmt 5 is \'false\'' . ' :' . $conn->error);
 
                                     $stmt->bind_param('i', $muszidakt);
 
@@ -121,15 +125,18 @@ if (!isset($_SESSION['profilint_id']))
                                                 if ($rowAcc['internal_id'] == $rowKeret['jelentkezo'])
                                                 {
                                                     $vittMuszakIDk[] = $muszidakt;
+                                                    if ($jelMosogatasok[$muszidakt] == 1)//Ha az aktuálisan vitt műszakban mosogatott
+                                                        $vittMosogatasok[] = $muszidakt;
                                                     break;
                                                 }
 
-                                               // var_dump($rowKeret);
+                                                // var_dump($rowKeret);
 
                                             }
                                         }
                                     }
-
+                                    else
+                                        throw new \Exception('$stmt->execute() 5 nem sikerült' . ' :' . $conn->error);
                                 }
 
                                 if (count($vittMuszakIDk) > 0)
@@ -138,7 +145,7 @@ if (!isset($_SESSION['profilint_id']))
                                     //TODO: idoveg < now() - ból kivenni a TRUE-t
                                     $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
                                     if (!$stmt)
-                                        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+                                        throw new \Exception('SQL hiba: $stmt 3 is \'false\'' . ' :' . $conn->error);
 
                                     if ($stmt->execute())
                                     {
@@ -147,6 +154,25 @@ if (!isset($_SESSION['profilint_id']))
                                         {
                                             $rowMuszak = $resultMuszak->fetch_assoc();
                                             $pontszam += $rowMuszak['OsszPontszam'];
+                                        }
+                                        if (count($vittMosogatasok) > 0)
+                                        {
+                                            $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
+                                            if (!$stmt)
+                                                throw new \Exception('SQL hiba: $stmt 4 is \'false\'' . ' :' . $conn->error);
+
+                                            if ($stmt->execute())
+                                            {
+                                                $resultMuszak = $stmt->get_result();
+                                                if ($resultMuszak->num_rows == 1)
+                                                {
+                                                    $rowMuszak = $resultMuszak->fetch_assoc();
+                                                    $pontszam += $rowMuszak['OsszPontszam'];
+                                                }
+
+                                            }
+                                            else
+                                                throw new \Exception('$stmt->execute() 4 nem sikerült' . ' :' . $conn->error);
                                         }
                                     }
                                     else
@@ -157,7 +183,7 @@ if (!isset($_SESSION['profilint_id']))
                         }
                         else
                             throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
-
+                        $pontszam = round($pontszam, 1);
                         ?>
 
                         <tr class="tablaSor">
@@ -166,7 +192,7 @@ if (!isset($_SESSION['profilint_id']))
                             </td>
                             <td class="tablaCella oszlopReszletek">
                                 <a href="userpont/?int_id=<?php echo $rowAcc['internal_id']; ?>"
-                                      style="text-decoration: none; color: inherit"><p>
+                                   style="text-decoration: none; color: inherit"><p>
                                         <i class="fa fa-plus-square-o fa-2x"></i>
                                     </p></a>
                             </td>

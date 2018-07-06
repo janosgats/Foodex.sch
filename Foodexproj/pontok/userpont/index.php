@@ -8,10 +8,21 @@ require_once __DIR__ . '/../../profil/Profil.php';
 if (!isset($_SESSION['profilint_id']))
     Eszkozok\Eszk::RedirectUnderRoot('');
 
-if (!IsParamSet('int_id'))
-    Eszkozok\Eszk::RedirectUnderRoot('pontok');
+$MosogatasJelentkezes = 0;//1: Ha az aktuális profil akar műszak után mosogatásra jelentkezni
 
-$MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetParam('int_id'));
+if (IsURLParamSet('mosjelentk') && GetURLParam('mosjelentk') == 1)
+{
+    SetURLParam('int_id', $_SESSION['profilint_id']);
+
+    $MosogatasJelentkezes = 1;
+}
+else if (!IsURLParamSet('int_id'))
+{
+    Eszkozok\Eszk::RedirectUnderRoot('pontok');
+}
+
+
+$MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'));
 
 
 //var_dump($MegjelenitettProfil);
@@ -25,7 +36,7 @@ $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetParam('int_id'));
     <meta charset="UTF-8">
     <title>Fx - Pontok</title>
 
-    <link rel="icon" href="../res/kepek/favicon1_64p.png">
+    <link rel="icon" href="../../res/kepek/favicon1_64p.png">
 
     <!--    <link rel="stylesheet" href="../backgradient.css">-->
 
@@ -58,9 +69,9 @@ $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetParam('int_id'));
         <colgroup>
             <col span="1" style="width: 10%;">
             <col span="1" style="width: 8%;">
+            <col span="1" style="width: 5%;">
             <col span="1" style="width: 4%;">
-            <col span="1" style="width: 4%;">
-            <col span="1" style="width: 54%">
+            <col span="1" style="width: 53%">
         </colgroup>
 
         <tr class="tablaSor">
@@ -76,10 +87,24 @@ $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetParam('int_id'));
             <td class="tablaCella tablaElsosor">
                 <p>Fő</p>
             </td>
-            <td class="tablaCella tablaElsosor">
-                <p>Létrehozta</p>
-            </td>
-
+            <?php
+            if ($MosogatasJelentkezes)
+            {
+                ?>
+                <td class="tablaCella tablaElsosor">
+                    <p>Mosogatás</p>
+                </td>
+                <?php
+            }
+            else
+            {
+                ?>
+                <td class="tablaCella tablaElsosor">
+                    <p>Létrehozta</p>
+                </td>
+                <?php
+            }
+            ?>
         </tr>
 
         <?php
@@ -95,7 +120,7 @@ $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetParam('int_id'));
             $MuszakKiirokNevei = array();//Cacheli az internal_id - Név párokat a kiírók közül, hogy ne kelljen minden műszaknál új lekérdezés a névért
 
 
-            $stmt = $conn->prepare("SELECT `muszid` FROM `fxjelentk` WHERE `jelentkezo` = ? AND status = 1;");
+            $stmt = $conn->prepare("SELECT `muszid`, `mosogat` FROM `fxjelentk` WHERE `jelentkezo` = ? AND status = 1;");
             if (!$stmt)
                 throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
@@ -108,10 +133,13 @@ $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetParam('int_id'));
                 if ($resultJelentk->num_rows > 0)
                 {
                     $jelMuszakIDk = array();
+                    $jelMosogatasok = array();
 
                     while ($rowJelentk = $resultJelentk->fetch_assoc())
                     {
-                        $jelMuszakIDk[] = $conn->escape_string($rowJelentk['muszid']);
+                        $aktmuszidBuff = $conn->escape_string($rowJelentk['muszid']);
+                        $jelMuszakIDk[] = $aktmuszidBuff;
+                        $jelMosogatasok[$aktmuszidBuff] = $conn->escape_string($rowJelentk['mosogat']);
                     }
 
                     //var_dump($muszakIDk);
@@ -147,7 +175,7 @@ $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetParam('int_id'));
                                         break;
                                     }
 
-                                   // var_dump($rowKeret);
+                                    // var_dump($rowKeret);
 
                                 }
                             }
@@ -200,15 +228,55 @@ $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetParam('int_id'));
                                             <p><?php echo $idostringbuff; ?></p>
                                         </td>
                                         <td class="tablaCella oszlopPont">
-                                            <p><?php echo htmlspecialchars($rowMuszak['pont']) . ' pont'; ?></p>
+                                            <p>
+                                                <?php
+                                                if ($jelMosogatasok[$rowMuszak['ID']] == 1)
+                                                {
+                                                    echo htmlspecialchars($rowMuszak['pont']) . ' + ' . htmlspecialchars($rowMuszak['mospont']) . '<br>pont';
+                                                }
+                                                else
+                                                {
+                                                    echo htmlspecialchars($rowMuszak['pont']) . ' pont';
+                                                }
+                                                ?>
+                                            </p>
                                         </td>
                                         <td class="tablaCella oszlopLetszam">
                                             <p><?php echo htmlspecialchars($rowMuszak['letszam']) . ' fő'; ?></p>
                                         </td>
-                                        <td class="tablaCella oszlopKiirta">
-                                            <p><?php echo htmlspecialchars($MuszakKiirokNevei[$rowMuszak['kiirta']]); ?></p>
-                                        </td>
+                                        <?php
+                                        if ($MosogatasJelentkezes)
+                                        {
+                                            ?>
+                                            <td class="tablaCella oszlopMosogatas">
+                                                <?php
 
+                                                if ($jelMosogatasok[$rowMuszak['ID']] == 1)
+                                                {
+                                                    ?>
+                                                    <p><i class="fa fa-minus-square-o fa-2x"></i></p>
+                                                    <?php
+                                                }
+                                                else
+                                                {
+                                                    ?>
+                                                    <p><i class="fa fa-plus-square-o fa-2x"></i></p>
+                                                    <?php
+                                                }
+
+                                                ?>
+                                            </td>
+                                            <?php
+                                        }
+                                        else
+                                        {
+                                            ?>
+                                            <td class="tablaCella oszlopKiirta">
+                                                <p><?php echo htmlspecialchars($MuszakKiirokNevei[$rowMuszak['kiirta']]); ?></p>
+                                            </td>
+                                            <?php
+                                        }
+                                        ?>
                                     </tr>
                                     <?php
                                 }
