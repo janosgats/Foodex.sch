@@ -387,9 +387,19 @@ namespace Eszkozok
 
         public static function initMySqliObject()
         {
+            $username = "fxtestuser";
+            $password = "fxtest1234";
+            $dbname = "fxtestdb";
 
             $servername = "gjani.sch.bme.hu:3306";
-            if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
+            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme.hu') !== false)
+            {
+                $username = "foodex";
+                $password = "***REMOVED***";
+                $dbname = "wadon_foodex";
+                $servername = "hal-9000.sch.bme.hu:3306";
+            }
+            else if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
             {
                 $servername = "gjani.sch.bme.hu:3306";
             }
@@ -400,9 +410,6 @@ namespace Eszkozok
             }
 
 
-            $username = "fxtestuser";
-            $password = "fxtest1234";
-            $dbname = "fxtestdb";
 
 
             $conn = new \mysqli($servername, $username, $password, $dbname);
@@ -553,7 +560,13 @@ namespace Eszkozok
             $clientId = "***REMOVED***";
             $clientSecret = "***REMOVED***";
 
-            if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
+            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme.hu') !== false)
+            {
+                $redirectUri = "https://foodex.sch.bme.hu/login.php";
+                $clientId = "***REMOVED***";
+                $clientSecret = "***REMOVED***";
+            }
+            else if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
             {
                 $redirectUri = "http://gjani.sch.bme.hu/foodex/login.php";
                 $clientId = "***REMOVED***";
@@ -969,7 +982,11 @@ namespace Eszkozok
         {
             $ret = $_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER["HTTP_HOST"] . "/";
 
-            if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)
+            if (strpos($_SERVER["HTTP_HOST"], 'sch.bme') !== false)
+            {
+                $ret .= "";
+            }
+            else if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)
             {
                 $ret .= "foodex/";
             }
