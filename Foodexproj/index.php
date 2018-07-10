@@ -17,7 +17,7 @@ if (isset($_SESSION['profilint_id']))
 
 <head>
     <meta charset="UTF-8">
-    <title>Foodex test site</title>
+    <title>Foodexet a népnek!</title>
 
     <link rel="stylesheet" href="index.css">
     <link rel="icon" href="res/kepek/favicon1_64p.png">
