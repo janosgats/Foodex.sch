@@ -13,8 +13,7 @@ function isReCaptchaValid()
     if (IsURLParamSet('g-recaptcha-response'))
     {
 
-        $recaptcha = new \ReCaptcha\ReCaptcha($secret);
-
+        $recaptcha = new \ReCaptcha\ReCaptcha($secret, new \ReCaptcha\RequestMethod\CurlPost());
 
         $resp = $recaptcha->verify(GetURLParam('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
 
@@ -43,7 +42,6 @@ function doJelentkezes()
     if (!IsURLParamSet('g-recaptcha-response'))
         return;
 //Ha a 'g-recaptcha-response' paraméter meg van adva, megy tovább az ellenőrzés és végrehajtás...
-
 
     if (!isReCaptchaValid())
         \Eszkozok\Eszk::dieToErrorPage('3211: A ReCaptcha megoldása (már) nem érvényes!');

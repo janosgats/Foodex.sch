@@ -1,5 +1,5 @@
-<If "%{HTTP_HOST} == 'foodex.sch.bme.hu'">
-<If "%{REQUEST_URI} == '/'">
-DirectoryIndex /underconst.html
-</If>
-</If>
+#<If "%{HTTP_HOST} == 'foodex.sch.bme.hu'">
+#<If "%{REQUEST_URI} == '/'">
+#DirectoryIndex /underconst.html
+#</If>
+#</If>

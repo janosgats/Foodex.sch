@@ -106,7 +106,7 @@ if ($MosogatasJelentkezes)
 
 <head>
     <meta charset="UTF-8">
-    <title>Fx - Pontok</title>
+    <title>Fx - <?php echo ($MosogatasJelentkezes)?  'Mosogatás' : 'Pontok'; ?></title>
 
     <link rel="icon" href="../../res/kepek/favicon1_64p.png">
 
@@ -130,7 +130,7 @@ if ($MosogatasJelentkezes)
 <div style="width: 99vw; text-align: center">
     <h1 style="horiz-align: center; color: gold; margin-bottom: 0;"><?php echo $MegjelenitettProfil->getNev(); ?></h1>
 
-    <h1 style="horiz-align: center; color: gray; margin: 0">Pontjai</h1>
+    <h1 style="horiz-align: center; color: gray; margin: 0"><?php echo ($MosogatasJelentkezes)?  'Elvitt műszakjai' : 'Pontjai'; ?></h1>
 </div>
 
 
