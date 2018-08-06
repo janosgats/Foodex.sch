@@ -37,7 +37,7 @@ if (isset($_SESSION['profilint_id']))
 
             <div style="horiz-align: center; text-align: center;margin-left:20px">
 
-                <img class="fxlogo" src="res/kepek/favicon1.svg"">
+                <img class="fxlogo" src="res/kepek/FoodEx_logo.png"">
 
             </div>
             <div style="horiz-align: center; text-align: center;">
@@ -60,7 +60,7 @@ if (isset($_SESSION['profilint_id']))
                 <div style="horiz-align: center; text-align: center; padding-top: 5vh">
 
                     <button class="button" type="submit" style="vertical-align:middle; horiz-align: center">
-                        <span>Nyomás </span>
+                        <span>Belépés </span>
                     </button>
 
                 </div>
