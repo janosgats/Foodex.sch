@@ -4,8 +4,7 @@ session_start();
 require_once '../Eszkozok/Eszk.php';
 require_once 'Profil.php';
 
-if (!isset($_SESSION['profilint_id']))
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\Eszk::ValidateLogin();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
@@ -18,7 +17,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
     <meta charset="UTF-8">
     <title>Fx Profil</title>
 
-    <link rel="icon" href="../res/kepek/FoodEx_logo.png">
+    <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"

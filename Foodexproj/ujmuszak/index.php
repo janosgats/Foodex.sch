@@ -4,8 +4,7 @@ session_start();
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
 
-if (!isset($_SESSION['profilint_id']))
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\Eszk::ValidateLogin();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 

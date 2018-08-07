@@ -27,8 +27,7 @@ try
 {
 
 
-    if (!isset($_SESSION['profilint_id']))
-        Eszkozok\Eszk::RedirectUnderRoot('');
+    \Eszkozok\Eszk::ValidateLogin();
 
     $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 

@@ -4,8 +4,7 @@ session_start();
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
 
 
-if (!isset($_SESSION['profilint_id']))
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\Eszk::ValidateLogin();
 
 ?>
 

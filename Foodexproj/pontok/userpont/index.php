@@ -5,8 +5,7 @@ require_once __DIR__ . '/../../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../../Eszkozok/param.php';
 require_once __DIR__ . '/../../profil/Profil.php';
 
-if (!isset($_SESSION['profilint_id']))
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\Eszk::ValidateLogin();
 
 $MosogatasJelentkezes = 0;//1: Ha az aktuális profil akar műszak után mosogatásra jelentkezni
 
