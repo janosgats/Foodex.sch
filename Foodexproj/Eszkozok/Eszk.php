@@ -13,7 +13,7 @@ namespace Eszkozok
 
     require_once __DIR__ . '/../vendor/autoload.php';
 
-    require_once __DIR__ . '/init.php';
+    require_once __DIR__ . '/ini.php';
 
 //include_once './AuthSchProvider.php';
 
