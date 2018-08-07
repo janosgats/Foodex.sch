@@ -36,8 +36,7 @@ function isReCaptchaValid()
 
 function doJelentkezes()
 {
-    if (!isset($_SESSION['profilint_id']))
-        Eszkozok\Eszk::RedirectUnderRoot('');
+    \Eszkozok\Eszk::ValidateLogin();
 
     if (!IsURLParamSet('g-recaptcha-response'))
         return;

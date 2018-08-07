@@ -6,8 +6,7 @@ require_once '../Eszkozok/param.php';
 include_once '../profil/Profil.php';
 include_once 'jelentkez.php';
 
-if (!isset($_SESSION['profilint_id']))
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\Eszk::ValidateLogin();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 

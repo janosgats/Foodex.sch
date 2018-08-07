@@ -5,16 +5,83 @@ namespace Eszkozok
     //echo 'include path: ' . get_include_path();
 
     use GuzzleHttp\Exception\ConnectException;
+    use PHPMailer\PHPMailer\Exception;
     use Profil\Profil;
+    use Symfony\Component\Debug\ExceptionHandler;
 
     require_once __DIR__ . '/Muszak.php';
 
     require_once __DIR__ . '/../vendor/autoload.php';
 
+    require_once __DIR__ . '/init.php';
+
 //include_once './AuthSchProvider.php';
 
     class Eszk
     {
+        /**
+         * Ha a bejelentkezés nem érvényes, kilépteti az embert
+         */
+        static public function ValidateLogin()
+        {
+            if (!GlobalServerInitParams::$RequireAuth)
+            {
+                $_SESSION['profilint_id'] = GlobalServerInitParams::$DefaultIntID;
+                return;
+            }
+
+            try
+            {
+                if (self::IsLoginValid())
+                    return;
+            }
+            catch (\Exception $e)
+            {
+                self::RedirectUnderRoot('');
+            }
+
+            self::RedirectUnderRoot('');
+        }
+
+        static public function IsLoginValid()
+        {
+            try
+            {
+
+                if (!isset($_SESSION['profilint_id']))
+                    throw new Exception();
+
+
+                $conn = self::initMySqliObject();
+
+                if (!$conn)
+                    throw new Exception();
+
+                $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
+                if (!$stmt)
+                    throw new \Exception();
+
+
+                $intidbuff = $_SESSION['profilint_id'];
+                $stmt->bind_param('s', $intidbuff);
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+                    if ($result->num_rows == 1)
+                    {
+                        return true;
+                    }
+                    else
+                        throw new \Exception();
+                }
+            }
+            catch (\Exception $e)
+            {
+                return false;
+            }
+            return false;
+        }
 
         /**
          * @returns TRUE, ha a $muszid műszak keretlétszámába benne van az $int_id account
@@ -408,8 +475,6 @@ namespace Eszkozok
                 $servername = "gjani.ddns.net:3306";
                 $servername = "localhost:3306";//Mert a ddns-es címmel elérve nagyon lassú
             }
-
-
 
 
             $conn = new \mysqli($servername, $username, $password, $dbname);

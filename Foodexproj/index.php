@@ -4,8 +4,7 @@ session_start();
 set_include_path(getcwd());
 include_once 'Eszkozok/Eszk.php';
 
-
-if (isset($_SESSION['profilint_id']))
+if (\Eszkozok\Eszk::IsLoginValid())
 {
     Eszkozok\Eszk::RedirectUnderRoot('profil');
 }
