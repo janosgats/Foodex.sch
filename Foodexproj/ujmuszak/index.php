@@ -12,7 +12,6 @@ if ($AktProfil->getUjMuszakJog() != 1)
     Eszkozok\Eszk::RedirectUnderRoot('');
 
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -22,130 +21,115 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
-    <link rel="stylesheet" href="../backgradient.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel='stylesheet prefetch'
+          href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
 </head>
 
 <body>
-
-
-<!-- Special version of Bootstrap that is isolated to content wrapped in .bootstrap-iso -->
-<link rel="stylesheet" href="../3rdparty/bootstrap-iso.css"/>
-<!--<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css"/>-->
-
-<!--Font Awesome (added because you use icons in your prepend/append)-->
-<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css"/>
-
-<!-- Inline CSS based on choices in "Settings" tab -->
-<style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form {
-        font-family: Arial, Helvetica, sans-serif;
-        color: black
-    }
-
-    .bootstrap-iso form button, .bootstrap-iso form button:hover {
-        color: white !important;
-    }
-
-    .asteriskField {
-        color: red;
-    }</style>
-
-
-<a href="../profil" style="font-size: larger"> Vissza a profilba</a>
-<br><br>
-
-<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
-<div class="bootstrap-iso" style="background: transparent">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <form action="" class="form-horizontal" method="get">
-
-                    <p style="display: inline;">Név: </p>
-                    <input id="musznev" name="musznev" type="text" style="background: transparent"
-                           placeholder="pl. Pizzásch 1">
-                    <br><br>
-
-                    <p style="display: inline">Létszám: </p>
-                    <input id="letszam" name="letszam" type="text" style="background: transparent" placeholder="pl. 2">
-                    <br><br>
-
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2 requiredField" for="idokezd">Kezdet: </label>
-
-                        <div class="col-sm-3">
-                            <div class="input-group date">
-                                <input class="form-control" id="idokezd" name="idokezd" style="background: transparent" placeholder="YYYY/MM/DD HH:mm"
-                                       type="text"/>
-
-                                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2 requiredField" for="idoveg">Vég: </label>
-
-                        <div class="col-sm-3">
-                            <div class="input-group">
-
-                                <input class="form-control" id="idoveg" name="idoveg" style="background: transparent" placeholder="YYYY/MM/DD HH:mm"
-                                       type="text"/>
-
-                                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-
-                    <p style="display: inline">Közösségi pont: </p>
-                    <input id="pont" name="pont" type="text" style="background: transparent" placeholder="pl. 3">
-                    <br>
-                    <br>
-                    <p style="display: inline">Pont mosogatásért: </p>
-                    <input id="mospont" name="pont" type="text" style="background: transparent" placeholder="pl. 0.5">
-                    <br>
-                    <br>
-
-                    <div class="form-group">
-                        <div class="col-sm-10 col-sm-offset-2">
-
-                            <button class="btn btn-primary " name="kiiras" style="background: transparent" onclick="submitMuszak()" type="button">
-                                Műszak kiírása
-                            </button>
-                        </div>
-                    </div>
-
-                </form>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                        aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><img alt="Brand" src="../res/kepek/FoodEx_logo.png" style="height: 30px"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="../jelentkezes">Jelentkezés műszakra<span class="sr-only">(current)</span></a></li>
+                    <li><a href="../pontok/userpont/?mosjelentk=1">Mosogattam</a></li>
+                    <li><a href="../pontok">Pontozás</a></li>
+                    <?php
+                    if ($AktProfil->getUjMuszakJog() == 1) {
+                        ?>
+                        <li class="active"><a href="../ujmuszak">Új műszak kiírása</a></li>
+                        <?php
+                    }
+                    ?>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <form action="logout.php">
+                            <button type="submit" class="btn btn-default">Kijelentkezés</button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
+    </nav>
+    <div class="jumbotron">
+        <form method="get">
+            <div class="row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="musznev">Név</label>
+                    <input id="musznev" name="musznev" type="text" placeholder="pl. Pizzásch 1" class="form-control">
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="letszam">Létszám</label>
+                    <input id="letszam" name="letszam" type="text" placeholder="pl. 2" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="idokezd">Kezdet</label>
+                    <div class="input-group date">
+                        <input type="text" class="form-control" id="idokezd" name="idokezd" placeholder="YYYY/MM/DD HH:mm"/>
+                        <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="idoveg">Vég</label>
+                    <div class="input-group date">
+                        <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY/MM/DD HH:mm"
+                               type="text"/>
+                        <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="pont">Pont</label>
+                    <select id="pont" name="pont" class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="mospont">Mosogatás pont</label>
+                    <select id="mospont" name="pont" class="form-control">
+                        <option>0.5</option>
+                        <option>1</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary pull-right" onclick="submitMuszak()">Műszak kiírása</button>
+        </form>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
-<script
-    src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
 
-
-<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css'>
-<link rel='stylesheet prefetch'
-      href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css'>
-<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
-
-
-<!-- Include Date Range Picker -->
-<!--<script type="text/javascript"-->
-<!--        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>-->
-<!--<link rel="stylesheet"-->
-<!--      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>-->
 
 <script>
-
-
-    function escapeHtml(unsafe)
-    {
+    function escapeHtml(unsafe) {
         return unsafe
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
@@ -154,26 +138,21 @@ if ($AktProfil->getUjMuszakJog() != 1)
             .replace(/'/g, "&#039;");
     }
 
-
-    function HandlePHPPageData(ret)
-    {
+    function HandlePHPPageData(ret) {
         if (ret == "siker4567")
             alert("A műszakot sikeresen kiírtad!");
         else
             alert(escapeHtml(ret));
     }
 
-    function callPHPPage(postdata)
-    {
+    function callPHPPage(postdata) {
         $.post('kiir.php', postdata, HandlePHPPageData).fail(
-            function ()
-            {
+            function () {
                 alert("Error at AJAX call!");
             });
     }
 
-    function submitMuszak()
-    {
+    function submitMuszak() {
         callPHPPage({
             musznev: document.getElementById("musznev").value,
             idokezd: document.getElementById("idokezd").value,
@@ -184,15 +163,10 @@ if ($AktProfil->getUjMuszakJog() != 1)
         });
     }
 
-</script>
-
-<script>
-    $(document).ready(function ()
-    {
-        var bindDatetimePicker = function (id)
-        {
-            var date_input = $('input[name=' + id + ']'); //our date input has the name "idokezd"
-            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+    jquery(document).ready(function () {
+        let bindDatetimePicker = function (id) {
+            let date_input = $('input[name=' + id + ']');
+            let container = $('.container form').length > 0 ? $('.container form').parent() : "body";
             date_input.datetimepicker({
                 format: 'YYYY/MM/DD HH:mm',
                 container: container,
@@ -200,12 +174,9 @@ if ($AktProfil->getUjMuszakJog() != 1)
                 autoclose: true,
                 sideBySide: true,
                 showTodayButton: true,
-                locale: 'ru'
+                locale: 'hu'
             });
-
-
-        }
-
+        };
 
         bindDatetimePicker("idokezd");
         bindDatetimePicker("idoveg");
@@ -214,3 +185,4 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
 
 </body>
+</html>
