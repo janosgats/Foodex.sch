@@ -115,17 +115,25 @@ if ($AktProfil->getUjMuszakJog() != 1)
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary pull-right" onclick="submitMuszak()">Műszak kiírása</button>
+            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Műszak kiírása</button>
         </form>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
+<script
+    src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
+
+
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css'>
+<link rel='stylesheet prefetch'
+      href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css'>
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
 
 
 <script>
@@ -163,10 +171,17 @@ if ($AktProfil->getUjMuszakJog() != 1)
         });
     }
 
-    jquery(document).ready(function () {
-        let bindDatetimePicker = function (id) {
-            let date_input = $('input[name=' + id + ']');
-            let container = $('.container form').length > 0 ? $('.container form').parent() : "body";
+</script>
+<script>
+
+
+    $(document).ready(function ()
+    {
+        var bindDatetimePicker = function (id)
+        {
+            var date_input = $('input[name=' + id + ']'); //our date input has the name "idokezd"
+            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+
             date_input.datetimepicker({
                 format: 'YYYY/MM/DD HH:mm',
                 container: container,
@@ -180,7 +195,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
         bindDatetimePicker("idokezd");
         bindDatetimePicker("idoveg");
-    })
+    });
 </script>
 
 
