@@ -483,7 +483,7 @@ namespace Eszkozok
 
             if ($conn->connect_errno)
             {
-                self::dieToErrorPage('3217: ' . $conn->connect_error);
+                self::dieToErrorPage('3219: ' . $conn->connect_error);
             }
             return $conn;
         }
