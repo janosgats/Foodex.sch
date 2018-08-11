@@ -155,7 +155,7 @@ doJelentkezes();
                                     <td><?php echo htmlspecialchars($row['letszam']); ?> fő</td>
                                     <td><?php echo $jelnevstring; ?></td>
                                     <td>
-                                        <a href="#"><i onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');"
+                                        <a href="#"><i onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idostringbuff; ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');"
                                                        class="fa fa-plus-square-o fa-2x"></i></a>
                                     </td>
                                 </tr>
@@ -185,15 +185,9 @@ doJelentkezes();
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">Kezdet</label>
+                        <label class="col-sm-4 control-label">Időpont</label>
                         <div class="col-sm-8">
                             <p class="form-control-static" id="modalidokezd"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Vég</label>
-                        <div class="col-sm-8">
-                            <p class="form-control-static" id="modalidovegERTEK"></p>
                         </div>
                     </div>
                     <div class="form-group">
@@ -237,7 +231,7 @@ doJelentkezes();
         jQuery('#myModal').modal();
         document.getElementById('modalheadertext').innerHTML = 'Jelentkezés ' + musznev + ' műszakra';
         document.getElementById('modalidokezd').innerHTML = idokezd;
-        document.getElementById('modalidovegERTEK').innerHTML = idoveg;
+        // document.getElementById('modalidovegERTEK').innerHTML = idoveg;
         document.getElementById('modalletszam').innerHTML = letszam + ' fő';
         document.getElementById('modalmuszakid').value = id;
 
