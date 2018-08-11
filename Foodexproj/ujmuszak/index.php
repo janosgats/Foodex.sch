@@ -26,10 +26,9 @@ if ($AktProfil->getUjMuszakJog() != 1)
     <link rel='stylesheet prefetch'
           href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css'>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
-
 </head>
 
-<body>
+<body style="background-color: #de520d">
 <div class="container">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -41,7 +40,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><img alt="Brand" src="../res/kepek/FoodEx_logo.png" style="height: 30px"></a>
+                <a class="navbar-brand" href="../profil"><img alt="Brand" src="../res/kepek/FoodEx_logo.png" style="height: 30px"></a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
@@ -56,10 +55,10 @@ if ($AktProfil->getUjMuszakJog() != 1)
                     }
                     ?>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right p-t" style="margin-top: 8px">
                     <li>
                         <form action="logout.php">
-                            <button type="submit" class="btn btn-default">Kijelentkezés</button>
+                            <button type="submit" class="btn btn-danger">Kijelentkezés</button>
                         </form>
                     </li>
                 </ul>
@@ -120,21 +119,10 @@ if ($AktProfil->getUjMuszakJog() != 1)
     </div>
 </div>
 
-
-
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
-<script
-    src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
-
-
-<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css'>
-<link rel='stylesheet prefetch'
-      href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css'>
-<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
-
-
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
 
 <script>
     function escapeHtml(unsafe) {
@@ -170,10 +158,6 @@ if ($AktProfil->getUjMuszakJog() != 1)
             mospont: document.getElementById("mospont").value
         });
     }
-
-</script>
-<script>
-
 
     $(document).ready(function ()
     {

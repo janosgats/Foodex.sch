@@ -19,21 +19,14 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
 <body style="background-color: #de520d">
 <div class="container">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
                         aria-expanded="false">
@@ -45,10 +38,9 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                 <a class="navbar-brand" href="#"><img alt="Brand" src="../res/kepek/FoodEx_logo.png" style="height: 30px"></a>
             </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="../jelentkezes"> Jelentkezés műszakra <span class="sr-only">(current)</span></a></li>
+                    <li><a href="../jelentkezes"> Jelentkezés műszakra <span class="sr-only">(current)</span></a></li>
                     <li><a href="../pontok/userpont/?mosjelentk=1"> Mosogattam!</a></li>
                     <li><a href="../pontok"> Pontozás</a></li>
                     <?php
@@ -59,15 +51,15 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                     }
                     ?>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right p-t" style="margin-top: 8px">
                     <li>
                         <form action="logout.php">
-                            <button type="submit" class="btn btn-default">Kijelentkezés</button>
+                            <button type="submit" class="btn btn-danger">Kijelentkezés</button>
                         </form>
                     </li>
                 </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
+            </div>
+        </div>
     </nav>
     <div class="jumbotron">
         <h1>Hello Foodexes!</h1>
@@ -75,6 +67,10 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
         <p>Értesítési címed: <b><?php echo $AktProfil->getEmail(); ?></b></p>
     </div>
 </div>
-</body>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
 </html>
