@@ -10,215 +10,224 @@ include_once 'jelentkez.php';
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
+
 doJelentkezes();
+
 ?>
 
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Fx - Jelentkezés Műszakra</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
+    <!--    <link rel="stylesheet" href="../backgradient.css">-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
+
+    <link rel="stylesheet" href="modal.css">
+
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
-<body style="background: #de520d">
-<div class="container">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-                        aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="../profil"><img alt="Brand" src="../res/kepek/FoodEx_logo.png" style="height: 30px"></a>
-            </div>
+<body style="background: #151515">
 
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="../jelentkezes">Jelentkezés műszakra <span class="sr-only">(current)</span></a></li>
-                    <li><a href="../pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
-                    <li><a href="../pontok">Pontozás</a></li>
-                    <?php
-                    if ($AktProfil->getUjMuszakJog() == 1) {
-                        ?>
-                        <li><a href="../ujmuszak">Új műszak kiírása</a></li>
-                        <?php
-                    }
-                    ?>
-                </ul>
-                <ul class="nav navbar-nav navbar-right p-t" style="margin-top: 8px">
-                    <li>
-                        <form action="logout.php">
-                            <button type="submit" class="btn btn-danger">Kijelentkezés</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="panel panel-default">
-        <div class="panel-heading">Műszakok</div>
-        <div class="panel-body">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Műszak</th>
-                    <th>Időpont</th>
-                    <th>Létszám</th>
-                    <th>Akik jelentkeztek</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <?php
-                try {
-                    $conn = Eszkozok\Eszk::initMySqliObject();
+<a href="../profil" style="font-size: larger; text-decoration: none;color: yellow"> << Profil</a>
+
+<div id="osszhastablazat" class="tablaDiv" style="margin-top: 1.5%;">
+
+    <table class="tabla">
+
+        <colgroup>
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 2%;">
+            <col span="1" style="width: 8%;">
+            <col span="1" style="width: 4%;">
+            <col span="1" style="width: 56%;">
+        </colgroup>
+
+        <?php
+        try
+        {
+            $conn = Eszkozok\Eszk::initMySqliObject();
 
 
-                    if (!$conn)
-                        throw new \Exception('SQL hiba: $conn is \'false\'');
+            if (!$conn)
+                throw new \Exception('SQL hiba: $conn is \'false\'');
 
-                    ///`fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`)
-                    $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
-                    if (!$stmt)
-                        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
-
-
-                    if ($stmt->execute()) {
-                        $result = $stmt->get_result();
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                //var_dump($row);
-                                $kiiroProfil = Eszkozok\Eszk::GetTaroltProfilAdat($row['kiirta']);
-
-                                $idokezd = DateTime::createFromFormat("Y-m-d H:i:s", $row['idokezd']);
-
-                                $idostringbuff = \Eszkozok\Eszk::getNameOfDayOfWeek(date('N', $idokezd->getTimestamp()), true);
-                                $idostringbuff .= '<br>';
-                                $idostringbuff .= $idokezd->format('H:i');
-
-                                $idostringbuff .= ' - ';
-
-                                $idoveg = DateTime::createFromFormat("Y-m-d H:i:s", $row['idoveg']);
-                                $idostringbuff .= $idoveg->format('H:i');
-
-                                $jelentkIdoszakVan = 1;
-
-                                if (date("Y-m-d H:i:s") > $idokezd->format('Y-m-d H:i:s'))
-                                    $jelentkIdoszakVan = 0;
-
-                                $jelintidtomb = \Eszkozok\Eszk::getJelentkezokListajaWithConn($row['ID'], $conn);
-
-                                if (in_array($_SESSION['profilint_id'], $jelintidtomb))
-                                    $felvetel = 0;
-                                else
-                                    $felvetel = 1;
-
-                                $jelnevtomb = \Eszkozok\Eszk::getColumnAdatTombFromInternalIdTombWithConn($jelintidtomb, 'nev', $conn);
+            ///`fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`)
+            $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
+            if (!$stmt)
+                throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
 
-                                $jelnevstring = '';
+            if ($stmt->execute())
+            {
+                $result = $stmt->get_result();
 
-                                for ($i = 0; $i < count($jelnevtomb);) {
-                                    if ($i < $row['letszam'])
-                                        $jelnevstring .= '<p class="varolistaElso">';
-                                    else
-                                        $jelnevstring .= '<p>';
+                if ($result->num_rows > 0)
+                {
+                    while ($row = $result->fetch_assoc())
+                    {
+                        //var_dump($row);
+                        $kiiroProfil = Eszkozok\Eszk::GetTaroltProfilAdat($row['kiirta']);
+
+                        $idokezd = DateTime::createFromFormat("Y-m-d H:i:s", $row['idokezd']);
+
+                        $idostringbuff = \Eszkozok\Eszk::getNameOfDayOfWeek(date('N', $idokezd->getTimestamp()), true);
+                        $idostringbuff .= '<br>';
+                        $idostringbuff .= $idokezd->format('H:i');
+
+                        $idostringbuff .= ' - ';
+
+                        $idoveg = DateTime::createFromFormat("Y-m-d H:i:s", $row['idoveg']);
+                        $idostringbuff .= $idoveg->format('H:i');
+
+                        $jelentkIdoszakVan = 1;
+
+                        if (date("Y-m-d H:i:s") > $idokezd->format('Y-m-d H:i:s'))
+                            $jelentkIdoszakVan = 0;
+
+                        $jelintidtomb = \Eszkozok\Eszk::getJelentkezokListajaWithConn($row['ID'], $conn);
+
+                        if (in_array($_SESSION['profilint_id'], $jelintidtomb))
+                            $felvetel = 0;
+                        else
+                            $felvetel = 1;
+
+                        $jelnevtomb = \Eszkozok\Eszk::getColumnAdatTombFromInternalIdTombWithConn($jelintidtomb, 'nev', $conn);
 
 
-                                    $jelnevstring .= htmlspecialchars($jelnevtomb[$i]);
+                        $jelnevstring = '';
 
-                                    $jelnevstring .= '</p>';
+                        for ($i = 0; $i < count($jelnevtomb);)
+                        {
+                            if ($i < $row['letszam'])
+                                $jelnevstring .= '<p class="varolistaElso">';
+                            else
+                                $jelnevstring .= '<p>';
 
-                                    ++$i;
 
-                                    if ($i < count($jelnevtomb))
-                                        $jelnevstring .= ', ';
-                                }
-                                ?>
+                            $jelnevstring .= htmlspecialchars($jelnevtomb[$i]);
 
-                                <tr>
-                                    <td><?php echo htmlspecialchars($row['musznev']); ?></td>
-                                    <td><?php echo $idostringbuff; ?></td>
-                                    <td><?php echo htmlspecialchars($row['letszam']); ?> fő</td>
-                                    <td><?php echo $jelnevstring; ?></td>
-                                    <td>
-                                        <a href="#"><i onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idostringbuff; ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');"
-                                                       class="fa fa-plus-square-o fa-2x"></i></a>
-                                    </td>
-                                </tr>
-                                <?php
-                            }
+                            $jelnevstring .= '</p>';
+
+                            ++$i;
+
+                            if ($i < count($jelnevtomb))
+                                $jelnevstring .= ', ';
                         }
-                    } else {
-                        throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
+                        ?>
+
+                        <!--                        ShowModal(id,kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv)-->
+
+                        <tr class="tablaSor">
+                            <td class="tablaCella oszlopNev">
+                                <p><?php echo htmlspecialchars($row['musznev']); ?></p>
+                            </td>
+                            <td class="tablaCella oszlopReszletek">
+                                <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
+                                    <i
+                                        class="fa fa-plus-square-o fa-2x"></i></p>
+                            </td>
+                            <td class="tablaCella oszlopPont">
+                                <p><?php echo $idostringbuff; ?></p>
+                            </td>
+                            <td class="tablaCella oszlopLetszam">
+                                <p><?php echo htmlspecialchars($row['letszam']); ?> fő</p>
+                            </td>
+                            <td class="tablaCella oszlopVarolista">
+                                <?php echo $jelnevstring; ?>
+                            </td>
+                        </tr>
+                        <?php
+
                     }
-                } catch (\Exception $e) {
-                    ob_clean();
-                    Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
+
+
                 }
-                ?>
-            </table>
-        </div>
-    </div>
+
+            }
+            else
+            {
+                throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
+            }
+
+        }
+        catch (\Exception $e)
+        {
+            ob_clean();
+            Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
+        }
+        ?>
+
+    </table>
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="modalheadertext"></h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Időpont</label>
-                        <div class="col-sm-8">
-                            <p class="form-control-static" id="modalidokezd"></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Maximális létszám</label>
-                        <div class="col-sm-8">
-                            <p class="form-control-static" id="modalletszam"></p>
-                        </div>
-                    </div>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+
+            <h2 id="modalheadertext">Jelentkezés</h2>
+        </div>
+        <div class="modal-body" id=modalbody">
+            <p id="modalkiirta">Kiírta: </p>
+
+            <div style="display: inline-block; margin: 0; padding: 0; text-align: justify">
+                <p id="modalidokezd" style="white-space:pre;margin: 0; padding: 0">Kezdet: </p>
+
+                <div
+                    style="display: flex; width: 100%;justify-content: space-between;text-align: justify; margin: 0; padding: 0;">
+
+                    <p id="modalidovegSZOVEG" style="margin-bottom: 0; padding-bottom: 0; ;display: inline">Vég: </p>
+
+                    <p id="modalidovegERTEK"
+                       style="white-space:pre;margin-bottom: 0; padding-bottom: 0;display: inline"></p>
+
                 </div>
             </div>
-            <div class="modal-footer">
-                <form method="post" id="jelentkezgombdiv">
-                    <div class="g-recaptcha" style=" margin: 0 auto;display: inline-block;" data-callback="greDataCallback"
-                         data-sitekey="6LfTxl8UAAAAAO05DCRMYxdnDnRHd5E-uzN-J8fs"></div>
-                    <input type="hidden" name="muszid" id="modalmuszakid">
-                    <input type="hidden" name="muszmuv" value="felvetel" id="modalmuvelet">
+
+            <p id="modalletszam">Maximális létszám: </p>
+
+            <p id="modalpont">Közösségi pont: </p>
+
+            <p id="modalmospont">Pont mosogatásért: </p>
+        </div>
+        <div class="modal-footer">
+            <div id="jelentkezgombdiv" style="text-align: center;">
+
+                <form action="" method="post">
+                    <div>
+                        <div class="g-recaptcha" style=" margin: 0 auto;display: inline-block;"
+                             data-callback="greDataCallback"
+                             data-sitekey="6LfTxl8UAAAAAO05DCRMYxdnDnRHd5E-uzN-J8fs"></div>
+                    </div>
+                    <br>
+                    <input name="muszid" id="modalmuszakid" style="display: none">
+                    <input name="muszmuv" value="felvetel" id="modalmuvelet" style="display: none">
 
                     <div class="tooltip" id="modalbtntooltip">
                         <span class="tooltiptext" id="modalbtntooltiptext">Oldd meg a reCaptcha-t!</span>
-                        <button type="submit" class="btn btn-primary popupbutton" id="modalsubmitbtn" disabled>Viszem!</button>
+                        <button type="submit" class="popupbutton" id="modalsubmitbtn" disabled>Viszem!</button>
                     </div>
                 </form>
             </div>
+            <br>
         </div>
     </div>
 </div>
-
-<script src='https://www.google.com/recaptcha/api.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <script>
     function greDataCallback() {
@@ -226,13 +235,25 @@ doJelentkezes();
         document.getElementById('modalbtntooltip').classList.remove('tooltip');
         document.getElementById('modalbtntooltiptext').style.display = 'none';
     }
+</script>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById('myModal');
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
 
     function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv, felvetel) {
-        jQuery('#myModal').modal();
-        document.getElementById('modalheadertext').innerHTML = 'Jelentkezés ' + musznev + ' műszakra';
-        document.getElementById('modalidokezd').innerHTML = idokezd;
-        // document.getElementById('modalidovegERTEK').innerHTML = idoveg;
-        document.getElementById('modalletszam').innerHTML = letszam + ' fő';
+        document.getElementById('modalheadertext').innerHTML = musznev + ' Jelentkezés';
+        document.getElementById('modalkiirta').innerHTML = 'Kiírta: ' + kiirta;
+        document.getElementById('modalidokezd').innerHTML = 'Kezdet: ' + idokezd;
+        document.getElementById('modalidovegERTEK').innerHTML = idoveg;
+        document.getElementById('modalletszam').innerHTML = 'Maximális létszám: ' + letszam;
+        document.getElementById('modalpont').innerHTML = 'Közösségi pont: ' + pont;
+        document.getElementById('modalmospont').innerHTML = 'Pont mosogatásért: ' + mospont;
         document.getElementById('modalmuszakid').value = id;
 
         if (felvetel == 0) {
@@ -250,8 +271,22 @@ doJelentkezes();
         else {
             document.getElementById('jelentkezgombdiv').style.display = 'block';
         }
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     }
 </script>
 
 </body>
+
 </html>
