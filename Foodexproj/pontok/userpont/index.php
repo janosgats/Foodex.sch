@@ -138,7 +138,7 @@ if ($MosogatasJelentkezes) {
         </div>
     </nav>
     <div class="panel panel-default">
-        <div class="panel-heading"><?php echo $MegjelenitettProfil->getNev(); ?><?php echo ($MosogatasJelentkezes) ? 'elvitt műszakjai' : 'pontjai'; ?></div>
+        <div class="panel-heading"><b><?php echo $MegjelenitettProfil->getNev(); ?></b><?php echo ($MosogatasJelentkezes) ? ' elvitt műszakjai' : ' pontjai'; ?></div>
         <div class="panel-body">
             <table class="table table-hover">
                 <thead>

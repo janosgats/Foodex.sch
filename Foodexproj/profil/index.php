@@ -62,8 +62,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
         </div>
     </nav>
     <div class="jumbotron">
-        <h1>Hello Foodexes!</h1>
-        <p>Neved: <b><?php echo $AktProfil->getNev(); ?></b></p>
+        <h1>Hello <?php echo $AktProfil->getNev(); ?>!</h1>
         <p>Értesítési címed: <b><?php echo $AktProfil->getEmail(); ?></b></p>
     </div>
 </div>
