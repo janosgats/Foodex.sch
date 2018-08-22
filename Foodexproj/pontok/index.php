@@ -57,7 +57,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                 </ul>
                 <ul class="nav navbar-nav navbar-right p-t" style="margin-top: 8px">
                     <li>
-                        <form action="logout.php">
+                        <form action="../profil/logout.php">
                             <button type="submit" class="btn btn-danger">Kijelentkezés</button>
                         </form>
                     </li>
