@@ -52,6 +52,16 @@ doJelentkezes();
             <col span="1" style="width: 8%;">
             <col span="1" style="width: 4%;">
             <col span="1" style="width: 56%;">
+            <?php
+            if ($AktProfil->getUjMuszakJog() == 1)
+            {
+                ?>
+
+                <col span="1">
+                <?php
+            }
+            ?>
+
         </colgroup>
 
         <?php
@@ -147,6 +157,18 @@ doJelentkezes();
                             <td class="tablaCella oszlopVarolista">
                                 <?php echo $jelnevstring; ?>
                             </td>
+
+                            <?php
+                            if ($AktProfil->getUjMuszakJog() == 1)
+                            {
+                                ?>
+                                <td cass="tablaCella oszlopReszletek">
+                                    a
+                                </td>
+                                <?php
+                            }
+                            ?>
+
                         </tr>
                         <?php
 
@@ -230,7 +252,8 @@ doJelentkezes();
 </div>
 
 <script>
-    function greDataCallback() {
+    function greDataCallback()
+    {
         document.getElementById('modalsubmitbtn').removeAttribute('disabled');
         document.getElementById('modalbtntooltip').classList.remove('tooltip');
         document.getElementById('modalbtntooltiptext').style.display = 'none';
@@ -246,7 +269,8 @@ doJelentkezes();
 
     // When the user clicks the button, open the modal
 
-    function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv, felvetel) {
+    function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv, felvetel)
+    {
         document.getElementById('modalheadertext').innerHTML = musznev + ' Jelentkezés';
         document.getElementById('modalkiirta').innerHTML = 'Kiírta: ' + kiirta;
         document.getElementById('modalidokezd').innerHTML = 'Kezdet: ' + idokezd;
@@ -256,32 +280,39 @@ doJelentkezes();
         document.getElementById('modalmospont').innerHTML = 'Pont mosogatásért: ' + mospont;
         document.getElementById('modalmuszakid').value = id;
 
-        if (felvetel == 0) {
+        if (felvetel == 0)
+        {
             document.getElementById('modalmuvelet').value = 'lead';
             document.getElementById('modalsubmitbtn').innerHTML = 'Leadom!';
         }
-        else {
+        else
+        {
             document.getElementById('modalmuvelet').value = 'felvesz';
             document.getElementById('modalsubmitbtn').innerHTML = 'Viszem!';
         }
 
-        if (jelaktiv == 0) {
+        if (jelaktiv == 0)
+        {
             document.getElementById('jelentkezgombdiv').style.display = 'none';
         }
-        else {
+        else
+        {
             document.getElementById('jelentkezgombdiv').style.display = 'block';
         }
         modal.style.display = "block";
     }
 
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
+    span.onclick = function ()
+    {
         modal.style.display = "none";
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
+    window.onclick = function (event)
+    {
+        if (event.target == modal)
+        {
             modal.style.display = "none";
         }
     }

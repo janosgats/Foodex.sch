@@ -70,11 +70,13 @@ namespace Eszkozok
                     $result = $stmt->get_result();
                     if ($result->num_rows == 1)
                     {
+                        $conn->close();
                         return true;
                     }
                     else
                         throw new \Exception();
                 }
+                $conn->close();
             }
             catch (\Exception $e)
             {
