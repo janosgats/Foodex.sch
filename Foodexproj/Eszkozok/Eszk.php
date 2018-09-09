@@ -301,6 +301,7 @@ namespace Eszkozok
                         $ki->idoveg = $row['idoveg'];
                         $ki->letszam = $row['letszam'];
                         $ki->pont = $row['pont'];
+                        $ki->mospont = $row['mospont'];
 
                         return $ki;
                     }

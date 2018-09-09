@@ -20,7 +20,17 @@ function verifyDate($date, $strict = true)
             return false;
         }
     }
-    return $dateTime !== false;
+
+    $dateTime2 = DateTime::createFromFormat('Y-m-d G:i:s', $date);
+    if ($strict)
+    {
+        $errors = DateTime::getLastErrors();
+        if (!empty($errors['warning_count']))
+        {
+            return false;
+        }
+    }
+    return $dateTime !== false || $dateTime2 !== false;
 }
 
 try
@@ -32,7 +42,7 @@ try
     $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
     if ($AktProfil->getUjMuszakJog() != 1)
-        Eszkozok\Eszk::dieToErrorPage('2077: Nincs jogosultságod új műszakot kiírni!');
+        Eszkozok\Eszk::dieToErrorPage('19077: Nincs jogosultságod a műszak szerkesztésére!');
 
 
     $internal_id = $_SESSION['profilint_id'];
@@ -40,6 +50,9 @@ try
 
     $AktMuszak = new \Eszkozok\Muszak();
     $AktMuszak->kiirta = $internal_id;
+
+    if (IsURLParamSet('muszid'))
+        $AktMuszak->ID = GetURLParam('muszid');
 
     if (IsURLParamSet('musznev'))
         $AktMuszak->musznev = GetURLParam('musznev');
@@ -60,6 +73,8 @@ try
         throw new \Exception('A mosogatásért járó pontszám nem egy szám.');
     if (!is_numeric($AktMuszak->letszam))
         throw new \Exception('A létszám nem egy szám.');
+    if (!is_numeric($AktMuszak->ID))
+        throw new \Exception('Az ID nem egy szám.');
 
     if ($AktMuszak->pont < 0)
         throw new \Exception('A közösségi pontszám nagyobb, vagy egyenlő kell, hogy legyen, mint 0.');
@@ -74,7 +89,7 @@ try
     }
 
     if (!verifyDate($AktMuszak->idokezd))
-        throw new \Exception('A kezdési idő nem megfelelő.');
+        throw new \Exception('A kezdési idő nem megfelelő. ' . $AktMuszak->idokezd);
     if (!verifyDate($AktMuszak->idoveg))
         throw new \Exception('A vég idő nem megfelelő.');
 
@@ -85,11 +100,11 @@ try
     if (!$conn)
         throw new \Exception('SQL hiba: $conn is \'false\'');
 
-    $stmt = $conn->prepare("INSERT INTO `fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`, `mospont`) VALUES (?, ?, ?, ?, ?, ?, ?);");
+    $stmt = $conn->prepare("UPDATE `fxmuszakok` SET `musznev` = ?, `idokezd` = ?, `idoveg` = ?, `letszam` = ?, `pont` = ?, `mospont` = ? WHERE `fxmuszakok`.`ID` = ?;");
     if (!$stmt)
         throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-    $stmt->bind_param('ssssiss', $AktMuszak->kiirta, $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont);
+    $stmt->bind_param('ssssiss', $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->ID);
 
 
     if ($stmt->execute())

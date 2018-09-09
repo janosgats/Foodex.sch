@@ -57,7 +57,7 @@ doJelentkezes();
             {
                 ?>
 
-                <col span="1">
+                <col span="1" style="width: 2%;">
                 <?php
             }
             ?>
@@ -162,8 +162,12 @@ doJelentkezes();
                             if ($AktProfil->getUjMuszakJog() == 1)
                             {
                                 ?>
-                                <td cass="tablaCella oszlopReszletek">
-                                    a
+                                <td class="tablaCella oszlopReszletek">
+                                    <p>
+                                        <a href="../muszedit?muszid=<?php echo $row['ID'];?>" target="_blank" style="text-decoration: none; color: inherit">
+                                            <i class="fa fa-cog fa-2x"></i>
+                                        </a>
+                                    </p>
                                 </td>
                                 <?php
                             }

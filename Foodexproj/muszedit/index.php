@@ -3,21 +3,35 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
+include_once '../Eszkozok/Muszak.php';
+include_once '../Eszkozok/param.php';
 
 \Eszkozok\Eszk::ValidateLogin();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 if ($AktProfil->getUjMuszakJog() != 1)
-    Eszkozok\Eszk::RedirectUnderRoot('');
+    Eszkozok\Eszk::dieToErrorPage('19965: Nincs jogod a műszak szerkesztéséhez!');
+
+if(IsURLParamSet('muszid') == false)
+    Eszkozok\Eszk::dieToErrorPage('19975: muszid URL param is not set!');
+$muszidbuff = GetURLParam('muszid');
+
+if($muszidbuff == '')
+    Eszkozok\Eszk::dieToErrorPage('19985: muszid URL param is empty!');
+
+
+$SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
+
 
 ?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="UTF-8">
-    <title>Fx - Új műszak kiírása</title>
+    <title>Fx - Műszak szerkesztése</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
@@ -30,58 +44,27 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
 <body style="background-color: #de520d">
 <div class="container">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-                        aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="../profil"><img alt="Brand" src="../res/kepek/FoodEx_logo.png" style="height: 30px"></a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="../jelentkezes">Jelentkezés műszakra<span class="sr-only">(current)</span></a></li>
-                    <li><a href="../pontok/userpont/?mosjelentk=1">Mosogattam</a></li>
-                    <li><a href="../pontok">Pontozás</a></li>
-                    <?php
-                    if ($AktProfil->getUjMuszakJog() == 1) {
-                        ?>
-                        <li class="active"><a href="../ujmuszak">Új műszak kiírása</a></li>
-                        <?php
-                    }
-                    ?>
-                </ul>
-                <ul class="nav navbar-nav navbar-right p-t" style="margin-top: 8px">
-                    <li>
-                        <form action="../profil/logout.php">
-                            <button type="submit" class="btn btn-danger">Kijelentkezés</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="jumbotron">
+    <div class="jumbotron" style="padding-top:10px">
         <form method="get">
+            <div style="width: 100%; text-align: center">
+            <h1 style="color: darkgray; font-family: 'Arial'; font-size: xx-large">Műszak szerkesztése</h1>
+                <br><br>
+                </div>
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="musznev">Név</label>
-                    <input id="musznev" name="musznev" type="text" placeholder="pl. Pizzásch 1" class="form-control">
+                    <input id="musznev" name="musznev" type="text" placeholder="pl. Pizzásch 1" value="<?php echo $SzerkMuszak->musznev?>" class="form-control">
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="letszam">Létszám</label>
-                    <input id="letszam" name="letszam" type="text" placeholder="pl. 2" class="form-control">
+                    <input id="letszam" name="letszam" type="text" placeholder="pl. 2" value="<?php echo $SzerkMuszak->letszam?>" class="form-control">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="idokezd">Kezdet</label>
                     <div class="input-group date">
-                        <input type="text" class="form-control" id="idokezd" name="idokezd" placeholder="YYYY/MM/DD HH:mm"/>
+                        <input type="text" class="form-control" id="idokezd" name="idokezd" placeholder="YYYY-MM-DD HH:mm" value='<?php echo  $SzerkMuszak->idokezd; ?>'/>
                         <span class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </span>
@@ -90,7 +73,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="idoveg">Vég</label>
                     <div class="input-group date">
-                        <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY/MM/DD HH:mm"
+                        <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY-MM-DD HH:mm"  value="<?php echo $SzerkMuszak->idoveg; ?>"
                                type="text"/>
                         <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                     </div>
@@ -100,22 +83,22 @@ if ($AktProfil->getUjMuszakJog() != 1)
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="pont">Pont</label>
                     <select id="pont" name="pont" class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
+                        <option <?php if($SzerkMuszak->pont == 1) echo ' selected="selected" '; ?> >1</option>
+                        <option <?php if($SzerkMuszak->pont == 2) echo ' selected="selected" '; ?>>2</option>
+                        <option <?php if($SzerkMuszak->pont == 3) echo ' selected="selected" '; ?>>3</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="mospont">Mosogatás pont</label>
                     <select id="mospont" name="pont" class="form-control">
-                        <option>0</option>
-                        <option>0.5</option>
-                        <option>1</option>
+                        <option <?php if($SzerkMuszak->mospont == 0) echo ' selected="selected" '; ?>>0</option>
+                        <option <?php if($SzerkMuszak->mospont == 0.5) echo ' selected="selected" '; ?>>0.5</option>
+                        <option <?php if($SzerkMuszak->mospont == 1) echo ' selected="selected" '; ?>>1</option>
                     </select>
                 </div>
             </div>
 
-            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Műszak kiírása</button>
+            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Mentés</button>
         </form>
     </div>
 </div>
@@ -137,13 +120,13 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
     function HandlePHPPageData(ret) {
         if (ret == "siker4567")
-            alert("A műszakot sikeresen kiírtad!");
+            alert("A műszakot sikeresen módosítottad!");
         else
             alert(escapeHtml(ret));
     }
 
     function callPHPPage(postdata) {
-        $.post('kiir.php', postdata, HandlePHPPageData).fail(
+        $.post('edit.php', postdata, HandlePHPPageData).fail(
             function () {
                 alert("Error at AJAX call!");
             });
@@ -156,7 +139,8 @@ if ($AktProfil->getUjMuszakJog() != 1)
             idoveg: document.getElementById("idoveg").value,
             letszam: document.getElementById("letszam").value,
             pont: document.getElementById("pont").value,
-            mospont: document.getElementById("mospont").value
+            mospont: document.getElementById("mospont").value,
+            muszid: <?php echo $SzerkMuszak->ID; ?>
         });
     }
 
