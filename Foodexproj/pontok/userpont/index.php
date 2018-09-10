@@ -21,6 +21,8 @@ if (IsURLParamSet('mosjelentk') && GetURLParam('mosjelentk') == 1) {
 
 $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'));
 
+$mosfoglalt = false;
+
 if ($MosogatasJelentkezes) {
     if (IsURLParamSet('muv') && (GetURLParam('muv') == 'ujmosjel' || GetURLParam('muv') == 'ujmoslead')) {
         if (IsURLParamSet('mosmuszid')) {
@@ -43,22 +45,49 @@ if ($MosogatasJelentkezes) {
                         $resultMuszak = $stmt->get_result();
                         if ($resultMuszak->num_rows == 1) {//Az acc a műszakkeretnek tagja, és már a műszak végideje is elmúlt
 
+
+
                             if (GetURLParam('muv') == 'ujmosjel')
-                                $stmt = $conn->prepare("UPDATE `fxjelentk` SET  `mosogat` = '1' WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
+                            {
+                                $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE muszid = ? AND `status` = 1 AND `mosogat` = 1;");
+
+                                $stmt->bind_param('i', $mosmuszid);
+
+                                if ($stmt->execute())
+                                {
+                                    $resultMuszak = $stmt->get_result();
+                                    if ($resultMuszak->num_rows != 0)
+                                        $mosfoglalt = true;
+
+
+                                }
+                                else
+                                    throw new \Exception('$stmt->execute() 2 nem sikerült');
+
+
+                                if(!$mosfoglalt)
+                                {
+                                    $stmt = $conn->prepare("UPDATE `fxjelentk` SET  `mosogat` = '1' WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
+                                }
+                            }
                             elseif (GetURLParam('muv') == 'ujmoslead')
                                 $stmt = $conn->prepare("UPDATE `fxjelentk` SET  `mosogat` = '0' WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
 
+                            if(!$mosfoglalt)
+                            {
+                                if (!$stmt)
+                                    throw new \Exception('SQL hiba: $stmt 2 is \'false\'');
 
-                            if (!$stmt)
-                                throw new \Exception('SQL hiba: $stmt 2 is \'false\'');
+                                $intid = $_SESSION['profilint_id'];
+                                $stmt->bind_param('si', $intid, $mosmuszid);
 
-                            $intid = $_SESSION['profilint_id'];
-                            $stmt->bind_param('si', $intid, $mosmuszid);
+                                if ($stmt->execute())
+                                {
 
-                            if ($stmt->execute()) {
-
-                            } else
-                                throw new \Exception('$stmt->execute() 2 nem sikerült');
+                                }
+                                else
+                                    throw new \Exception('$stmt->execute() 2 nem sikerült');
+                            }
                         }
                     } else
                         throw new \Exception('$stmt->execute() 1 nem sikerült' . ' :' . $conn->error);
@@ -100,6 +129,16 @@ if ($MosogatasJelentkezes) {
 </head>
 
 <body style="background: #de520d">
+<?php
+if($mosfoglalt)
+{
+    ?>
+    <script>
+        alert('Ezen a műszakon másvalaki már mosogatott.')
+    </script>
+<?php
+}
+?>
 <div class="container">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -268,7 +307,7 @@ if ($MosogatasJelentkezes) {
                                                 <td>
                                                     <?php
                                                     if ($jelMosogatasok[$rowMuszak['ID']] == 1) {
-                                                        echo htmlspecialchars($rowMuszak['pont']) . ' + ' . htmlspecialchars($rowMuszak['mospont']) . 'pont';
+                                                        echo htmlspecialchars($rowMuszak['pont']) . ' + ' . htmlspecialchars($rowMuszak['mospont']) . ' pont';
                                                     } else {
                                                         echo htmlspecialchars($rowMuszak['pont']) . ' pont';
                                                     }
