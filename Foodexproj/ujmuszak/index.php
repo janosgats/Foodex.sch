@@ -114,6 +114,12 @@ if ($AktProfil->getUjMuszakJog() != 1)
                     </select>
                 </div>
             </div>
+            <div class="row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="megj">Megjegyzés</label>
+                    <input id="megj" name="megj" type="text" placeholder="pl. Börgör" class="form-control">
+                </div>
+            </div>
 
             <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Műszak kiírása</button>
         </form>
@@ -156,7 +162,8 @@ if ($AktProfil->getUjMuszakJog() != 1)
             idoveg: document.getElementById("idoveg").value,
             letszam: document.getElementById("letszam").value,
             pont: document.getElementById("pont").value,
-            mospont: document.getElementById("mospont").value
+            mospont: document.getElementById("mospont").value,
+            megj: document.getElementById("megj").value
         });
     }
 

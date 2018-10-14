@@ -13,5 +13,6 @@ namespace Eszkozok
         public $letszam = '';
         public $pont = '';
         public $mospont = '';
+        public $megj = '';
     }
 }

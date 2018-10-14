@@ -97,6 +97,12 @@ $SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
                     </select>
                 </div>
             </div>
+            <div class="row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="megj">Megjegyzés</label>
+                    <input id="megj" name="megj" type="text" placeholder="pl. Börgör"   value="<?php echo $SzerkMuszak->megj; ?>" class="form-control">
+                </div>
+            </div>
 
             <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Mentés</button>
         </form>
@@ -140,6 +146,7 @@ $SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
             letszam: document.getElementById("letszam").value,
             pont: document.getElementById("pont").value,
             mospont: document.getElementById("mospont").value,
+            megj: document.getElementById("megj").value,
             muszid: <?php echo $SzerkMuszak->ID; ?>
         });
     }
