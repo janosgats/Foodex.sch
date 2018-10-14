@@ -144,7 +144,7 @@ doJelentkezes();
                                 <p><?php echo htmlspecialchars($row['musznev']); ?></p>
                             </td>
                             <td class="tablaCella oszlopReszletek">
-                                <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
+                                <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
                                     <i
                                         class="fa fa-plus-square-o fa-2x"></i></p>
                             </td>
@@ -230,6 +230,9 @@ doJelentkezes();
             <p id="modalpont">Közösségi pont: </p>
 
             <p id="modalmospont">Pont mosogatásért: </p>
+
+            <p id="modalmegj">Wukker intelmei: </p>
+
         </div>
         <div class="modal-footer">
             <div id="jelentkezgombdiv" style="text-align: center;">
@@ -273,7 +276,7 @@ doJelentkezes();
 
     // When the user clicks the button, open the modal
 
-    function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv, felvetel)
+    function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, megj, jelaktiv, felvetel)
     {
         document.getElementById('modalheadertext').innerHTML = musznev + ' Jelentkezés';
         document.getElementById('modalkiirta').innerHTML = 'Kiírta: ' + kiirta;
@@ -282,6 +285,7 @@ doJelentkezes();
         document.getElementById('modalletszam').innerHTML = 'Maximális létszám: ' + letszam;
         document.getElementById('modalpont').innerHTML = 'Közösségi pont: ' + pont;
         document.getElementById('modalmospont').innerHTML = 'Pont mosogatásért: ' + mospont;
+        document.getElementById('modalmegj').innerHTML = 'Wukker intelmei: ' + megj;
         document.getElementById('modalmuszakid').value = id;
 
         if (felvetel == 0)

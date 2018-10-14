@@ -53,6 +53,8 @@ try
         $AktMuszak->idokezd = GetURLParam('idokezd');
     if (IsURLParamSet('idoveg'))
         $AktMuszak->idoveg = GetURLParam('idoveg');
+    if (IsURLParamSet('megj'))
+        $AktMuszak->megj = GetURLParam('megj');
 
     if (!is_numeric($AktMuszak->pont))
         throw new \Exception('A közösségi pontszám nem egy szám.');
@@ -73,6 +75,11 @@ try
         throw new \Exception('A műszaknév hossza maximum 230 karakter lehet.');
     }
 
+    if (strlen($AktMuszak->megj) > 230)
+    {
+        throw new \Exception('A megjegyzés hossza maximum 230 karakter lehet.');
+    }
+
     if (!verifyDate($AktMuszak->idokezd))
         throw new \Exception('A kezdési idő nem megfelelő.');
     if (!verifyDate($AktMuszak->idoveg))
@@ -85,16 +92,16 @@ try
     if (!$conn)
         throw new \Exception('SQL hiba: $conn is \'false\'');
 
-    $stmt = $conn->prepare("INSERT INTO `fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`, `mospont`) VALUES (?, ?, ?, ?, ?, ?, ?);");
+    $stmt = $conn->prepare("INSERT INTO `fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`, `mospont`, `megj`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
     if (!$stmt)
         throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-    $stmt->bind_param('ssssiss', $AktMuszak->kiirta, $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont);
+    $stmt->bind_param('ssssisss', $AktMuszak->kiirta, $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj);
 
 
     if ($stmt->execute())
     {
-        //ob_clean();
+        ob_clean();
         die('siker4567');
     }
     else
