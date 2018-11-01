@@ -3,6 +3,7 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
+require_once '../Eszkozok/param.php';
 
 \Eszkozok\Eszk::ValidateLogin();
 
@@ -33,14 +34,16 @@ if ($AktProfil->getUjMuszakJog() != 1)
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1"
                         aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="../profil"><img alt="Brand" src="../res/kepek/FoodEx_logo.png" style="height: 30px"></a>
+                <a class="navbar-brand" href="../profil"><img alt="Brand" src="../res/kepek/FoodEx_logo.png"
+                                                              style="height: 30px"></a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
@@ -48,7 +51,8 @@ if ($AktProfil->getUjMuszakJog() != 1)
                     <li><a href="../pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
                     <li><a href="../pontok">Pontozás</a></li>
                     <?php
-                    if ($AktProfil->getUjMuszakJog() == 1) {
+                    if ($AktProfil->getUjMuszakJog() == 1)
+                    {
                         ?>
                         <li class="active"><a href="../ujmuszak">Új műszak kiírása</a></li>
                         <?php
@@ -65,23 +69,43 @@ if ($AktProfil->getUjMuszakJog() != 1)
             </div>
         </div>
     </nav>
+
+    <?php
+    $MuszakMasolas = false;
+    $MasoltMuszak = new Eszkozok\Muszak();
+    try
+    {
+        if (IsURLParamSet('muszmasol') && GetURLParam('muszmasol') == 1 && IsURLParamSet('muszid') && is_numeric(GetURLParam('muszid')))
+        {
+            $MuszakMasolas = true;
+            $MasoltMuszak = Eszkozok\Eszk::getMuszakFromMuszakId(GetURLParam('muszid'));
+        }
+    }
+    catch (\Exception $e)
+    {
+    }
+    ?>
+
     <div class="jumbotron">
         <form method="get">
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="musznev">Név</label>
-                    <input id="musznev" name="musznev" type="text" placeholder="pl. Pizzásch 1" class="form-control">
+                    <input id="musznev" name="musznev" type="text" placeholder="pl. Pizzásch 1"
+                           value="<?php if($MuszakMasolas) echo $MasoltMuszak->musznev; ?>" class="form-control">
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="letszam">Létszám</label>
-                    <input id="letszam" name="letszam" type="text" placeholder="pl. 2" class="form-control">
+                    <input id="letszam" name="letszam" type="text" placeholder="pl. 2" value="<?php if($MuszakMasolas) echo $MasoltMuszak->letszam; ?>" class="form-control">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="idokezd">Kezdet</label>
+
                     <div class="input-group date">
-                        <input type="text" class="form-control" id="idokezd" name="idokezd" placeholder="YYYY/MM/DD HH:mm"/>
+                        <input type="text" class="form-control" id="idokezd" name="idokezd"
+                               placeholder="YYYY/MM/DD HH:mm" value="<?php if($MuszakMasolas) echo $MasoltMuszak->idokezd; ?>"/>
                         <span class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </span>
@@ -89,9 +113,11 @@ if ($AktProfil->getUjMuszakJog() != 1)
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="idoveg">Vég</label>
+
                     <div class="input-group date">
-                        <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY/MM/DD HH:mm"
+                        <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY/MM/DD HH:mm" value="<?php if($MuszakMasolas) echo $MasoltMuszak->idoveg; ?>"
                                type="text"/>
+
                         <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                     </div>
                 </div>
@@ -100,28 +126,30 @@ if ($AktProfil->getUjMuszakJog() != 1)
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="pont">Pont</label>
                     <select id="pont" name="pont" class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
+                        <option <?php if ($MuszakMasolas && $MasoltMuszak->pont == 1) echo ' selected="selected" '; ?> >1</option>
+                        <option <?php if ($MasoltMuszak->pont == 2) echo ' selected="selected" '; ?>>2</option>
+                        <option <?php if ($MasoltMuszak->pont == 3) echo ' selected="selected" '; ?>>3</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="mospont">Mosogatás pont</label>
                     <select id="mospont" name="pont" class="form-control">
-                        <option>0</option>
-                        <option>0.5</option>
-                        <option>1</option>
+                        <option <?php if ($MuszakMasolas && $MasoltMuszak->mospont == 0) echo ' selected="selected" '; ?>>0</option>
+                        <option <?php if ($MuszakMasolas && $MasoltMuszak->mospont == 0.5) echo ' selected="selected" '; ?>>0.5</option>
+                        <option <?php if ($MuszakMasolas && $MasoltMuszak->mospont == 1) echo ' selected="selected" '; ?>>1</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="megj">Megjegyzés</label>
-                    <input id="megj" name="megj" type="text" placeholder="pl. Börgör" class="form-control">
+                    <input id="megj" name="megj" type="text" placeholder="pl. Börgör" value="<?php if($MuszakMasolas) echo $MasoltMuszak->megj; ?>" class="form-control">
                 </div>
             </div>
 
-            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()"  type="button">Műszak kiírása</button>
+            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Műszak
+                kiírása
+            </button>
 
         </form>
     </div>
@@ -130,10 +158,12 @@ if ($AktProfil->getUjMuszakJog() != 1)
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
+<script
+    src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
 
 <script>
-    function escapeHtml(unsafe) {
+    function escapeHtml(unsafe)
+    {
         return unsafe
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
@@ -142,21 +172,25 @@ if ($AktProfil->getUjMuszakJog() != 1)
             .replace(/'/g, "&#039;");
     }
 
-    function HandlePHPPageData(ret) {
+    function HandlePHPPageData(ret)
+    {
         if (ret == "siker4567")
             alert("A műszakot sikeresen kiírtad!");
         else
             alert(escapeHtml(ret));
     }
 
-    function callPHPPage(postdata) {
+    function callPHPPage(postdata)
+    {
         $.post('kiir.php', postdata, HandlePHPPageData).fail(
-            function () {
+            function ()
+            {
                 alert("Error at AJAX call!");
             });
     }
 
-    function submitMuszak() {
+    function submitMuszak()
+    {
         callPHPPage({
             musznev: document.getElementById("musznev").value,
             idokezd: document.getElementById("idokezd").value,
