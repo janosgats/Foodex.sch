@@ -20,7 +20,17 @@ function verifyDate($date, $strict = true)
             return false;
         }
     }
-    return $dateTime !== false;
+
+    $dateTime2 = DateTime::createFromFormat('Y-m-d G:i:s', $date);
+    if ($strict)
+    {
+        $errors = DateTime::getLastErrors();
+        if (!empty($errors['warning_count']))
+        {
+            return false;
+        }
+    }
+    return $dateTime !== false || $dateTime2 !== false;
 }
 
 try

@@ -146,7 +146,7 @@ else
         //ob_clean();
         if($stmt->affected_rows == 0)
         {
-            throw new Exception("A műszak nem található!");
+            throw new Exception("Nem történt módosítás!");
         }
 
         die('siker4567');

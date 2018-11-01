@@ -65,6 +65,31 @@ doJelentkezes();
         </colgroup>
 
         <?php
+        $OsszesMuszakMutat = false;
+
+        try
+        {
+            if (IsURLParamSet('osszmusz') && GetURLParam('osszmusz') == 1)
+            {
+                $OsszesMuszakMutat = true;
+                ?>
+                <a href="?osszmusz=0" style="font-size: larger; color: greenyellow"> Csak az aktuális műszakokat
+                    mutasd!</a>
+                <br><br>
+                <?php
+            }
+            else
+            {
+                ?>
+                <a href="?osszmusz=1" style="font-size: larger; color: greenyellow"> Mutasd az összes műszakot!</a>
+                <br><br>
+                <?php
+            }
+        }
+        catch (\Exception $e)
+        {
+        }
+
         try
         {
             $conn = Eszkozok\Eszk::initMySqliObject();
@@ -74,7 +99,12 @@ doJelentkezes();
                 throw new \Exception('SQL hiba: $conn is \'false\'');
 
             ///`fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`)
-            $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
+
+            if ($OsszesMuszakMutat)
+                $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` ORDER BY `idokezd` DESC;");
+            else
+                $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
+
             if (!$stmt)
                 throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
@@ -164,7 +194,8 @@ doJelentkezes();
                                 ?>
                                 <td class="tablaCella oszlopReszletek">
                                     <p>
-                                        <a href="../muszedit?muszid=<?php echo $row['ID'];?>" target="_blank" style="text-decoration: none; color: inherit">
+                                        <a href="../muszedit?muszid=<?php echo $row['ID']; ?>" target="_blank"
+                                           style="text-decoration: none; color: inherit">
                                             <i class="fa fa-cog fa-2x"></i>
                                         </a>
                                     </p>
