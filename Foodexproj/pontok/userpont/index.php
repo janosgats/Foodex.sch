@@ -236,7 +236,11 @@ if($mosfoglalt)
 
                             foreach ($jelMuszakIDk as $muszidakt) {
                                 if (!array_key_exists($muszidakt, $MuszakLetszamok))
-                                    $MuszakLetszamok[$muszidakt] = Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszidakt, $conn)->letszam;
+                                {
+                                   $buff = Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszidakt, false, $conn);
+                                    if($buff != false)
+                                        $MuszakLetszamok[$muszidakt] = $buff->letszam;
+                                }
 
 
                                 $stmt = $conn->prepare("SELECT * FROM `fxjelentk` WHERE `muszid` = ? AND `status` = 1 ORDER BY `ID` ASC;");
@@ -249,7 +253,7 @@ if($mosfoglalt)
                                     $resultKeret = $stmt->get_result();
                                     if ($resultKeret->num_rows > 0) {
 
-                                        for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && $i < $MuszakLetszamok[$muszidakt]; ++$i) {
+                                        for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && isset($MuszakLetszamok[$muszidakt])  && $i < $MuszakLetszamok[$muszidakt]; ++$i) {
                                             //echo $i . ' - ' . $muszidakt . '<br>';
 
 

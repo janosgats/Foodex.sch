@@ -36,7 +36,7 @@ if (\Eszkozok\Eszk::IsLoginValid())
 
             <div style="horiz-align: center; text-align: center;margin-left:20px">
 
-                <img class="fxlogo" src="res/kepek/FoodEx_logo.png"">
+                <img class="fxlogo" src="res/kepek/favicon1.svg"">
 
             </div>
             <div style="horiz-align: center; text-align: center;">

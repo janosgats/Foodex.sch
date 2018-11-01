@@ -47,7 +47,34 @@ try
 
     $internal_id = $_SESSION['profilint_id'];
 
+    $conn; $stmt;
+    if(IsURLParamSet('musztorles') && GetURLParam('musztorles') == 1)
+    {//Torles//
 
+        $id = 'URL PARAM IS NOT SET';
+        if (IsURLParamSet('muszid'))
+            $id = GetURLParam('muszid');
+
+
+        if(!is_numeric($id))
+            throw new \Exception('A műszak ID-je nem megfelelő:' . htmlspecialchars(var_dump($id)));
+
+            $conn = Eszkozok\Eszk::initMySqliObject();
+
+
+            if (!$conn)
+                throw new \Exception('SQL hiba: $conn is \'false\'');
+
+            $stmt = $conn->prepare("DELETE FROM `fxmuszakok` WHERE `fxmuszakok`.`ID` = ?;");
+
+            if (!$stmt)
+                throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+            $stmt->bind_param('i', $id);
+
+    }
+else
+{//Szerkesztes//
     $AktMuszak = new \Eszkozok\Muszak();
     $AktMuszak->kiirta = $internal_id;
 
@@ -112,11 +139,16 @@ try
         throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
     $stmt->bind_param('ssssisss', $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
-
+}
 
     if ($stmt->execute())
     {
         //ob_clean();
+        if($stmt->affected_rows == 0)
+        {
+            throw new Exception("A műszak nem található!");
+        }
+
         die('siker4567');
     }
     else

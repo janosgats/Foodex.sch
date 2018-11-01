@@ -116,7 +116,7 @@ namespace Eszkozok
                     throw new \Exception('SQL hiba: $conn is \'false\'');
 
 
-                $MuszakLetszam = self::GetTaroltMuszakAdatWithConn($muszid, $conn)->letszam;
+                $MuszakLetszam = self::GetTaroltMuszakAdatWithConn($muszid, true,$conn)->letszam;
 
 
                 $stmt = $conn->prepare("SELECT * FROM `fxjelentk` WHERE `muszid` = ? AND `status` = 1 ORDER BY `ID` ASC;");
@@ -492,7 +492,7 @@ namespace Eszkozok
             return $conn;
         }
 
-        public static function GetTaroltMuszakAdatWithConn($muszid, $conn)
+        public static function GetTaroltMuszakAdatWithConn($muszid, $statpageerr, $conn)
         {
 
             $Ki = new Muszak();
@@ -534,7 +534,10 @@ namespace Eszkozok
                     }
                     else if ($result->num_rows == 0)
                     {
+                        if($statpageerr)
                         throw new \Exception('Nem található ilyen műszak! (' . htmlspecialchars($muszid) . ')');
+                        else
+                            return false;
                     }
                     else
                     {
