@@ -45,7 +45,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="../jelentkezes">Jelentkezés műszakra<span class="sr-only">(current)</span></a></li>
-                    <li><a href="../pontok/userpont/?mosjelentk=1">Mosogattam</a></li>
+                    <li><a href="../pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
                     <li><a href="../pontok">Pontozás</a></li>
                     <?php
                     if ($AktProfil->getUjMuszakJog() == 1) {
@@ -121,7 +121,8 @@ if ($AktProfil->getUjMuszakJog() != 1)
                 </div>
             </div>
 
-            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Műszak kiírása</button>
+            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()"  type="button">Műszak kiírása</button>
+
         </form>
     </div>
 </div>

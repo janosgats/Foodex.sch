@@ -44,6 +44,42 @@ $SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
 
 <body style="background-color: #de520d">
 <div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                        aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../profil"><img alt="Brand" src="../res/kepek/FoodEx_logo.png" style="height: 30px"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="../jelentkezes">Jelentkezés műszakra<span class="sr-only">(current)</span></a></li>
+                    <li><a href="../pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
+                    <li><a href="../pontok">Pontozás</a></li>
+                    <?php
+                    if ($AktProfil->getUjMuszakJog() == 1) {
+                        ?>
+                        <li class="active"><a href="../ujmuszak">Új műszak kiírása</a></li>
+                        <?php
+                    }
+                    ?>
+                </ul>
+                <ul class="nav navbar-nav navbar-right p-t" style="margin-top: 8px">
+                    <li>
+                        <form action="../profil/logout.php">
+                            <button type="submit" class="btn btn-danger">Kijelentkezés</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="jumbotron" style="padding-top:10px">
         <form method="get">
             <div style="width: 100%; text-align: center">
@@ -104,7 +140,8 @@ $SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
                 </div>
             </div>
 
-            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Mentés</button>
+            <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="submitMuszak()" type="button">Mentés</button>
+            <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-right: 10px" onclick="deleteMuszak()" type="button">Műszak törlése</button>
         </form>
     </div>
 </div>
@@ -124,22 +161,40 @@ $SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
             .replace(/'/g, "&#039;");
     }
 
-    function HandlePHPPageData(ret) {
+    function HandlePHPPageDataEdit(ret) {
         if (ret == "siker4567")
             alert("A műszakot sikeresen módosítottad!");
         else
             alert(escapeHtml(ret));
     }
 
-    function callPHPPage(postdata) {
-        $.post('edit.php', postdata, HandlePHPPageData).fail(
+    function callPHPPageEdit(postdata) {
+        $.post('edit.php', postdata, HandlePHPPageDataEdit).fail(
+            function () {
+                alert("Error at AJAX call!");
+            });
+    }
+
+    function HandlePHPPageDataTorol(ret) {
+        if (ret == "siker4567")
+        {
+            alert("A műszakot sikeresen törölted!");
+            document.getElementById('mentes').style.display = "none";
+            document.getElementById('torles').style.display = "none";
+        }
+        else
+            alert(escapeHtml(ret));
+    }
+
+    function callPHPPageTorol(postdata) {
+        $.post('edit.php', postdata, HandlePHPPageDataTorol).fail(
             function () {
                 alert("Error at AJAX call!");
             });
     }
 
     function submitMuszak() {
-        callPHPPage({
+        callPHPPageEdit({
             musznev: document.getElementById("musznev").value,
             idokezd: document.getElementById("idokezd").value,
             idoveg: document.getElementById("idoveg").value,
@@ -147,6 +202,12 @@ $SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
             pont: document.getElementById("pont").value,
             mospont: document.getElementById("mospont").value,
             megj: document.getElementById("megj").value,
+            muszid: <?php echo $SzerkMuszak->ID; ?>
+        });
+    }
+    function deleteMuszak() {
+        callPHPPageTorol({
+            musztorles: 1,
             muszid: <?php echo $SzerkMuszak->ID; ?>
         });
     }
