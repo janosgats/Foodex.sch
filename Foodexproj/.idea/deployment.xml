@@ -2,13 +2,6 @@
 <project version="4">
   <component name="PublishConfigData" autoUpload="On explicit save action" serverName="XAMPP foodex" autoUploadExternalChanges="true">
     <serverData>
-      <paths name="IninetFeverkillFoodex">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="XAMPP foodex">
         <serverdata>
           <mappings>

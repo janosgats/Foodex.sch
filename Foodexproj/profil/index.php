@@ -2,11 +2,22 @@
 session_start();
 
 require_once '../Eszkozok/Eszk.php';
+require_once '../Eszkozok/param.php';
 require_once 'Profil.php';
 
 \Eszkozok\Eszk::ValidateLogin();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
+
+if(IsURLParamSet('mprof'))
+{
+    $mprof_int_id = GetURLParam('mprof');
+    $MegjProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($mprof_int_id);
+}
+else
+{
+    $MegjProfil = $AktProfil;//TODO: Ezt URL paraméter alapján beállítani
+}
 
 ?>
 
@@ -61,9 +72,11 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
             </div>
         </div>
     </nav>
+
     <div class="jumbotron">
-        <h1>Hello <?php echo $AktProfil->getNev(); ?>!</h1>
-        <p>Értesítési címed: <b><?php echo $AktProfil->getEmail(); ?></b></p>
+        <h1><?php echo $MegjProfil->getNev(); ?></h1>
+        <p>Értesítési cím: <b><?php echo $MegjProfil->getEmail(); ?></b></p>
+        <a style="cursor: pointer;" href="<?php echo '../pontok/userpont/?int_id=' . $MegjProfil->getInternalID(); ?>" ><p>Pontok: <b><?php try{$buff = \Eszkozok\Eszk::GetAccPontok($MegjProfil->getInternalID()); echo $buff;}catch(\Exception $e){echo 'N/A';} ?> pont</b></p></a>
     </div>
 </div>
 

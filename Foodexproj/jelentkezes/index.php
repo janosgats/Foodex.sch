@@ -150,15 +150,20 @@ doJelentkezes();
 
                         for ($i = 0; $i < count($jelnevtomb);)
                         {
+                            $jelnevstring .= '<a style="cursor: pointer;text-decoration: none; color: inherited" href="../profil/?mprof=' . $jelintidtomb[$i] . '" >';
+
+
                             if ($i < $row['letszam'])
                                 $jelnevstring .= '<p class="varolistaElso">';
                             else
-                                $jelnevstring .= '<p>';
+                                $jelnevstring .= '<p class="varolistaLemaradt">';
 
 
                             $jelnevstring .= htmlspecialchars($jelnevtomb[$i]);
 
+
                             $jelnevstring .= '</p>';
+                            $jelnevstring .= '</a>';
 
                             ++$i;
 

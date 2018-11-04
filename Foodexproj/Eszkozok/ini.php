@@ -10,7 +10,8 @@ namespace Eszkozok
          **/
         public static $RequireAuth = true; //true: csak bejelentkezett felhasználók láthatják a belsős oldalakat.
        // public static $DefaultIntID = '4cbdfb46-5553-92c6-8536-e1d58c85cf76';//Használt internal ID (Auth SCH-s), ha a $RequireAuth paraméter false. (Kijelentkezés után frissül)
-        public static $DefaultIntID = 't1';
+       // public static $DefaultIntID = 't1';
         //public static $DefaultIntID = 't2';
+        public static $DefaultIntID = '5df058f7-d76d-4b03-e9c8-65a78b27fb7e';
     }
 }

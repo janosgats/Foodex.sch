@@ -116,7 +116,7 @@ namespace Eszkozok
                     throw new \Exception('SQL hiba: $conn is \'false\'');
 
 
-                $MuszakLetszam = self::GetTaroltMuszakAdatWithConn($muszid, true,$conn)->letszam;
+                $MuszakLetszam = self::GetTaroltMuszakAdatWithConn($muszid, true, $conn)->letszam;
 
 
                 $stmt = $conn->prepare("SELECT * FROM `fxjelentk` WHERE `muszid` = ? AND `status` = 1 ORDER BY `ID` ASC;");
@@ -534,8 +534,8 @@ namespace Eszkozok
                     }
                     else if ($result->num_rows == 0)
                     {
-                        if($statpageerr)
-                        throw new \Exception('Nem található ilyen műszak! (' . htmlspecialchars($muszid) . ')');
+                        if ($statpageerr)
+                            throw new \Exception('Nem található ilyen műszak! (' . htmlspecialchars($muszid) . ')');
                         else
                             return false;
                     }
@@ -1070,5 +1070,156 @@ namespace Eszkozok
             return $ret;
 
         }
+
+
+        public static function GetAccPontok($int_id)
+        {
+            $conn = self::initMySqliObject();
+            $ki = self::GetAccPontokWithConn($int_id, $conn);
+
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
+        }
+
+        public static function GetAccPontokWithConn($int_id, $conn)
+        {
+            try
+            {
+                $MuszakLetszamok = array();//Cacheli az muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
+
+                $pontszam = 0;
+
+                $stmt = $conn->prepare("SELECT `muszid`, `mosogat` FROM `fxjelentk` WHERE `jelentkezo` = ? AND status = 1;");
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                $stmt->bind_param('s', $int_id);
+
+                if ($stmt->execute())
+                {
+                    $resultJelentk = $stmt->get_result();
+                    if ($resultJelentk->num_rows > 0)
+                    {
+                        $jelMuszakIDk = array();//Jelentkezett műszakok ID-i a $int_id-hoz
+                        $jelMosogatasok = array();
+
+                        while ($rowJelentk = $resultJelentk->fetch_assoc())
+                        {
+                            $aktmuszidBuff = $conn->escape_string($rowJelentk['muszid']);
+                            $jelMuszakIDk[] = $aktmuszidBuff;
+                            $jelMosogatasok[$aktmuszidBuff] = $conn->escape_string($rowJelentk['mosogat']);
+                        }
+
+                        // var_dump($jelMuszakIDk);
+
+                        $vittMuszakIDk = array();
+                        $vittMosogatasok = array();
+
+                        foreach ($jelMuszakIDk as $muszidakt)
+                        {
+                            if (!array_key_exists($muszidakt, $MuszakLetszamok))
+                            {
+                                $buff = self::GetTaroltMuszakAdatWithConn($muszidakt, false, $conn);
+                                if ($buff != false)
+                                    $MuszakLetszamok[$muszidakt] = $buff->letszam;
+                            }
+
+
+                            $stmt = $conn->prepare("SELECT * FROM `fxjelentk` WHERE `muszid` = ? AND `status` = 1 ORDER BY `ID` ASC;");
+                            if (!$stmt)
+                                throw new \Exception('SQL hiba: $stmt 5 is \'false\'' . ' :' . $conn->error);
+
+                            $stmt->bind_param('i', $muszidakt);
+
+                            if ($stmt->execute())
+                            {
+                                $resultKeret = $stmt->get_result();
+                                if ($resultKeret->num_rows > 0)
+                                {
+
+                                    for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && isset($MuszakLetszamok[$muszidakt]) && $i < $MuszakLetszamok[$muszidakt]; ++$i)
+                                    {
+                                        //echo $i . ' - ' . $muszidakt . '<br>';
+
+
+                                        if ($int_id == $rowKeret['jelentkezo'])
+                                        {
+                                            $vittMuszakIDk[] = $muszidakt;
+                                            if ($jelMosogatasok[$muszidakt] == 1)//Ha az aktuálisan vitt műszakban mosogatott
+                                                $vittMosogatasok[] = $muszidakt;
+                                            break;
+                                        }
+
+                                        // var_dump($rowKeret);
+
+                                    }
+                                }
+                            }
+                            else
+                                throw new \Exception('$stmt->execute() 5 nem sikerült' . ' :' . $conn->error);
+                        }
+
+                        if (count($vittMuszakIDk) > 0)
+                        {
+                            //`idoveg` < NOW() : Csak arra a műszakra kap pontot, ami már lezárult
+                            //TODO: idoveg < now() - ból kivenni a TRUE-t
+                            $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
+                            if (!$stmt)
+                                throw new \Exception('SQL hiba: $stmt 3 is \'false\'' . ' :' . $conn->error);
+
+                            if ($stmt->execute())
+                            {
+                                $resultMuszak = $stmt->get_result();
+                                if ($resultMuszak->num_rows == 1)
+                                {
+                                    $rowMuszak = $resultMuszak->fetch_assoc();
+                                    $pontszam += $rowMuszak['OsszPontszam'];
+                                }
+                                if (count($vittMosogatasok) > 0)
+                                {
+                                    $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
+                                    if (!$stmt)
+                                        throw new \Exception('SQL hiba: $stmt 4 is \'false\'' . ' :' . $conn->error);
+
+                                    if ($stmt->execute())
+                                    {
+                                        $resultMuszak = $stmt->get_result();
+                                        if ($resultMuszak->num_rows == 1)
+                                        {
+                                            $rowMuszak = $resultMuszak->fetch_assoc();
+                                            $pontszam += $rowMuszak['OsszPontszam'];
+                                        }
+                                    }
+                                    else
+                                        throw new \Exception('$stmt->execute() 4 nem sikerült' . ' :' . $conn->error);
+                                }
+                            }
+                            else
+                                throw new \Exception('$stmt->execute() 3 nem sikerült' . ' :' . $conn->error);
+                        }
+                    }
+                }
+                else
+                    throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
+
+                return round($pontszam, 1);
+
+
+            }
+            catch (\Exception $e)
+            {
+                throw $e;
+                //ob_clean();
+                //Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
+            }
+        }
+
     }
 }
