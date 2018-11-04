@@ -160,7 +160,7 @@ $SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
                     onclick="deleteMuszak()" type="button">Műszak törlése
             </button>
             <a class="btn btn-success pull-right" name="masolas" id="masolas" style="margin-right: 10px"
-                    href="../ujmuszak?<?php echo urldecode('muszmasol=1&muszid=' . $SzerkMuszak->ID);?>" type="button">Műszak másolása
+                    href="../ujmuszak?<?php echo 'muszmasol=1&muszid=' . urlencode($SzerkMuszak->ID);?>" type="button">Műszak másolása
             </a>
 
         </form>
@@ -170,8 +170,7 @@ $SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
-<script
-    src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
 
 <script>
     function escapeHtml(unsafe)

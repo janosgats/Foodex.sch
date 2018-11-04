@@ -211,7 +211,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                                 }
                                 else
                                     throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
-                                $pontszam = round($pontszam, 1);
+                                $pontszam = round($pontszam +  + \Eszkozok\Eszk::GetAccKompenzaltPontokWithConn($rowAcc['internal_id'], $conn), 1);
                                 ?>
 
                                 <tr>

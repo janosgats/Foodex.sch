@@ -1209,7 +1209,7 @@ namespace Eszkozok
                 else
                     throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
 
-                return round($pontszam, 1);
+                return round($pontszam + self::GetAccKompenzaltPontokWithConn($int_id, $conn), 1);
 
 
             }
@@ -1219,6 +1219,31 @@ namespace Eszkozok
                 //ob_clean();
                 //Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
             }
+        }
+
+        public static function GetAccKompenzaltPontokWithConn($int_id, $conn)
+        {
+                $stmt = $conn->prepare("SELECT `pont` FROM `kompenz` WHERE `internal_id` = ?;");
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                $buffInt = $int_id;
+                $stmt->bind_param('s', $buffInt);
+
+                if ($stmt->execute())
+                {
+                    $kipont = 0;
+
+                    $resultKomp = $stmt->get_result();
+                        while ($rowKomp = $resultKomp->fetch_assoc())
+                        {
+                            $kipont += $rowKomp['pont'];
+                        }
+
+                    return $kipont;
+                }
+                else
+                    throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
         }
 
     }
