@@ -198,7 +198,8 @@ if ($mosfoglalt)
     </nav>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <b><?php echo $MegjelenitettProfil->getNev(); ?></b><?php echo ($MosogatasJelentkezes) ? ' elvitt műszakjai' : ' pontjai'; ?>
+
+            <a style="cursor: pointer" href="<?php echo '../../profil/?mprof=' . $MegjelenitettProfil->getInternalID(); ?>" ><b><?php echo $MegjelenitettProfil->getNev(); ?></b></a> <?php echo ($MosogatasJelentkezes) ? ' elvitt műszakjai' : ' pontjai'; ?>
         </div>
         <div class="panel-body">
             <table class="table table-hover">
