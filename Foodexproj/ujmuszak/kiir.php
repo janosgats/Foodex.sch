@@ -106,7 +106,7 @@ try
     if (!$stmt)
         throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-    $stmt->bind_param('ssssisss', $AktMuszak->kiirta, $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj);
+    $stmt->bind_param('ssssidds', $AktMuszak->kiirta, $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj);
 
 
     if ($stmt->execute())

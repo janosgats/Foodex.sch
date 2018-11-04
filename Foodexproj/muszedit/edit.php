@@ -138,7 +138,7 @@ else
     if (!$stmt)
         throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-    $stmt->bind_param('ssssisss', $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
+    $stmt->bind_param('ssssidds', $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
 }
 
     if ($stmt->execute())

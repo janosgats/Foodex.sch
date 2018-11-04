@@ -175,8 +175,8 @@ if ($mosfoglalt)
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="../../jelentkezes">Jelentkezés műszakra <span class="sr-only">(current)</span></a></li>
-                    <li class="active"><a href="../../pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
-                    <li><a href="../../pontok">Pontozás</a></li>
+                    <li <?php if ($MosogatasJelentkezes) echo 'class="active"'; ?>><a href="../../pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
+                    <li <?php if (!$MosogatasJelentkezes) echo 'class="active"'; ?>><a href="../../pontok">Pontozás</a></li>
                     <?php
                     if ($AktProfil->getUjMuszakJog() == 1)
                     {
@@ -199,7 +199,8 @@ if ($mosfoglalt)
     <div class="panel panel-default">
         <div class="panel-heading">
 
-            <a style="cursor: pointer" href="<?php echo '../../profil/?mprof=' . $MegjelenitettProfil->getInternalID(); ?>" ><b><?php echo $MegjelenitettProfil->getNev(); ?></b></a> <?php echo ($MosogatasJelentkezes) ? ' elvitt műszakjai' : ' pontjai'; ?>
+            <a style="cursor: pointer"
+               href="<?php echo '../../profil/?mprof=' . $MegjelenitettProfil->getInternalID(); ?>"><b><?php echo $MegjelenitettProfil->getNev(); ?></b></a> <?php echo ($MosogatasJelentkezes) ? ' elvitt műszakjai' : ' pontjai'; ?>
         </div>
         <div class="panel-body">
             <table class="table table-hover">
@@ -413,6 +414,81 @@ if ($mosfoglalt)
             </table>
         </div>
     </div>
+
+    <?php
+    if (!$MosogatasJelentkezes)
+    {
+    ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+
+            Kompenzációk
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Pont</th>
+                    <th>Megjegyzés</th>
+                </tr>
+                </thead>
+                <?php
+                try
+                {
+                    $stmt = $conn->prepare("SELECT `pont`, `megj` FROM `kompenz` WHERE `internal_id` = ?;");
+                    if (!$stmt)
+                        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                    $buffInt = $MegjelenitettProfil->getInternalID();
+                    $stmt->bind_param('s', $buffInt);
+
+                    if ($stmt->execute())
+                    {
+                        $resultKomp = $stmt->get_result();
+                        if ($resultKomp->num_rows > 0)
+                        {
+                            while ($rowKomp = $resultKomp->fetch_assoc())
+                            {
+                                ?>
+
+                                <tr>
+                                    <td>
+                                        <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($rowKomp['megj']); ?></td>
+
+                                </tr>
+                                <?php
+                            }
+                        }
+                    }
+                    else
+                        throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
+                }
+                catch (\Exception $e)
+                {
+                    ob_clean();
+                    Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
+                }
+                ?>
+            </table>
+            <?php
+            if ($AktProfil->getUjMuszakJog() == 1)
+            {
+                ?>
+                <a class="btn btn-primary pull-right" name="kompenz" id="kompenz" style="margin-right: 10px"
+                   href="../../ujkomp?<?php echo 'int_id=' . urlencode($MegjelenitettProfil->getInternalID()); ?>" type="button">Kompenzálás
+                </a>
+
+                <?php
+            }
+            ?>
+        </div>
+    </div>
+    <?php
+    }
+    ?>
+
 </div>
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
