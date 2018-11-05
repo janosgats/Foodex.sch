@@ -10,6 +10,7 @@ namespace Eszkozok
     use Symfony\Component\Debug\ExceptionHandler;
 
     require_once __DIR__ . '/Muszak.php';
+    require_once __DIR__ . '/Kompenz.php';
 
     require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -254,10 +255,10 @@ namespace Eszkozok
         }
 
 
-        public static function getMuszakFromMuszakId($muszakid)
+        public static function GetTaroltMuszakAdat($muszakid, $statpageerr)
         {
             $conn = self::initMySqliObject();
-            $ki = self::getMuszakFromMuszakIdWithConn($muszakid, $conn);
+            $ki = self::GetTaroltMuszakAdatWithConn($muszakid, $statpageerr, $conn);
 
             try
             {
@@ -270,7 +271,7 @@ namespace Eszkozok
             return $ki;
         }
 
-        public static function getMuszakFromMuszakIdWithConn($muszakid, $conn)
+        public static function GetTaroltMuszakAdatWithConn($muszakid, $statpageerr, $conn)
         {
             try
             {
@@ -308,7 +309,7 @@ namespace Eszkozok
                     }
                     else
                     {
-                        throw new \Exception('$result->num_rows == 1');
+                        throw new \Exception('$result->num_rows != 1');
                     }
                 }
                 else
@@ -318,7 +319,72 @@ namespace Eszkozok
             }
             catch (\Exception $e)
             {
-                self::dieToErrorPage('8591: ' . $e->getMessage());
+                if ($statpageerr)
+                    self::dieToErrorPage('8591: ' . $e->getMessage());
+            }
+        }
+
+        public static function GetTaroltKompenzAdat($kompid, $statpageerr)
+        {
+            $conn = self::initMySqliObject();
+            $ki = self::GetTaroltKompenzAdatWithConn($kompid, $statpageerr, $conn);
+
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
+        }
+
+        public static function GetTaroltKompenzAdatWithConn($kompid, $statpageerr, $conn)
+        {
+            try
+            {
+                $ki = new Kompenz();
+
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+                $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `ID` = ?;");
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                $stmt->bind_param('i', $kompid);
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows == 1)
+                    {
+                        $row = $result->fetch_assoc();
+
+
+                        $ki->ID = $kompid;
+                        $ki->int_id = $row['internal_id'];
+                        $ki->pont = $row['pont'];
+                        $ki->megj = $row['megj'];
+
+                        return $ki;
+                    }
+                    else
+                    {
+                        throw new \Exception('$result->num_rows != 1');
+                    }
+                }
+                else
+                {
+                    throw new \Exception('$stmt->execute() is false');
+                }
+            }
+            catch (\Exception $e)
+            {
+                if ($statpageerr)
+                    self::dieToErrorPage('8692: ' . $e->getMessage());
             }
         }
 
@@ -490,67 +556,6 @@ namespace Eszkozok
                 self::dieToErrorPage('3219: ' . $conn->connect_error);
             }
             return $conn;
-        }
-
-        public static function GetTaroltMuszakAdatWithConn($muszid, $statpageerr, $conn)
-        {
-
-            $Ki = new Muszak();
-
-            try
-            {
-                if (!$conn)
-                    throw new \Exception('$conn is \'false\'');
-
-                $stmt = $conn->prepare("SELECT * FROM fxmuszakok WHERE ID = ?");
-                if (!$stmt)
-                    throw new \Exception('$stmt is \'false\'');
-
-                $stmt->bind_param('i', $muszid);
-
-                if ($stmt->execute())
-                {
-                    $result = $stmt->get_result();
-
-                    if ($result->num_rows == 1)
-                    {
-                        $row = $result->fetch_assoc();
-
-                        if (isset($row['ID']))
-                            $Ki->ID = $row['ID'];
-                        if (isset($row['kiirta']))
-                            $Ki->kiirta = $row['kiirta'];
-                        if (isset($row['musznev']))
-                            $Ki->musznev = $row['musznev'];
-                        if (isset($row['idokezd']))
-                            $Ki->idokezd = $row['idokezd'];
-                        if (isset($row['idoveg']))
-                            $Ki->idoveg = $row['idoveg'];
-                        if (isset($row['letszam']))
-                            $Ki->letszam = $row['letszam'];
-                        if (isset($row['pont']))
-                            $Ki->pont = $row['pont'];
-
-                    }
-                    else if ($result->num_rows == 0)
-                    {
-                        if ($statpageerr)
-                            throw new \Exception('Nem található ilyen műszak! (' . htmlspecialchars($muszid) . ')');
-                        else
-                            return false;
-                    }
-                    else
-                    {
-                        throw new \Exception('$result->num_rows != 1');
-                    }
-                }
-            }
-            catch (\Exception $e)
-            {
-                self::dieToErrorPage('1233: ' . $e->getMessage());
-            }
-
-            return $Ki;
         }
 
         public static function GetBejelentkezettProfilAdat()
@@ -1030,10 +1035,12 @@ namespace Eszkozok
                     ?>
                 </form>
                 <script>
-                    function redirectfromsubmitter() {
+                    function redirectfromsubmitter()
+                    {
                         document.getElementById("formtosubmitabc9871215487").submit();
                     }
-                    window.onload = function () {
+                    window.onload = function ()
+                    {
                         setTimeout(redirectfromsubmitter, 1);
                         setTimeout(redirectfromsubmitter, 30);
                         setTimeout(redirectfromsubmitter, 200);
@@ -1223,27 +1230,27 @@ namespace Eszkozok
 
         public static function GetAccKompenzaltPontokWithConn($int_id, $conn)
         {
-                $stmt = $conn->prepare("SELECT `pont` FROM `kompenz` WHERE `internal_id` = ?;");
-                if (!$stmt)
-                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+            $stmt = $conn->prepare("SELECT `pont` FROM `kompenz` WHERE `internal_id` = ?;");
+            if (!$stmt)
+                throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-                $buffInt = $int_id;
-                $stmt->bind_param('s', $buffInt);
+            $buffInt = $int_id;
+            $stmt->bind_param('s', $buffInt);
 
-                if ($stmt->execute())
+            if ($stmt->execute())
+            {
+                $kipont = 0;
+
+                $resultKomp = $stmt->get_result();
+                while ($rowKomp = $resultKomp->fetch_assoc())
                 {
-                    $kipont = 0;
-
-                    $resultKomp = $stmt->get_result();
-                        while ($rowKomp = $resultKomp->fetch_assoc())
-                        {
-                            $kipont += $rowKomp['pont'];
-                        }
-
-                    return $kipont;
+                    $kipont += $rowKomp['pont'];
                 }
-                else
-                    throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
+
+                return $kipont;
+            }
+            else
+                throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
         }
 
     }

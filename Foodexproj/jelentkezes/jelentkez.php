@@ -95,7 +95,7 @@ function doJelentkezes()
             }
             else if (GetURLParam('muszmuv') == 'lead')
             {
-                $leadottMuszak = \Eszkozok\Eszk::getMuszakFromMuszakIdWithConn($muszakID, $conn);
+                $leadottMuszak = \Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszakID, $conn);
 
 
                 $eredetivarolista = \Eszkozok\Eszk::getJelentkezokListajaWithConn($muszakID, $conn);

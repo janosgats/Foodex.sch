@@ -78,7 +78,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
         if (IsURLParamSet('muszmasol') && GetURLParam('muszmasol') == 1 && IsURLParamSet('muszid') && is_numeric(GetURLParam('muszid')))
         {
             $MuszakMasolas = true;
-            $MasoltMuszak = Eszkozok\Eszk::getMuszakFromMuszakId(GetURLParam('muszid'));
+            $MasoltMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat(GetURLParam('muszid'), true);
         }
     }
     catch (\Exception $e)
