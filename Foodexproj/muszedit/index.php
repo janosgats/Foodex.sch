@@ -21,7 +21,7 @@ if ($muszidbuff == '')
     Eszkozok\Eszk::dieToErrorPage('19985: muszid URL param is empty!');
 
 
-$SzerkMuszak = Eszkozok\Eszk::getMuszakFromMuszakId($muszidbuff)
+$SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
 
 
 ?>

@@ -415,76 +415,96 @@ if ($mosfoglalt)
         </div>
     </div>
 
+
     <?php
     if (!$MosogatasJelentkezes)
     {
     ?>
-    <div class="panel panel-default">
-        <div class="panel-heading">
 
-            Kompenzációk
-        </div>
-        <div class="panel-body">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Pont</th>
-                    <th>Megjegyzés</th>
-                </tr>
-                </thead>
-                <?php
-                try
-                {
-                    $stmt = $conn->prepare("SELECT `pont`, `megj` FROM `kompenz` WHERE `internal_id` = ?;");
-                    if (!$stmt)
-                        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+        <div class="panel panel-default">
+            <div class="panel-heading">
 
-                    $buffInt = $MegjelenitettProfil->getInternalID();
-                    $stmt->bind_param('s', $buffInt);
+                Kompenzációk
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Pont</th>
+                        <th>Megjegyzés</th>
 
-                    if ($stmt->execute())
-                    {
-                        $resultKomp = $stmt->get_result();
-                        if ($resultKomp->num_rows > 0)
+                        <?php
+                        if ($AktProfil->getUjMuszakJog() == 1)
                         {
-                            while ($rowKomp = $resultKomp->fetch_assoc())
+                            ?>
+                            <th></th>
+
+                            <?php
+                        }
+                        ?>
+                    </tr>
+                    </thead>
+                    <?php
+                    try
+                    {
+                        $conn = \Eszkozok\Eszk::initMySqliObject();
+                        $stmt = $conn->prepare("SELECT `ID`, `pont`, `megj` FROM `kompenz` WHERE `internal_id` = ?;");
+                        if (!$stmt)
+                            throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                        $buffInt = $MegjelenitettProfil->getInternalID();
+                        $stmt->bind_param('s', $buffInt);
+
+                        if ($stmt->execute())
+                        {
+                            $resultKomp = $stmt->get_result();
+                            if ($resultKomp->num_rows > 0)
                             {
-                                ?>
+                                while ($rowKomp = $resultKomp->fetch_assoc())
+                                {
+                                    ?>
 
-                                <tr>
-                                    <td>
-                                        <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($rowKomp['megj']); ?></td>
+                                    <tr>
+                                        <td>
+                                            <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo htmlspecialchars($rowKomp['megj']); ?>
+                                        </td>
 
-                                </tr>
-                                <?php
+                                        <?php
+                                        if ($AktProfil->getUjMuszakJog() == 1)
+                                        {
+                                            ?>
+                                            <td>
+                                                <p>
+                                                    <a href="../../ujkomp?szerk=1&kompid=<?php echo $rowKomp['ID']; ?>"
+                                                       target="_blank"
+                                                       style="text-decoration: none; color: inherit">
+                                                        <i class="fa fa-cog fa-2x"></i>
+                                                    </a>
+                                                </p>
+                                            </td>
+
+                                            <?php
+                                        }
+                                        ?>
+
+                                    </tr>
+                                    <?php
+                                }
                             }
                         }
+                        else
+                            throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
                     }
-                    else
-                        throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
-                }
-                catch (\Exception $e)
-                {
-                    ob_clean();
-                    Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
-                }
-                ?>
-            </table>
-            <?php
-            if ($AktProfil->getUjMuszakJog() == 1)
-            {
-                ?>
-                <a class="btn btn-primary pull-right" name="kompenz" id="kompenz" style="margin-right: 10px"
-                   href="../../ujkomp?<?php echo 'int_id=' . urlencode($MegjelenitettProfil->getInternalID()); ?>" type="button">Kompenzálás
-                </a>
-
-                <?php
-            }
-            ?>
+                    catch (\Exception $e)
+                    {
+                    }
+                    ?>
+                </table>
+            </div>
         </div>
-    </div>
     <?php
     }
     ?>

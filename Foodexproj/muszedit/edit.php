@@ -47,8 +47,9 @@ try
 
     $internal_id = $_SESSION['profilint_id'];
 
-    $conn; $stmt;
-    if(IsURLParamSet('musztorles') && GetURLParam('musztorles') == 1)
+    $conn;
+    $stmt;
+    if (IsURLParamSet('musztorles') && GetURLParam('musztorles') == 1)
     {//Torles//
 
         $id = 'URL PARAM IS NOT SET';
@@ -56,95 +57,95 @@ try
             $id = GetURLParam('muszid');
 
 
-        if(!is_numeric($id))
+        if (!is_numeric($id))
             throw new \Exception('A műszak ID-je nem megfelelő:' . htmlspecialchars(var_dump($id)));
 
-            $conn = Eszkozok\Eszk::initMySqliObject();
+        $conn = Eszkozok\Eszk::initMySqliObject();
 
 
-            if (!$conn)
-                throw new \Exception('SQL hiba: $conn is \'false\'');
+        if (!$conn)
+            throw new \Exception('SQL hiba: $conn is \'false\'');
 
-            $stmt = $conn->prepare("DELETE FROM `fxmuszakok` WHERE `fxmuszakok`.`ID` = ?;");
+        $stmt = $conn->prepare("DELETE FROM `fxmuszakok` WHERE `fxmuszakok`.`ID` = ?;");
 
-            if (!$stmt)
-                throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+        if (!$stmt)
+            throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-            $stmt->bind_param('i', $id);
+        $stmt->bind_param('i', $id);
 
     }
-else
-{//Szerkesztes//
-    $AktMuszak = new \Eszkozok\Muszak();
-    $AktMuszak->kiirta = $internal_id;
+    else
+    {//Szerkesztes//
+        $AktMuszak = new \Eszkozok\Muszak();
+        $AktMuszak->kiirta = $internal_id;
 
-    if (IsURLParamSet('muszid'))
-        $AktMuszak->ID = GetURLParam('muszid');
+        if (IsURLParamSet('muszid'))
+            $AktMuszak->ID = GetURLParam('muszid');
 
-    if (IsURLParamSet('musznev'))
-        $AktMuszak->musznev = GetURLParam('musznev');
-    if (IsURLParamSet('letszam'))
-        $AktMuszak->letszam = GetURLParam('letszam');
-    if (IsURLParamSet('pont'))
-        $AktMuszak->pont = GetURLParam('pont');
-    if (IsURLParamSet('mospont'))
-        $AktMuszak->mospont = GetURLParam('mospont');
-    if (IsURLParamSet('idokezd'))
-        $AktMuszak->idokezd = GetURLParam('idokezd');
-    if (IsURLParamSet('idoveg'))
-        $AktMuszak->idoveg = GetURLParam('idoveg');
-    if (IsURLParamSet('megj'))
-        $AktMuszak->megj = GetURLParam('megj');
+        if (IsURLParamSet('musznev'))
+            $AktMuszak->musznev = GetURLParam('musznev');
+        if (IsURLParamSet('letszam'))
+            $AktMuszak->letszam = GetURLParam('letszam');
+        if (IsURLParamSet('pont'))
+            $AktMuszak->pont = GetURLParam('pont');
+        if (IsURLParamSet('mospont'))
+            $AktMuszak->mospont = GetURLParam('mospont');
+        if (IsURLParamSet('idokezd'))
+            $AktMuszak->idokezd = GetURLParam('idokezd');
+        if (IsURLParamSet('idoveg'))
+            $AktMuszak->idoveg = GetURLParam('idoveg');
+        if (IsURLParamSet('megj'))
+            $AktMuszak->megj = GetURLParam('megj');
 
-    if (!is_numeric($AktMuszak->pont))
-        throw new \Exception('A közösségi pontszám nem egy szám.');
-    if (!is_numeric($AktMuszak->mospont))
-        throw new \Exception('A mosogatásért járó pontszám nem egy szám.');
-    if (!is_numeric($AktMuszak->letszam))
-        throw new \Exception('A létszám nem egy szám.');
-    if (!is_numeric($AktMuszak->ID))
-        throw new \Exception('Az ID nem egy szám.');
+        if (!is_numeric($AktMuszak->pont))
+            throw new \Exception('A közösségi pontszám nem egy szám.');
+        if (!is_numeric($AktMuszak->mospont))
+            throw new \Exception('A mosogatásért járó pontszám nem egy szám.');
+        if (!is_numeric($AktMuszak->letszam))
+            throw new \Exception('A létszám nem egy szám.');
+        if (!is_numeric($AktMuszak->ID))
+            throw new \Exception('Az ID nem egy szám.');
 
-    if ($AktMuszak->pont < 0)
-        throw new \Exception('A közösségi pontszám nagyobb, vagy egyenlő kell, hogy legyen, mint 0.');
-    if ($AktMuszak->mospont < 0)
-        throw new \Exception('A mosogatásért járó pontszám nagyobb, vagy egyenlő kell, hogy legyen, mint 0.');
-    if ($AktMuszak->letszam < 1)
-        throw new \Exception('A létszám nagyobb kell, hogy legyen, mint 0.');
+        if ($AktMuszak->pont < 0)
+            throw new \Exception('A közösségi pontszám nagyobb, vagy egyenlő kell, hogy legyen, mint 0.');
+        if ($AktMuszak->mospont < 0)
+            throw new \Exception('A mosogatásért járó pontszám nagyobb, vagy egyenlő kell, hogy legyen, mint 0.');
+        if ($AktMuszak->letszam < 1)
+            throw new \Exception('A létszám nagyobb kell, hogy legyen, mint 0.');
 
-    if (strlen($AktMuszak->musznev) > 230)
-    {
-        throw new \Exception('A műszaknév hossza maximum 230 karakter lehet.');
+        if (strlen($AktMuszak->musznev) > 230)
+        {
+            throw new \Exception('A műszaknév hossza maximum 230 karakter lehet.');
+        }
+
+        if (strlen($AktMuszak->megj) > 230)
+        {
+            throw new \Exception('A megjegyzés hossza maximum 230 karakter lehet.');
+        }
+
+        if (!verifyDate($AktMuszak->idokezd))
+            throw new \Exception('A kezdési idő nem megfelelő. ' . $AktMuszak->idokezd);
+        if (!verifyDate($AktMuszak->idoveg))
+            throw new \Exception('A vég idő nem megfelelő.');
+
+
+        $conn = Eszkozok\Eszk::initMySqliObject();
+
+
+        if (!$conn)
+            throw new \Exception('SQL hiba: $conn is \'false\'');
+
+        $stmt = $conn->prepare("UPDATE `fxmuszakok` SET `musznev` = ?, `idokezd` = ?, `idoveg` = ?, `letszam` = ?, `pont` = ?, `mospont` = ? , `megj` = ? WHERE `fxmuszakok`.`ID` = ?;");
+        if (!$stmt)
+            throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+        $stmt->bind_param('ssssidds', $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
     }
-
-    if (strlen($AktMuszak->megj) > 230)
-    {
-        throw new \Exception('A megjegyzés hossza maximum 230 karakter lehet.');
-    }
-
-    if (!verifyDate($AktMuszak->idokezd))
-        throw new \Exception('A kezdési idő nem megfelelő. ' . $AktMuszak->idokezd);
-    if (!verifyDate($AktMuszak->idoveg))
-        throw new \Exception('A vég idő nem megfelelő.');
-
-
-    $conn = Eszkozok\Eszk::initMySqliObject();
-
-
-    if (!$conn)
-        throw new \Exception('SQL hiba: $conn is \'false\'');
-
-    $stmt = $conn->prepare("UPDATE `fxmuszakok` SET `musznev` = ?, `idokezd` = ?, `idoveg` = ?, `letszam` = ?, `pont` = ?, `mospont` = ? , `megj` = ? WHERE `fxmuszakok`.`ID` = ?;");
-    if (!$stmt)
-        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
-
-    $stmt->bind_param('ssssidds', $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
-}
 
     if ($stmt->execute())
     {
-        //ob_clean();
-        if($stmt->affected_rows == 0)
+        ob_clean();
+        if ($stmt->affected_rows == 0)
         {
             throw new Exception("Nem történt módosítás!");
         }
