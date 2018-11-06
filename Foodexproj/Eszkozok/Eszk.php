@@ -982,7 +982,9 @@ namespace Eszkozok
         {
             try
             {
-                ob_clean();
+                if (ob_get_length())
+                    ob_clean();
+
                 $rooturl = self::GetRootURL();
                 $url = $rooturl . $relurl;
 
@@ -1011,7 +1013,9 @@ namespace Eszkozok
                     echo $e->getMessage();
                 }
 
-                ob_clean();
+                if (ob_get_length())
+                    ob_clean();
+
                 header('Location: ' . $url);
                 ?>
                 <script>
