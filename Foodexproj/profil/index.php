@@ -4,6 +4,7 @@ session_start();
 require_once '../Eszkozok/Eszk.php';
 require_once '../Eszkozok/param.php';
 require_once 'Profil.php';
+require_once '../Eszkozok/ProfilInfo.php';
 
 \Eszkozok\Eszk::ValidateLogin();
 
@@ -29,6 +30,8 @@ else
     <title>Fx Profil</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
+
+    <link rel="stylesheet" href="main.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -92,6 +95,34 @@ else
                         echo 'N/A';
                     } ?> pont</b></p></a>
 
+        <p style="display: inline">Kedvenc vicc: </p>
+
+        <p style="display: inline" id="kedv_vicc_szoveg"><?php
+            $ProfInf = \Eszkozok\Eszk::GetTaroltProfilInfo($MegjProfil->getInternalID());
+
+            if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
+                echo htmlspecialchars($ProfInf->KedvencVicc);
+            else
+                echo 'Semmi jó :(';
+
+            ?>  </p>
+
+
+        <?php
+        if ($AktProfil->getInternalID() == $MegjProfil->getInternalID())
+        {
+            ?>
+            <p id="ked_vicc_editgear" style="display: inline; font-size: x-large" onclick="StartEditKedvencVicc();"><i class="fa fa-cog fa settingsgear"></i></p>
+            <?php
+        }
+        ?>
+
+        <div class="input-group mb-3" style="display: none" id="kedv_vicc_editdiv">
+            <input type="text" id="kedv_vicc_input" onblur="SubmitKedvencVicc()" class="form-control" placeholder="Fasza legyen ;)" aria-describedby="basic-addon2">
+        </div>
+
+        <br><br>
+
         <?php
         if ($AktProfil->getUjMuszakJog() == 1)
         {
@@ -105,6 +136,111 @@ else
         ?>
 
     </div>
+
+    <script>
+        document.getElementById("kedv_vicc_input").addEventListener("keyup", function (e)
+        {
+            if (e.keyCode === 13)
+            {  //checks whether the pressed key is "Enter"
+                SubmitKedvencVicc();
+            }
+            else if (e.keyCode === 27)
+            {  //checks whether the pressed key is "Esc"
+                RestoreEditing();
+            }
+        });
+
+
+        function StartEditKedvencVicc()
+        {
+            EnableSubmit = true;
+            document.getElementById('ked_vicc_editgear').style.display = 'none';
+            document.getElementById('kedv_vicc_szoveg').style.display = 'none';
+            document.getElementById('kedv_vicc_editdiv').style.display = 'block';
+            document.getElementById('kedv_vicc_input').focus();
+
+            document.getElementById('kedv_vicc_input').value = ViccText;
+
+
+        }
+
+        var EnableSubmit = true;
+
+        var ViccText = '<?php
+            if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
+                echo htmlspecialchars($ProfInf->KedvencVicc);
+            ?>';
+
+        function SubmitKedvencVicc()
+        {
+            if (EnableSubmit)
+            {
+                ViccText = document.getElementById("kedv_vicc_input").value;
+
+                callPHPPage({
+                    vicctext: ViccText,
+                    megj_int_id: '<?php echo $MegjProfil->getInternalID(); ?>'
+                });
+            }
+            EnableSubmit = false;
+        }
+
+        function RestoreEditing()
+        {
+            EnableSubmit = false;
+            document.getElementById('kedv_vicc_szoveg').innerHTML = (ViccText == '') ? 'Semmi jó :(' : escapeHtml(ViccText);
+
+            document.getElementById('kedv_vicc_editdiv').style.display = 'none';
+            document.getElementById('ked_vicc_editgear').style.display = 'inline';
+            document.getElementById('kedv_vicc_szoveg').style.display = 'inline';
+
+            document.getElementById('kedv_vicc_input').blur();
+        }
+
+        function escapeHtml(unsafe)
+        {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function HandlePHPPageData(ret)
+        {
+
+            switch (ret)
+            {
+                case 'tulhosszuvicc':
+                    alert('A vicc túl hosszú :/');
+                    break;
+
+                case 'siker345':
+                {
+                    RestoreEditing();
+                }
+                    break;
+
+                default:
+                    alert(escapeHtml(ret));
+            }
+
+            EnableSubmit = true;
+        }
+
+        function callPHPPage(postdata)
+        {
+            $.post('editvicc.php', postdata, HandlePHPPageData).fail(
+                function ()
+                {
+                    alert("Error at AJAX call!");
+                });
+
+            console.log('AJAX request sent.')
+        }
+
+    </script>
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -166,7 +302,7 @@ else
                                                 <a href="../ujkomp?szerk=1&kompid=<?php echo $rowKomp['ID']; ?>"
                                                    target="_blank"
                                                    style="text-decoration: none; color: inherit">
-                                                    <i class="fa fa-cog fa-2x"></i>
+                                                    <i class="fa fa-cog fa-2x settingsgear"></i>
                                                 </a>
                                             </p>
                                         </td>
