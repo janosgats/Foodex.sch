@@ -555,6 +555,9 @@ namespace Eszkozok
             {
                 self::dieToErrorPage('3219: ' . $conn->connect_error);
             }
+
+            if(!$conn)
+                self::dieToErrorPage('3218: ' . '$conn is false!');
             return $conn;
         }
 
@@ -570,10 +573,70 @@ namespace Eszkozok
             return self::GetTaroltProfilAdat($internal_id);
         }
 
+        public static function GetTaroltProfilInfo($internal_id)
+        {
+            require_once __DIR__ . '/../Eszkozok/ProfilInfo.php';
+            $ProfInf = new ProfilInfo();
+
+            $conn = 0;
+            try
+            {
+                $conn = self::initMySqliObject();
+
+                if (!$conn)
+                    throw new \Exception('$conn is \'false\'');
+
+                $stmt = $conn->prepare("SELECT * FROM profilinfo WHERE int_id = ?");
+                if (!$stmt)
+                    throw new \Exception('$stmt is \'false\'');
+
+                $stmt->bind_param('s', $internal_id);
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+                    if ($result->num_rows == 0)
+                    {
+                        //throw new \Exception('A felhasználó nem található!');
+                    }
+                    else if ($result->num_rows == 1)
+                    {
+                        $row = $result->fetch_assoc();
+
+                        if (isset($row['kedv_vicc']))
+                            $ProfInf->KedvencVicc = $row['kedv_vicc'];
+
+                    }
+                    else
+                    {
+                        throw new \Exception('$result->num_rows != 1');
+                    }
+                }
+            }
+            catch (\Exception $e)
+            {
+                self::dieToErrorPage('1420: ' . $e->getMessage());
+            }
+            finally
+            {
+                try
+                {
+                    $conn->close();
+                }
+                catch (\Exception $e)
+                {
+                }
+            }
+
+            return $ProfInf;
+        }
+
         public static function GetTaroltProfilAdat($internal_id)
         {
             $ProfilNev = "";
             $UjMuszakJog = 0;
+
+            $conn = 0;
             try
             {
                 $conn = self::initMySqliObject();

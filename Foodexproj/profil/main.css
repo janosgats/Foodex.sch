@@ -1,0 +1,8 @@
+.settingsgear {
+    color: rgb(71, 162, 243);
+    cursor: pointer;
+}
+
+.settingsgear:hover {
+    color: rgb(51, 122, 200);
+}
