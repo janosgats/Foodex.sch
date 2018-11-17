@@ -16,7 +16,10 @@ namespace Eszkozok
 
     require_once __DIR__ . '/ini.php';
 
-//include_once './AuthSchProvider.php';
+    require_once __DIR__ . '/AuthSchProvider.php';
+
+    require_once __DIR__ . '/MonologHelper.php';
+
 
     class Eszk
     {
@@ -556,7 +559,7 @@ namespace Eszkozok
                 self::dieToErrorPage('3219: ' . $conn->connect_error);
             }
 
-            if(!$conn)
+            if (!$conn)
                 self::dieToErrorPage('3218: ' . '$conn is false!');
             return $conn;
         }
@@ -758,14 +761,36 @@ namespace Eszkozok
             return false;
         }
 
+        // Function to get the client ip address
+        function get_client_ip_address()
+        {
+            $ipaddress = '';
+            if ($_SERVER['HTTP_CLIENT_IP'])
+                $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+            else if ($_SERVER['HTTP_X_FORWARDED_FOR'])
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            else if ($_SERVER['HTTP_X_FORWARDED'])
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+            else if ($_SERVER['HTTP_FORWARDED_FOR'])
+                $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+            else if ($_SERVER['HTTP_FORWARDED'])
+                $ipaddress = $_SERVER['HTTP_FORWARDED'];
+            else if ($_SERVER['REMOTE_ADDR'])
+                $ipaddress = $_SERVER['REMOTE_ADDR'];
+            else
+                $ipaddress = 'UNKNOWN';
+
+            return $ipaddress;
+        }
+
         /**
          *
          */
         public static function doAuthSchLogin()
         {
+            $logger = new \MonologHelper('Eszk::doAuthSchLogin()');
+
             set_include_path(getcwd());
-            require_once 'vendor/autoload.php';
-            include_once 'Eszkozok/AuthSchProvider.php';
 
             $provider = self::initNewAuthSchProvider();
 
@@ -862,6 +887,8 @@ namespace Eszkozok
                             ?>
                             <h3 style="color: red">Nem vagy FoodEx tag!</h3>
                             <?php
+
+                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resp['internal_id'], self::get_client_ip_address()]);
                             self::RedirectUnderRoot('nemkortag.html');
                         }
                         // var_dump($resp);
