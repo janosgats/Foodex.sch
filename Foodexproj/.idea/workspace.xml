@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84755cb6-d501-466d-8123-16f202aae52a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Eszkozok/MonologHelper.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Foodexproj.iml" afterPath="$PROJECT_DIR$/.idea/Foodexproj.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Eszkozok/Eszk.php" afterPath="$PROJECT_DIR$/Eszkozok/Eszk.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vendor/composer/autoload_psr4.php" afterPath="$PROJECT_DIR$/vendor/composer/autoload_psr4.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vendor/composer/autoload_static.php" afterPath="$PROJECT_DIR$/vendor/composer/autoload_static.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vendor/composer/installed.json" afterPath="$PROJECT_DIR$/vendor/composer/installed.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
     </list>
     <ignored path="Foodexproj.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,8 +38,8 @@
             <file leaf-file-name="ini.php" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/Eszkozok/ini.php">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.16739607">
-                    <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+                  <state vertical-scroll-proportion="0.18599562">
+                    <caret line="10" column="122" selection-start-line="10" selection-start-column="122" selection-end-line="10" selection-end-column="122" />
                     <folding />
                   </state>
                 </provider>
@@ -66,8 +59,8 @@
       <file leaf-file-name="MonologHelper.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Eszkozok/MonologHelper.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.384615">
-              <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+            <state vertical-scroll-proportion="-7.8461537">
+              <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
               <folding>
                 <element signature="e#6#164#0#PHP" expanded="true" />
                 <marker date="1542472212338" expanded="true" signature="988:1107" placeholder="INSERT INTO `logs`..." />
@@ -76,61 +69,42 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.php">
+      <file leaf-file-name="Logger.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/vendor/monolog/monolog/src/Monolog/Logger.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.230769">
-              <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
-              <folding>
-                <marker date="1542472354265" expanded="true" signature="201:2003" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="209:384" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="392:1994" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="413:1986" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="438:1979" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="466:1968" placeholder="..." />
-                <marker date="1542472354265" expanded="false" signature="784:840" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="841:929" placeholder="..." />
-                <marker date="1542472354265" expanded="false" signature="955:995" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="996:1501" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="1085:1482" placeholder="..." />
-                <marker date="1542472354265" expanded="false" signature="1112:1155" placeholder="..." />
-                <marker date="1542472354265" expanded="false" signature="1188:1270" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="1271:1461" placeholder="..." />
-                <marker date="1542472354265" expanded="false" signature="1414:1444" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="1555:1953" placeholder="..." />
-                <marker date="1542472354265" expanded="false" signature="1664:1721" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="1722:1932" placeholder="..." />
-                <marker date="1542472354265" expanded="false" signature="1789:1831" placeholder="..." />
-                <marker date="1542472354265" expanded="true" signature="1832:1908" placeholder="..." />
-              </folding>
+            <state vertical-scroll-proportion="-20.923077">
+              <caret line="323" column="57" selection-start-line="323" selection-start-column="57" selection-end-line="323" selection-end-column="57" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Eszk.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.56962025">
-              <caret line="875" column="89" selection-start-line="875" selection-start-column="89" selection-end-line="875" selection-end-column="89" />
+            <state vertical-scroll-proportion="0.3521289">
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding>
-                <element signature="e#83#125#0#PHP" expanded="true" />
-                <marker date="1542474176540" expanded="true" signature="1504:1547" placeholder="SELECT * FRO..fxaccok..." />
-                <marker date="1542474176540" expanded="true" signature="3251:3330" placeholder="SELECT * FRO..fxjelentk..." />
-                <marker date="1542474176540" expanded="true" signature="8051:8092" placeholder="SELECT * FRO..fxmuszakok..." />
-                <marker date="1542474176540" expanded="true" signature="10225:10263" placeholder="SELECT * FRO..fxmuszakok..." />
-                <marker date="1542474176540" expanded="true" signature="12375:12431" placeholder="SELECT ${$os..fxaccok..." />
-                <marker date="1542474176540" expanded="true" signature="14409:14499" placeholder="SELECT `jele..fxjelentk..." />
-                <marker date="1542474176540" expanded="true" signature="17614:17655" placeholder="SELECT * FRO..fxaccok..." />
-                <marker date="1542474176540" expanded="true" signature="19294:19337" placeholder="SELECT * FRO..fxaccok..." />
-                <marker date="1542474176540" expanded="true" signature="30899:30942" placeholder="SELECT * FRO..fxaccok..." />
-                <marker date="1542474176540" expanded="true" signature="31402:31490" placeholder="INSERT INTO `fxaccok`..." />
-                <marker date="1542474176540" expanded="true" signature="32419:32483" placeholder="UPDATE `fxac..." />
-                <marker date="1542474176540" expanded="true" signature="33113:33179" placeholder="UPDATE `fxac..." />
-                <marker date="1542474176540" expanded="true" signature="38869:38950" placeholder="SELECT `musz..fxjelentk..." />
-                <marker date="1542474176540" expanded="true" signature="40527:40606" placeholder="SELECT * FRO..fxjelentk..." />
-                <marker date="1542474176540" expanded="true" signature="42511:42648" placeholder="SELECT SUM(`..fxmuszakok..." />
-                <marker date="1542474176540" expanded="true" signature="43402:43544" placeholder="SELECT SUM(`..fxmuszakok..." />
-                <marker date="1542474176540" expanded="true" signature="45258:45310" placeholder="SELECT `pont..kompenz..." />
+                <marker date="1542477038031" expanded="true" signature="372:2174" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="380:555" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="563:2165" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="584:2157" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="609:2150" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="637:2139" placeholder="..." />
+                <marker date="1542477038031" expanded="false" signature="955:1011" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="1012:1100" placeholder="..." />
+                <marker date="1542477038031" expanded="false" signature="1126:1166" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="1167:1672" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="1256:1653" placeholder="..." />
+                <marker date="1542477038031" expanded="false" signature="1283:1326" placeholder="..." />
+                <marker date="1542477038031" expanded="false" signature="1359:1441" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="1442:1632" placeholder="..." />
+                <marker date="1542477038031" expanded="false" signature="1585:1615" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="1726:2124" placeholder="..." />
+                <marker date="1542477038031" expanded="false" signature="1835:1892" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="1893:2103" placeholder="..." />
+                <marker date="1542477038031" expanded="false" signature="1960:2002" placeholder="..." />
+                <marker date="1542477038031" expanded="true" signature="2003:2079" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -153,7 +127,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/test.html" />
         <option value="$PROJECT_DIR$/testsql.php" />
         <option value="$PROJECT_DIR$/jelentkezes/popup.css" />
         <option value="$PROJECT_DIR$/../../../../Desktop/Feverkill/FeverkillWeb/FeverkillWeb/FTP/register/regform.php" />
@@ -201,9 +174,10 @@
         <option value="$PROJECT_DIR$/jelentkezes/jelentkez.php" />
         <option value="$PROJECT_DIR$/Eszkozok/Monolog.php" />
         <option value="$PROJECT_DIR$/Eszkozok/MonologHelper.php" />
-        <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/Eszkozok/ini.php" />
         <option value="$PROJECT_DIR$/Eszkozok/Eszk.php" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/composer.json" />
       </list>
     </option>
   </component>
@@ -323,128 +297,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ujmuszak" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ujkomp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="profil" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pontok" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pontok" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="userpont" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jelentkezes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Eszkozok" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Changed Files">
@@ -504,6 +356,40 @@
       <pane id="Scratches">
         <subPane />
       </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vendor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -522,18 +408,18 @@
     <property name="js-jscs-nodeInterpreter" value="D:\nodejs\node.exe" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\ujkomp" />
+      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\muszedit" />
+      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\pontok\userpont" />
+      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\pontok" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\devlogin" />
       <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\3rdparty" />
       <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\profil" />
       <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\statuspages" />
       <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\ujkomp" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\muszedit" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\pontok\userpont" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\pontok" />
     </key>
   </component>
   <component name="RunManager" selected="PHP Web Application.Foodex on XAMPP">
@@ -658,25 +544,25 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19296375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.4968017" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3434453" sideWeight="0.5053305" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20043337" sideWeight="0.49791667" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28710726" sideWeight="0.49573562" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19083156" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3163597" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20021646" sideWeight="0.49791667" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28710726" sideWeight="0.49573562" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3434453" sideWeight="0.4946695" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39869988" sideWeight="0.4978678" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3163597" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3434453" sideWeight="0.4946695" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -713,11 +599,6 @@
           <line>7</line>
           <option name="timeStamp" value="116" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/vendor/monolog/monolog/src/Monolog/Logger.php</url>
-          <line>337</line>
-          <option name="timeStamp" value="127" />
-        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
@@ -727,27 +608,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Eszkozok/SMTPSender.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="13.076923">
-          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jelentkezes/modal.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="100" column="1" selection-start-line="100" selection-start-column="1" selection-end-line="100" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nemkortag.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2246696">
-          <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/adminer/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -938,7 +798,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -946,7 +805,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -954,7 +812,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -962,7 +819,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="80" column="42" selection-start-line="80" selection-start-column="42" selection-end-line="80" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -970,7 +826,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="143" column="1" selection-start-line="143" selection-start-column="1" selection-end-line="143" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -990,12 +845,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-22.0">
           <caret line="51" column="17" selection-start-line="44" selection-start-column="16" selection-end-line="51" selection-end-column="17" />
-          <folding>
-            <marker date="1541550791649" expanded="true" signature="616:668" placeholder="SELECT `int_..profilinfo..." />
-            <marker date="1541550791649" expanded="true" signature="939:1001" placeholder="INSERT INTO `profilinfo`..." />
-            <marker date="1541550791649" expanded="true" signature="950:1000" placeholder="SELECT `int_..profilinfo..." />
-            <marker date="1541550791649" expanded="true" signature="1191:1262" placeholder="UPDATE `prof..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1003,13 +852,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.2692308">
           <caret line="236" column="91" selection-start-line="236" selection-start-column="89" selection-end-line="236" selection-end-column="91" />
-          <folding>
-            <marker date="1541415675741" expanded="true" signature="3323:3383" placeholder="SELECT `inte..fxaccok..." />
-            <marker date="1541415675741" expanded="true" signature="3933:4014" placeholder="SELECT `musz..fxjelentk..." />
-            <marker date="1541415675741" expanded="true" signature="6062:6141" placeholder="SELECT * FRO..fxjelentk..." />
-            <marker date="1541415675741" expanded="true" signature="8541:8678" placeholder="SELECT SUM(`..fxmuszakok..." />
-            <marker date="1541415675741" expanded="true" signature="9640:9782" placeholder="SELECT SUM(`..fxmuszakok..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1034,11 +876,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-15.807693">
           <caret line="81" column="41" selection-start-line="81" selection-start-column="41" selection-end-line="81" selection-end-column="41" />
-          <folding>
-            <marker date="1541621654613" expanded="true" signature="1578:1663" placeholder="SELECT `ID` ..fxjelentk..." />
-            <marker date="1541621654613" expanded="true" signature="2315:2406" placeholder="INSERT INTO `fxjelentk`..." />
-            <marker date="1541621654613" expanded="true" signature="3436:3547" placeholder="UPDATE `fxje..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1046,10 +883,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-19.615385">
           <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="31" selection-end-column="117" />
-          <folding>
-            <marker date="1541414154966" expanded="true" signature="2646:2696" placeholder="SELECT * FRO..fxmuszakok..." />
-            <marker date="1541414154966" expanded="true" signature="2758:2837" placeholder="SELECT * FRO..fxmuszakok..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1057,9 +890,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-76.5">
           <caret line="117" column="10" selection-start-line="117" selection-start-column="10" selection-end-line="117" selection-end-column="10" />
-          <folding>
-            <marker date="1541553712924" expanded="true" signature="8878:8944" placeholder="SELECT `ID`,..kompenz..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1067,7 +897,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-9.346154">
           <caret line="323" column="0" selection-start-line="323" selection-start-column="0" selection-end-line="323" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1083,7 +912,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.076923">
           <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1091,15 +919,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-14.269231">
           <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/monolog/monolog/src/Monolog/Logger.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.23077">
-          <caret line="329" column="32" selection-start-line="329" selection-start-column="32" selection-end-line="329" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1111,10 +930,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Eszkozok/ini.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.18599562">
+          <caret line="10" column="122" selection-start-line="10" selection-start-column="122" selection-end-line="10" selection-end-column="122" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Eszkozok/MonologHelper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.384615">
-          <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+        <state vertical-scroll-proportion="-7.8461537">
+          <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
           <folding>
             <element signature="e#6#164#0#PHP" expanded="true" />
             <marker date="1542472212338" expanded="true" signature="988:1107" placeholder="INSERT INTO `logs`..." />
@@ -1122,47 +949,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Eszkozok/ini.php">
+    <entry file="file://$PROJECT_DIR$/vendor/monolog/monolog/src/Monolog/Logger.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.16739607">
-          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+        <state vertical-scroll-proportion="-20.923077">
+          <caret line="323" column="57" selection-start-line="323" selection-start-column="57" selection-end-line="323" selection-end-column="57" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.230769">
-          <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
-          <folding>
-            <marker date="1542472354265" expanded="true" signature="201:2003" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="209:384" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="392:1994" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="413:1986" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="438:1979" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="466:1968" placeholder="..." />
-            <marker date="1542472354265" expanded="false" signature="784:840" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="841:929" placeholder="..." />
-            <marker date="1542472354265" expanded="false" signature="955:995" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="996:1501" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="1085:1482" placeholder="..." />
-            <marker date="1542472354265" expanded="false" signature="1112:1155" placeholder="..." />
-            <marker date="1542472354265" expanded="false" signature="1188:1270" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="1271:1461" placeholder="..." />
-            <marker date="1542472354265" expanded="false" signature="1414:1444" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="1555:1953" placeholder="..." />
-            <marker date="1542472354265" expanded="false" signature="1664:1721" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="1722:1932" placeholder="..." />
-            <marker date="1542472354265" expanded="false" signature="1789:1831" placeholder="..." />
-            <marker date="1542472354265" expanded="true" signature="1832:1908" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.56962025">
-          <caret line="875" column="89" selection-start-line="875" selection-start-column="89" selection-end-line="875" selection-end-column="89" />
+        <state vertical-scroll-proportion="0.6436782">
+          <caret line="878" column="68" selection-start-line="878" selection-start-column="68" selection-end-line="878" selection-end-column="68" />
           <folding>
             <element signature="e#83#125#0#PHP" expanded="true" />
             <marker date="1542474176540" expanded="true" signature="1504:1547" placeholder="SELECT * FRO..fxaccok..." />
@@ -1182,6 +980,59 @@
             <marker date="1542474176540" expanded="true" signature="42511:42648" placeholder="SELECT SUM(`..fxmuszakok..." />
             <marker date="1542474176540" expanded="true" signature="43402:43544" placeholder="SELECT SUM(`..fxmuszakok..." />
             <marker date="1542474176540" expanded="true" signature="45258:45310" placeholder="SELECT `pont..kompenz..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lock.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.lock">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.558659">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1173763">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3521289">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <marker date="1542477038031" expanded="true" signature="372:2174" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="380:555" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="563:2165" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="584:2157" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="609:2150" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="637:2139" placeholder="..." />
+            <marker date="1542477038031" expanded="false" signature="955:1011" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="1012:1100" placeholder="..." />
+            <marker date="1542477038031" expanded="false" signature="1126:1166" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="1167:1672" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="1256:1653" placeholder="..." />
+            <marker date="1542477038031" expanded="false" signature="1283:1326" placeholder="..." />
+            <marker date="1542477038031" expanded="false" signature="1359:1441" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="1442:1632" placeholder="..." />
+            <marker date="1542477038031" expanded="false" signature="1585:1615" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="1726:2124" placeholder="..." />
+            <marker date="1542477038031" expanded="false" signature="1835:1892" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="1893:2103" placeholder="..." />
+            <marker date="1542477038031" expanded="false" signature="1960:2002" placeholder="..." />
+            <marker date="1542477038031" expanded="true" signature="2003:2079" placeholder="..." />
           </folding>
         </state>
       </provider>

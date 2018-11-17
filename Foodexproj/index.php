@@ -9,6 +9,12 @@ if (\Eszkozok\Eszk::IsLoginValid())
     Eszkozok\Eszk::RedirectUnderRoot('profil');
 }
 
+//include_once 'Eszkozok/MonologHelper.php';
+//$l = new MonologHelper('test1');
+//$l->debug('test message 1');
+//
+//$d = new DateTime();
+//echo $d->format('Y-m-d H:i:s');
 ?>
 
 <!DOCTYPE html>
