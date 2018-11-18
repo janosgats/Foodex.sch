@@ -9,12 +9,14 @@ if (\Eszkozok\Eszk::IsLoginValid())
     Eszkozok\Eszk::RedirectUnderRoot('profil');
 }
 
+//date_default_timezone_set('Europe/Budapest');
+//ini_set('date.timezone', 'Europe/Budapest');
+//$d = new DateTime();
+//echo $d->format('Y-m-d H:i:s');
 //include_once 'Eszkozok/MonologHelper.php';
 //$l = new MonologHelper('test1');
 //$l->debug('test message 1');
 //
-//$d = new DateTime();
-//echo $d->format('Y-m-d H:i:s');
 ?>
 
 <!DOCTYPE html>
