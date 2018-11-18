@@ -15,6 +15,7 @@ class MonologHelper extends Monolog\Logger
 
     public function __construct($name)
     {
+        date_default_timezone_set('Europe/Budapest');
         parent::__construct($name);
         $this->pushHandler(new FxDBLogHandler());
     }
