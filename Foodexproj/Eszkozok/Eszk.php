@@ -1065,6 +1065,14 @@ namespace Eszkozok
 
         public static function dieToErrorPage($errcode)
         {
+            try
+            {
+                $logger = new \MonologHelper('Eszk::dieToErrorPage()');
+                $logger->error('$errcode: ' . $errcode, [(isset($_SESSION['internal_id']))?$_SESSION['internal_id']:'No Internal ID', self::get_client_ip_address()]);
+            }
+            catch (\Exception $e)
+            {
+            }
             self::RedirectUnderRoot('statuspages/error.php?code=' . urlencode($errcode));
         }
 
