@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84755cb6-d501-466d-8123-16f202aae52a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Eszkozok/MonologHelper.php" afterPath="$PROJECT_DIR$/Eszkozok/MonologHelper.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Eszkozok/Eszk.php" afterPath="$PROJECT_DIR$/Eszkozok/Eszk.php" />
     </list>
     <ignored path="Foodexproj.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,7 +38,7 @@
       <file leaf-file-name="MonologHelper.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Eszkozok/MonologHelper.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-15.038462">
+            <state vertical-scroll-proportion="0.0">
               <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
               <folding>
                 <element signature="e#6#164#0#PHP" expanded="true" />
@@ -53,19 +51,55 @@
       <file leaf-file-name="Logger.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/monolog/monolog/src/Monolog/Logger.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-157.57692">
+            <state vertical-scroll-proportion="0.0">
               <caret line="316" column="62" selection-start-line="316" selection-start-column="62" selection-end-line="316" selection-end-column="62" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3970803">
-              <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+            <state vertical-scroll-proportion="-5.8846154">
+              <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Eszk.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.4452555">
+              <caret line="1070" column="31" selection-start-line="1070" selection-start-column="31" selection-end-line="1070" selection-end-column="31" />
+              <folding>
+                <element signature="e#83#125#0#PHP" expanded="true" />
+                <marker date="1542816976893" expanded="true" signature="1504:1547" placeholder="SELECT * FRO..fxaccok..." />
+                <marker date="1542816976893" expanded="true" signature="3251:3330" placeholder="SELECT * FRO..fxjelentk..." />
+                <marker date="1542816976893" expanded="true" signature="8051:8092" placeholder="SELECT * FRO..fxmuszakok..." />
+                <marker date="1542816976893" expanded="true" signature="10225:10263" placeholder="SELECT * FRO..fxmuszakok..." />
+                <marker date="1542816976893" expanded="true" signature="12375:12431" placeholder="SELECT ${$os..fxaccok..." />
+                <marker date="1542816976893" expanded="true" signature="14409:14499" placeholder="SELECT `jele..fxjelentk..." />
+                <marker date="1542816976893" expanded="true" signature="17614:17655" placeholder="SELECT * FRO..fxaccok..." />
+                <marker date="1542816976893" expanded="true" signature="19294:19337" placeholder="SELECT * FRO..fxaccok..." />
+                <marker date="1542816976893" expanded="true" signature="30899:30942" placeholder="SELECT * FRO..fxaccok..." />
+                <marker date="1542816976893" expanded="true" signature="31402:31490" placeholder="INSERT INTO `fxaccok`..." />
+                <marker date="1542816976893" expanded="true" signature="32419:32483" placeholder="UPDATE `fxac..." />
+                <marker date="1542816976893" expanded="true" signature="33113:33179" placeholder="UPDATE `fxac..." />
+                <marker date="1542816976893" expanded="true" signature="36071:36162" placeholder="..." />
+                <marker date="1542816976893" expanded="true" signature="36264:36277" placeholder="..." />
+                <marker date="1542816976893" expanded="true" signature="36278:36909" placeholder="..." />
+                <marker date="1542816976893" expanded="true" signature="36700:36746" placeholder="..." />
+                <marker date="1542816976893" expanded="true" signature="36934:37620" placeholder="..." />
+                <marker date="1542816976893" expanded="true" signature="37009:37119" placeholder="{...}" />
+                <marker date="1542816976893" expanded="true" signature="37188:37594" placeholder="{...}" />
+                <marker date="1542816976893" expanded="true" signature="39214:39295" placeholder="SELECT `musz..fxjelentk..." />
+                <marker date="1542816976893" expanded="true" signature="40872:40951" placeholder="SELECT * FRO..fxjelentk..." />
+                <marker date="1542816976893" expanded="true" signature="42856:42993" placeholder="SELECT SUM(`..fxmuszakok..." />
+                <marker date="1542816976893" expanded="true" signature="43747:43889" placeholder="SELECT SUM(`..fxmuszakok..." />
+                <marker date="1542816976893" expanded="true" signature="45603:45655" placeholder="SELECT `pont..kompenz..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -134,10 +168,10 @@
         <option value="$PROJECT_DIR$/jelentkezes/jelentkez.php" />
         <option value="$PROJECT_DIR$/Eszkozok/Monolog.php" />
         <option value="$PROJECT_DIR$/Eszkozok/ini.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/Eszk.php" />
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/Eszkozok/MonologHelper.php" />
         <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/Eszkozok/Eszk.php" />
       </list>
     </option>
   </component>
@@ -257,9 +291,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches">
-        <subPane />
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -293,6 +324,9 @@
             </PATH_ELEMENT>
           </PATH>
         </subPane>
+      </pane>
+      <pane id="Scratches">
+        <subPane />
       </pane>
       <pane id="Scope">
         <subPane subId="Problems" />
@@ -505,7 +539,7 @@
     <editor active="false" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19722815" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19936034" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.4968017" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3434453" sideWeight="0.5053305" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -885,33 +919,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6436782">
-          <caret line="878" column="68" selection-start-line="878" selection-start-column="68" selection-end-line="878" selection-end-column="68" />
-          <folding>
-            <element signature="e#83#125#0#PHP" expanded="true" />
-            <marker date="1542474176540" expanded="true" signature="1504:1547" placeholder="SELECT * FRO..fxaccok..." />
-            <marker date="1542474176540" expanded="true" signature="3251:3330" placeholder="SELECT * FRO..fxjelentk..." />
-            <marker date="1542474176540" expanded="true" signature="8051:8092" placeholder="SELECT * FRO..fxmuszakok..." />
-            <marker date="1542474176540" expanded="true" signature="10225:10263" placeholder="SELECT * FRO..fxmuszakok..." />
-            <marker date="1542474176540" expanded="true" signature="12375:12431" placeholder="SELECT ${$os..fxaccok..." />
-            <marker date="1542474176540" expanded="true" signature="14409:14499" placeholder="SELECT `jele..fxjelentk..." />
-            <marker date="1542474176540" expanded="true" signature="17614:17655" placeholder="SELECT * FRO..fxaccok..." />
-            <marker date="1542474176540" expanded="true" signature="19294:19337" placeholder="SELECT * FRO..fxaccok..." />
-            <marker date="1542474176540" expanded="true" signature="30899:30942" placeholder="SELECT * FRO..fxaccok..." />
-            <marker date="1542474176540" expanded="true" signature="31402:31490" placeholder="INSERT INTO `fxaccok`..." />
-            <marker date="1542474176540" expanded="true" signature="32419:32483" placeholder="UPDATE `fxac..." />
-            <marker date="1542474176540" expanded="true" signature="33113:33179" placeholder="UPDATE `fxac..." />
-            <marker date="1542474176540" expanded="true" signature="38869:38950" placeholder="SELECT `musz..fxjelentk..." />
-            <marker date="1542474176540" expanded="true" signature="40527:40606" placeholder="SELECT * FRO..fxjelentk..." />
-            <marker date="1542474176540" expanded="true" signature="42511:42648" placeholder="SELECT SUM(`..fxmuszakok..." />
-            <marker date="1542474176540" expanded="true" signature="43402:43544" placeholder="SELECT SUM(`..fxmuszakok..." />
-            <marker date="1542474176540" expanded="true" signature="45258:45310" placeholder="SELECT `pont..kompenz..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package-lock.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -942,7 +949,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/vendor/monolog/monolog/src/Monolog/Logger.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-157.57692">
+        <state vertical-scroll-proportion="0.0">
           <caret line="316" column="62" selection-start-line="316" selection-start-column="62" selection-end-line="316" selection-end-column="62" />
           <folding />
         </state>
@@ -950,7 +957,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Eszkozok/MonologHelper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.038462">
+        <state vertical-scroll-proportion="0.0">
           <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
           <folding>
             <element signature="e#6#164#0#PHP" expanded="true" />
@@ -961,9 +968,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3970803">
-          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+        <state vertical-scroll-proportion="-5.8846154">
+          <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4452555">
+          <caret line="1070" column="31" selection-start-line="1070" selection-start-column="31" selection-end-line="1070" selection-end-column="31" />
+          <folding>
+            <element signature="e#83#125#0#PHP" expanded="true" />
+            <marker date="1542816976893" expanded="true" signature="1504:1547" placeholder="SELECT * FRO..fxaccok..." />
+            <marker date="1542816976893" expanded="true" signature="3251:3330" placeholder="SELECT * FRO..fxjelentk..." />
+            <marker date="1542816976893" expanded="true" signature="8051:8092" placeholder="SELECT * FRO..fxmuszakok..." />
+            <marker date="1542816976893" expanded="true" signature="10225:10263" placeholder="SELECT * FRO..fxmuszakok..." />
+            <marker date="1542816976893" expanded="true" signature="12375:12431" placeholder="SELECT ${$os..fxaccok..." />
+            <marker date="1542816976893" expanded="true" signature="14409:14499" placeholder="SELECT `jele..fxjelentk..." />
+            <marker date="1542816976893" expanded="true" signature="17614:17655" placeholder="SELECT * FRO..fxaccok..." />
+            <marker date="1542816976893" expanded="true" signature="19294:19337" placeholder="SELECT * FRO..fxaccok..." />
+            <marker date="1542816976893" expanded="true" signature="30899:30942" placeholder="SELECT * FRO..fxaccok..." />
+            <marker date="1542816976893" expanded="true" signature="31402:31490" placeholder="INSERT INTO `fxaccok`..." />
+            <marker date="1542816976893" expanded="true" signature="32419:32483" placeholder="UPDATE `fxac..." />
+            <marker date="1542816976893" expanded="true" signature="33113:33179" placeholder="UPDATE `fxac..." />
+            <marker date="1542816976893" expanded="true" signature="36071:36162" placeholder="..." />
+            <marker date="1542816976893" expanded="true" signature="36264:36277" placeholder="..." />
+            <marker date="1542816976893" expanded="true" signature="36278:36909" placeholder="..." />
+            <marker date="1542816976893" expanded="true" signature="36700:36746" placeholder="..." />
+            <marker date="1542816976893" expanded="true" signature="36934:37620" placeholder="..." />
+            <marker date="1542816976893" expanded="true" signature="37009:37119" placeholder="{...}" />
+            <marker date="1542816976893" expanded="true" signature="37188:37594" placeholder="{...}" />
+            <marker date="1542816976893" expanded="true" signature="39214:39295" placeholder="SELECT `musz..fxjelentk..." />
+            <marker date="1542816976893" expanded="true" signature="40872:40951" placeholder="SELECT * FRO..fxjelentk..." />
+            <marker date="1542816976893" expanded="true" signature="42856:42993" placeholder="SELECT SUM(`..fxmuszakok..." />
+            <marker date="1542816976893" expanded="true" signature="43747:43889" placeholder="SELECT SUM(`..fxmuszakok..." />
+            <marker date="1542816976893" expanded="true" signature="45603:45655" placeholder="SELECT `pont..kompenz..." />
+          </folding>
         </state>
       </provider>
     </entry>
