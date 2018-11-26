@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="84755cb6-d501-466d-8123-16f202aae52a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Eszkozok/Eszk.php" afterPath="$PROJECT_DIR$/Eszkozok/Eszk.php" />
+    <list default="true" id="84755cb6-d501-466d-8123-16f202aae52a" name="Default" comment="Tuti a vilagi spanja a gyereknek&#10;&#10;(cherry picked from commit 50f37586ee3d19e859b4225e36941ded8b824897)&#10;">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
     </list>
     <ignored path="Foodexproj.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -15,19 +15,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
-  <component name="ComposerSettings">
-    <pharConfigPath>D:\Users\gatsj\Documents\git\Foodex\Foodexproj\composer.json</pharConfigPath>
-    <pharPath>D:\Users\gatsj\Documents\git\Foodex\Foodexproj\composer.phar</pharPath>
-  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
-  </component>
-  <component name="DatabaseView">
-    <option name="GROUP_SCHEMA" value="true" />
-    <option name="GROUP_CONTENTS" value="false" />
-    <option name="SORT_POSITIONED" value="false" />
-    <option name="SHOW_TABLE_DETAILS" value="true" />
-    <option name="SHOW_EMPTY_GROUPS" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -61,17 +50,17 @@
       <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.8846154">
+            <state vertical-scroll-proportion="0.0">
               <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Eszk.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Eszk.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4452555">
+            <state vertical-scroll-proportion="0.0">
               <caret line="1070" column="31" selection-start-line="1070" selection-start-column="31" selection-end-line="1070" selection-end-column="31" />
               <folding>
                 <element signature="e#83#125#0#PHP" expanded="true" />
@@ -87,13 +76,6 @@
                 <marker date="1542816976893" expanded="true" signature="31402:31490" placeholder="INSERT INTO `fxaccok`..." />
                 <marker date="1542816976893" expanded="true" signature="32419:32483" placeholder="UPDATE `fxac..." />
                 <marker date="1542816976893" expanded="true" signature="33113:33179" placeholder="UPDATE `fxac..." />
-                <marker date="1542816976893" expanded="true" signature="36071:36162" placeholder="..." />
-                <marker date="1542816976893" expanded="true" signature="36264:36277" placeholder="..." />
-                <marker date="1542816976893" expanded="true" signature="36278:36909" placeholder="..." />
-                <marker date="1542816976893" expanded="true" signature="36700:36746" placeholder="..." />
-                <marker date="1542816976893" expanded="true" signature="36934:37620" placeholder="..." />
-                <marker date="1542816976893" expanded="true" signature="37009:37119" placeholder="{...}" />
-                <marker date="1542816976893" expanded="true" signature="37188:37594" placeholder="{...}" />
                 <marker date="1542816976893" expanded="true" signature="39214:39295" placeholder="SELECT `musz..fxjelentk..." />
                 <marker date="1542816976893" expanded="true" signature="40872:40951" placeholder="SELECT * FRO..fxjelentk..." />
                 <marker date="1542816976893" expanded="true" signature="42856:42993" placeholder="SELECT SUM(`..fxmuszakok..." />
@@ -104,76 +86,29 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Profil.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/profil/Profil.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="18" column="15" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="15" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/profil/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.49021864">
+              <caret line="293" column="34" selection-start-line="293" selection-start-column="34" selection-end-line="293" selection-end-column="34" />
+              <folding>
+                <marker date="1543192325232" expanded="true" signature="9184:9250" placeholder="SELECT `ID`,..kompenz..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Less File" />
-        <option value="HTML File" />
-        <option value="CSS File" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/testsql.php" />
-        <option value="$PROJECT_DIR$/jelentkezes/popup.css" />
-        <option value="$PROJECT_DIR$/../../../../Desktop/Feverkill/FeverkillWeb/FeverkillWeb/FTP/register/regform.php" />
-        <option value="$PROJECT_DIR$/jelentkezes/modal.css" />
-        <option value="$PROJECT_DIR$/backgradient.css" />
-        <option value="$PROJECT_DIR$/test/kesliro.php" />
-        <option value="$PROJECT_DIR$/test/asynctest.php" />
-        <option value="$PROJECT_DIR$/test/smtptest.php" />
-        <option value="$PROJECT_DIR$/profil/Profil.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/SMTPSender.php" />
-        <option value="$PROJECT_DIR$/pontok/main.css" />
-        <option value="$PROJECT_DIR$/Eszkozok/param.php" />
-        <option value="$PROJECT_DIR$/statuspages/error.php" />
-        <option value="$PROJECT_DIR$/underconst.html" />
-        <option value="$PROJECT_DIR$/profil/test.php" />
-        <option value="$PROJECT_DIR$/info.php" />
-        <option value="$PROJECT_DIR$/test.php" />
-        <option value="$PROJECT_DIR$/adminer/Új szöveges dokumentum.txt" />
-        <option value="$PROJECT_DIR$/.htaccess" />
-        <option value="$PROJECT_DIR$/Eszkozok/init.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/Muszak.php" />
-        <option value="$PROJECT_DIR$/navbar.php" />
-        <option value="$PROJECT_DIR$/jelentkezes/main.css" />
-        <option value="$PROJECT_DIR$/jelentkezes/index.php" />
-        <option value="$PROJECT_DIR$/3rdparty/jquery.bootstrap-touchspin.js" />
-        <option value="$PROJECT_DIR$/ujmuszak/kiir.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/Kompenz.php" />
-        <option value="$PROJECT_DIR$/pontok/index.php" />
-        <option value="$PROJECT_DIR$/muszedit/index.php" />
-        <option value="$PROJECT_DIR$/ujmuszak/index.php" />
-        <option value="$PROJECT_DIR$/muszedit/edit.php" />
-        <option value="$PROJECT_DIR$/ujkomp/kiir.php" />
-        <option value="$PROJECT_DIR$/ujkomp/index.php" />
-        <option value="$PROJECT_DIR$/devlogin.php" />
-        <option value="$PROJECT_DIR$/devlogin/index.html" />
-        <option value="$PROJECT_DIR$/devlogin/index.php" />
-        <option value="$PROJECT_DIR$/devlogin/devlogin.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/ProfilInfo.php" />
-        <option value="$PROJECT_DIR$/profil/main.css" />
-        <option value="$PROJECT_DIR$/Eszkozok/AJAXhost.php" />
-        <option value="$PROJECT_DIR$/profil/editvicc.php" />
-        <option value="$PROJECT_DIR$/pontok/userpont/main.css" />
-        <option value="$PROJECT_DIR$/pontok/userpont/index.php" />
-        <option value="$PROJECT_DIR$/profil/index.php" />
-        <option value="$PROJECT_DIR$/jelentkezes/jelentkez.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/Monolog.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/ini.php" />
-        <option value="$PROJECT_DIR$/composer.json" />
-        <option value="$PROJECT_DIR$/Eszkozok/MonologHelper.php" />
-        <option value="$PROJECT_DIR$/index.php" />
-        <option value="$PROJECT_DIR$/Eszkozok/Eszk.php" />
-      </list>
-    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" />
   <component name="JsBuildToolPackageJson" detection-done="true" />
@@ -181,90 +116,14 @@
     <detection-done>true</detection-done>
   </component>
   <component name="PhpServers">
-    <servers>
-      <server deployment_server="b5eb27b1-1f6a-40c4-a521-3442ae32ab88" host="feverkill.com" id="4761c7a8-43da-40af-ae08-5782ea2f4030" name="IninetFeverkillFoodex" use_path_mappings="true">
-        <path_mappings>
-          <mapping local-root="$PROJECT_DIR$" remote-root="/bme/foodex" />
-        </path_mappings>
-      </server>
-      <server host="localhost" id="d8247a99-7f1b-427f-a2f5-8e68054113e4" name="Apache XAMPP" use_path_mappings="true">
-        <path_mappings>
-          <mapping local-root="$PROJECT_DIR$" remote-root="D:/xampp/htdocs/foodex" />
-          <mapping local-root="$PROJECT_DIR$/Eszkozok/AuthSchProvider.php" remote-root="D:/xampp/htdocs/foodex/Eszkozok/AuthSchProvider.php" />
-          <mapping local-root="$PROJECT_DIR$/Eszkozok/Eszk.php" remote-root="D:/xampp/htdocs/foodex/Eszkozok/Eszk.php" />
-          <mapping local-root="$PROJECT_DIR$/Eszkozok/MonologHelper.php" remote-root="D:/xampp/htdocs/foodex/Eszkozok/MonologHelper.php" />
-          <mapping local-root="$PROJECT_DIR$/Eszkozok/param.php" remote-root="D:/xampp/htdocs/foodex/Eszkozok/param.php" />
-          <mapping local-root="$PROJECT_DIR$/devlogin/devlogin.php" remote-root="D:/xampp/htdocs/foodex/devlogin/devlogin.php" />
-          <mapping local-root="$PROJECT_DIR$/devlogin/index.php" remote-root="D:/xampp/htdocs/foodex/devlogin/index.php" />
-          <mapping local-root="$PROJECT_DIR$/index.php" remote-root="D:/xampp/htdocs/foodex/index.php" />
-          <mapping local-root="$PROJECT_DIR$/login.php" remote-root="D:/xampp/htdocs/foodex/login.php" />
-          <mapping local-root="$PROJECT_DIR$/profil/editvicc.php" remote-root="D:/xampp/htdocs/foodex/profil/editvicc.php" />
-          <mapping local-root="$PROJECT_DIR$/profil/index.php" remote-root="D:/xampp/htdocs/foodex/profil/index.php" />
-          <mapping local-root="$PROJECT_DIR$/statuspages/error.php" remote-root="D:/xampp/htdocs/foodex/statuspages/error.php" />
-          <mapping local-root="$PROJECT_DIR$/ujkomp/index.php" remote-root="D:/xampp/htdocs/foodex/ujkomp/index.php" />
-          <mapping local-root="$PROJECT_DIR$/ujkomp/kiir.php" remote-root="D:/xampp/htdocs/foodex/ujkomp/kiir.php" />
-          <mapping local-root="$PROJECT_DIR$/vendor/league/oauth2-client/src/Provider/AbstractProvider.php" remote-root="D:/xampp/htdocs/foodex/vendor/league/oauth2-client/src/Provider/AbstractProvider.php" />
-          <mapping local-root="$PROJECT_DIR$/vendor/league/oauth2-client/src/Provider/GenericProvider.php" remote-root="D:/xampp/htdocs/foodex/vendor/league/oauth2-client/src/Provider/GenericProvider.php" />
-          <mapping local-root="$PROJECT_DIR$/vendor/league/oauth2-client/src/Tool/QueryBuilderTrait.php" remote-root="D:/xampp/htdocs/foodex/vendor/league/oauth2-client/src/Tool/QueryBuilderTrait.php" />
-          <mapping local-root="$PROJECT_DIR$/vendor/monolog" remote-root="D:/xampp/htdocs/foodex/vendor/monolog" />
-        </path_mappings>
-      </server>
-      <server host="gjani.sch.bme.hu" id="5fd6eca6-15f4-4c63-b1b0-f4aee1a38662" name="gjani.sch.bme.hu" use_path_mappings="true">
-        <path_mappings>
-          <mapping local-root="$PROJECT_DIR$" remote-root="D:/xampp/htdocs/foodex" />
-        </path_mappings>
-      </server>
-      <server host="gjani.ddns.net" id="3dae57e3-c207-4de0-a43a-d5a3ce733709" name="gjani.ddns.net" use_path_mappings="true">
-        <path_mappings>
-          <mapping local-root="$PROJECT_DIR$" remote-root="D:/xampp/htdocs/foodex" />
-        </path_mappings>
-      </server>
-      <server host="91.83.223.79" id="5c0f0859-230e-4a52-b6b5-256a7f8f6e28" name="91.83.223.79" use_path_mappings="true">
-        <path_mappings>
-          <mapping local-root="$PROJECT_DIR$/jelentkezes" remote-root="D:/xampp/htdocs" />
-        </path_mappings>
-      </server>
-      <server debugger_id="php.debugger.ZendDebugger" host="foodex.sch.bme.hu" id="cd314e13-ad7c-44d7-9a9f-1ef2706485e5" name="foodex.sch.bme.hu" />
-    </servers>
+    <servers />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP 7">
-    <include_path>
-      <path value="$PROJECT_DIR$/vendor/guzzlehttp/guzzle" />
-      <path value="$PROJECT_DIR$/vendor/guzzlehttp/psr7" />
-      <path value="$PROJECT_DIR$/vendor/guzzlehttp/promises" />
-      <path value="$PROJECT_DIR$/vendor/composer" />
-      <path value="$PROJECT_DIR$/vendor/league/oauth2-client" />
-      <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
-      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
-      <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
-      <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
-      <path value="$PROJECT_DIR$/vendor/psr/log" />
-    </include_path>
-  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
-  </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>Spelling</id>
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>SpellCheckingInspection</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -291,43 +150,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Foodexproj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Eszkozok" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches">
-        <subPane />
-      </pane>
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Changed Files">
@@ -384,45 +206,63 @@
         </subPane>
         <subPane subId="Tests" />
       </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="profil" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Foodexproj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Eszkozok" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches">
+        <subPane />
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
-    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
-    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="SearchEverywhereHistoryKey" value="3217&#9;null&#9;null&#10;clientId&#9;null&#9;null" />
-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="js-jscs-nodeInterpreter" value="D:\nodejs\node.exe" />
   </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\ujkomp" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\muszedit" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\pontok\userpont" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\pontok" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\devlogin" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\3rdparty" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\profil" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj\statuspages" />
-      <recent name="D:\Users\gatsj\Documents\git\Foodex\Foodexproj" />
-    </key>
-  </component>
-  <component name="RunManager" selected="PHP Web Application.Foodex on XAMPP">
-    <configuration default="false" name="index.php" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost/index.php">
-      <method />
-    </configuration>
-    <configuration default="true" type="CompoundRunConfigurationType" factoryName="Compound Run Configuration">
-      <method />
-    </configuration>
+  <component name="RunManager">
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
     </configuration>
@@ -440,15 +280,7 @@
     <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
       <method />
     </configuration>
-    <configuration default="true" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application">
-      <method />
-    </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -469,82 +301,22 @@
       <recursive>false</recursive>
       <method />
     </configuration>
-    <configuration default="false" name="foodex" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="https://feverkill.com/bme/foodex">
-      <method />
-    </configuration>
-    <configuration default="false" name="Foodex on Ininet" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" server_name="IninetFeverkillFoodex" start_url="/bme/foodex">
-      <method>
-        <option name="FtpUpload" enabled="true">
-          <server_id>b5eb27b1-1f6a-40c4-a521-3442ae32ab88</server_id>
-          <server_name>IninetFeverkillFoodex</server_name>
-          <path>D:\Users\gatsj\Documents\git\Foodex\Foodexproj</path>
-        </option>
-      </method>
-    </configuration>
-    <configuration default="false" name="Foodex on SCH" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" server_name="foodex.sch.bme.hu">
-      <method>
-        <option name="FtpUpload" enabled="true">
-          <server_id>f40fd3f5-66ad-438b-bf87-5070c1e00bcd</server_id>
-          <server_name>foodex.sch.bme.hu</server_name>
-          <path>D:\Users\gatsj\Documents\git\Foodex\Foodexproj</path>
-        </option>
-      </method>
-    </configuration>
-    <configuration default="false" name="Foodex on XAMPP" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" server_name="Apache XAMPP" start_url="/foodex">
-      <method>
-        <option name="FtpUpload" enabled="true">
-          <server_id>cb5732ed-0024-488d-b455-ca8d67cf31d7</server_id>
-          <server_name>XAMPP foodex</server_name>
-          <path>D:\Users\gatsj\Documents\git\Foodex\Foodexproj</path>
-        </option>
-      </method>
-    </configuration>
-    <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.foodex" />
-      <item index="1" class="java.lang.String" itemvalue="PHP Web Application.Foodex on Ininet" />
-      <item index="2" class="java.lang.String" itemvalue="PHP Web Application.Foodex on SCH" />
-      <item index="3" class="java.lang.String" itemvalue="PHP Web Application.Foodex on XAMPP" />
-      <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.index.php" />
-    </list>
-    <recent_temporary>
-      <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.index.php" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SvnConfiguration">
-    <configuration />
-  </component>
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="84755cb6-d501-466d-8123-16f202aae52a" name="Default" comment="" />
-      <created>1527724532945</created>
-      <option name="number" value="Default" />
-      <updated>1527724532945</updated>
-    </task>
     <servers />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19936034" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20362474" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.4968017" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3434453" sideWeight="0.5053305" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20021646" sideWeight="0.49791667" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21776815" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28710726" sideWeight="0.49573562" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -552,6 +324,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39869988" sideWeight="0.4978678" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20021646" sideWeight="0.49791667" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3163597" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -566,9 +339,6 @@
     <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
       <collection />
     </option>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -756,13 +526,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/profil/Profil.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.769231">
-          <caret line="18" column="15" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/devlogin/devlogin.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.3076923">
@@ -877,13 +640,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/profil/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-76.5">
-          <caret line="117" column="10" selection-start-line="117" selection-start-column="10" selection-end-line="117" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/composer/ClassLoader.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-9.346154">
@@ -968,7 +724,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.8846154">
+        <state vertical-scroll-proportion="0.0">
           <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
           <folding />
         </state>
@@ -976,7 +732,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Eszkozok/Eszk.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4452555">
+        <state vertical-scroll-proportion="0.0">
           <caret line="1070" column="31" selection-start-line="1070" selection-start-column="31" selection-end-line="1070" selection-end-column="31" />
           <folding>
             <element signature="e#83#125#0#PHP" expanded="true" />
@@ -992,18 +748,29 @@
             <marker date="1542816976893" expanded="true" signature="31402:31490" placeholder="INSERT INTO `fxaccok`..." />
             <marker date="1542816976893" expanded="true" signature="32419:32483" placeholder="UPDATE `fxac..." />
             <marker date="1542816976893" expanded="true" signature="33113:33179" placeholder="UPDATE `fxac..." />
-            <marker date="1542816976893" expanded="true" signature="36071:36162" placeholder="..." />
-            <marker date="1542816976893" expanded="true" signature="36264:36277" placeholder="..." />
-            <marker date="1542816976893" expanded="true" signature="36278:36909" placeholder="..." />
-            <marker date="1542816976893" expanded="true" signature="36700:36746" placeholder="..." />
-            <marker date="1542816976893" expanded="true" signature="36934:37620" placeholder="..." />
-            <marker date="1542816976893" expanded="true" signature="37009:37119" placeholder="{...}" />
-            <marker date="1542816976893" expanded="true" signature="37188:37594" placeholder="{...}" />
             <marker date="1542816976893" expanded="true" signature="39214:39295" placeholder="SELECT `musz..fxjelentk..." />
             <marker date="1542816976893" expanded="true" signature="40872:40951" placeholder="SELECT * FRO..fxjelentk..." />
             <marker date="1542816976893" expanded="true" signature="42856:42993" placeholder="SELECT SUM(`..fxmuszakok..." />
             <marker date="1542816976893" expanded="true" signature="43747:43889" placeholder="SELECT SUM(`..fxmuszakok..." />
             <marker date="1542816976893" expanded="true" signature="45603:45655" placeholder="SELECT `pont..kompenz..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/profil/Profil.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="15" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/profil/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.49021864">
+          <caret line="293" column="34" selection-start-line="293" selection-start-column="34" selection-end-line="293" selection-end-column="34" />
+          <folding>
+            <marker date="1543192325232" expanded="true" signature="9184:9250" placeholder="SELECT `ID`,..kompenz..." />
           </folding>
         </state>
       </provider>
