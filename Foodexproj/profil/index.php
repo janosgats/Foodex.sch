@@ -81,7 +81,15 @@ else
     </nav>
 
     <div class="jumbotron">
-        <h1><?php echo $MegjProfil->getNev(); ?></h1>
+        <h1 style="display:inline" ><?php echo $MegjProfil->getNev(); ?></h1>
+        <?php
+        if($MegjProfil->getInternalID() == 'efb8476b-46c2-7aa8-b612-46d3b3a84e4c')//Wuki Internal ID-je
+        {
+            ?>
+            <h3 style="display:inline; color: #777777"> &nbsp; (Tuti a világi spanja a gyereknek.)</h3>
+        <?php
+        }
+        ?>
 
         <p>Értesítési cím: <b><?php echo $MegjProfil->getEmail(); ?></b></p>
         <a style="cursor: pointer;" href="<?php echo '../pontok/userpont/?int_id=' . $MegjProfil->getInternalID(); ?>">
