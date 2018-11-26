@@ -888,7 +888,7 @@ namespace Eszkozok
                             <h3 style="color: red">Nem vagy FoodEx tag!</h3>
                             <?php
 
-                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resp['internal_id'], self::get_client_ip_address()]);
+                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resp['displayName'],(isset($_SESSION['displayName']))?$_SESSION['internal_id']:'No DisplayName', self::get_client_ip_address()]);
                             self::RedirectUnderRoot('nemkortag.html');
                         }
                         // var_dump($resp);
