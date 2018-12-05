@@ -47,8 +47,8 @@ class FxDBLogHandler extends  Monolog\Handler\AbstractProcessingHandler
             $stmt = $this->conn->prepare('INSERT INTO `logs` (`datetime`, `channel`, `message`, `context`, `level`, `level_name`, `extra`) VALUES (?,?,?,?,?,?,?);');
 
             $refbuff = $record['datetime']->format('Y-m-d H:i:s');
-            $refbuff2 = json_encode($record['context']);
-            $refbuff3 = json_encode($record['extra']);
+            $refbuff2 = json_encode($record['context'], JSON_UNESCAPED_UNICODE);
+            $refbuff3 = json_encode($record['extra'], JSON_UNESCAPED_UNICODE);
             $stmt->bind_param('ssssiss', $refbuff, $record['channel'], $record['message'], $refbuff2, $record['level'], $record['level_name'], $refbuff3);
 
             if ($stmt->execute())

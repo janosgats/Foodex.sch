@@ -873,7 +873,7 @@ namespace Eszkozok
 
                         $kortagsagok = $resp['eduPersonEntitlement'];
 
-                        if ((($tagsag = self::testFoodexKortagsag($kortagsagok)) != false))
+                        if((($tagsag = self::testFoodexKortagsag($kortagsagok)) != false))
                         {
                             ?>
                             <h3 style="color: green">FoodEx <?php echo $tagsag['status']; ?> vagy!</h3>
@@ -888,7 +888,7 @@ namespace Eszkozok
                             <h3 style="color: red">Nem vagy FoodEx tag!</h3>
                             <?php
 
-                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resp['displayName'],(isset($_SESSION['displayName']))?$_SESSION['internal_id']:'No DisplayName', self::get_client_ip_address()]);
+                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resp['internal_id'],(isset($resp['displayName']))?$resp['displayName']:'No DisplayName', self::get_client_ip_address()]);
                             self::RedirectUnderRoot('nemkortag.html');
                         }
                         // var_dump($resp);
@@ -1068,7 +1068,7 @@ namespace Eszkozok
             try
             {
                 $logger = new \MonologHelper('Eszk::dieToErrorPage()');
-                $logger->error('$errcode: ' . $errcode, [(isset($_SESSION['internal_id']))?$_SESSION['internal_id']:'No Internal ID', self::get_client_ip_address()]);
+                $logger->error('$errcode: ' . $errcode, [(isset($_SESSION['profilint_id']))?$_SESSION['profilint_id']:'No Internal ID', self::get_client_ip_address()]);
             }
             catch (\Exception $e)
             {
