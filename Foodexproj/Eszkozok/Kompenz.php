@@ -9,5 +9,6 @@ namespace Eszkozok
         public $int_id = '';
         public $pont = '';
         public $megj = '';
+        public $ido = '';
     }
 }

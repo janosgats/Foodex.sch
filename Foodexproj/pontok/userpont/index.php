@@ -172,7 +172,7 @@ if ($mosfoglalt)
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="../../profil"><img alt="Brand" src="../../res/kepek/FoodEx_logo.png"
+                <a class="navbar-brand" href="../../profil"><img alt="Brand" src="../../res/kepek/favicon1.svg"
                                                                  style="height: 30px"></a>
             </div>
 

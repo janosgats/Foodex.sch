@@ -3,8 +3,7 @@
 
 namespace Eszkozok;
 
-set_include_path(getcwd());
-include_once 'Eszkozok/Eszk.php';
+include_once __DIR__ .'/Eszk.php';
 
 use League\OAuth2\Client\Provider\GenericProvider;
 

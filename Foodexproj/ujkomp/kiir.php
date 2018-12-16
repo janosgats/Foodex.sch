@@ -76,12 +76,15 @@ try
 
             if ($Muvelet == 'submit')
             {
-                $stmt = $conn->prepare("INSERT INTO `kompenz` (`internal_id`, `pont`, `megj`) VALUES (?, ?, ?);");
+                $stmt = $conn->prepare("INSERT INTO `kompenz` (`internal_id`, `pont`, `megj`, `ido`) VALUES (?, ?, ?, ?);");
 
                 if (!$stmt)
                     throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-                $stmt->bind_param('sds', $int_id, $pont, $megj);
+                date_default_timezone_set("Europe/Budapest");
+                $ido = (new DateTime(null, new \DateTimeZone(date_default_timezone_get() ?: 'UTC+1')))->format("Y-m-d H:i:s");
+
+                $stmt->bind_param('sdss', $int_id, $pont, $megj, $ido);
             }
             else if ($Muvelet == 'edit')
             {
