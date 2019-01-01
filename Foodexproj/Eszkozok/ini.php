@@ -15,6 +15,6 @@ namespace Eszkozok
         //public static $DefaultIntID = '5df058f7-d76d-4b03-e9c8-65a78b27fb7e';
 
         public static $DevloginEnabled = true;
-        public static $DevloginPassword = 'fxA12B13C14E15D16';
+        public static $DevloginPassword = 'fxA12B13C14D15E16';
     }
 }

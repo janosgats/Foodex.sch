@@ -25,6 +25,10 @@ elseif (!IsURLParamSet('int_id'))
 
 $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'));
 
+
+\Eszkozok\Eszk::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
+
+
 $mosfoglalt = false;
 
 if ($MosogatasJelentkezes)
@@ -200,6 +204,8 @@ if ($mosfoglalt)
                 <?php
                 try
                 {
+
+
                     $conn = Eszkozok\Eszk::initMySqliObject();
 
                     if (!$conn)
@@ -314,7 +320,7 @@ if ($mosfoglalt)
 
                                             ?>
 
-                                            <tr>
+                                            <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowMuszak['idokezd']))?'':'style="background-color: #EEEEEE;color: grey"';?>>
                                                 <td>
                                                     <?php echo htmlspecialchars($rowMuszak['musznev']) . '  <span>(' . htmlspecialchars($rowMuszak['ID']) . ')</span>'; ?>
                                                 </td>
@@ -419,7 +425,7 @@ if ($mosfoglalt)
                     try
                     {
                         $conn = \Eszkozok\Eszk::initMySqliObject();
-                        $stmt = $conn->prepare("SELECT `ID`, `pont`, `megj` FROM `kompenz` WHERE `internal_id` = ?;");
+                        $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `internal_id` = ? ORDER BY `ido` DESC;");
                         if (!$stmt)
                             throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
@@ -435,7 +441,7 @@ if ($mosfoglalt)
                                 {
                                     ?>
 
-                                    <tr>
+                                    <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido']))?'':'style="background-color: #EEEEEE;color: grey"';?>>
                                         <td>
                                             <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
                                         </td>

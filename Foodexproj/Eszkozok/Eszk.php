@@ -564,12 +564,12 @@ namespace Eszkozok
             return $conn;
         }
 
-        public static function Export_Database($tables=false, $backup_name=false )
+        public static function Export_Database($tables = false, $backup_name = false)
         {
             $mysqli = self::initMySqliObject();
 
             $name = $mysqli->query('SELECT DATABASE()');
-            if($row = $name->fetch_row())
+            if ($row = $name->fetch_row())
                 $name = $row[0];
             else
                 $name = 'fx_db_Export';
@@ -577,51 +577,51 @@ namespace Eszkozok
 
             $queryTables = $mysqli->query('SHOW TABLES');
 
-            while($row = $queryTables->fetch_row())
+            while ($row = $queryTables->fetch_row())
             {
                 $target_tables[] = $row[0];
             }
-            if($tables !== false)
+            if ($tables !== false)
             {
-                $target_tables = array_intersect( $target_tables, $tables);
+                $target_tables = array_intersect($target_tables, $tables);
             }
-            foreach($target_tables as $table)
+            foreach ($target_tables as $table)
             {
-                $result         =   $mysqli->query('SELECT * FROM '.$table);
-                $fields_amount  =   $result->field_count;
-                $rows_num=$mysqli->affected_rows;
-                $res            =   $mysqli->query('SHOW CREATE TABLE '.$table);
-                $TableMLine     =   $res->fetch_row();
-                $content        = (!isset($content) ?  '' : $content) . "\n\n".$TableMLine[1].";\n\n";
+                $result = $mysqli->query('SELECT * FROM ' . $table);
+                $fields_amount = $result->field_count;
+                $rows_num = $mysqli->affected_rows;
+                $res = $mysqli->query('SHOW CREATE TABLE ' . $table);
+                $TableMLine = $res->fetch_row();
+                $content = (!isset($content) ? '' : $content) . "\n\n" . $TableMLine[1] . ";\n\n";
 
-                for ($i = 0, $st_counter = 0; $i < $fields_amount;   $i++, $st_counter=0)
+                for ($i = 0, $st_counter = 0; $i < $fields_amount; $i++, $st_counter = 0)
                 {
-                    while($row = $result->fetch_row())
+                    while ($row = $result->fetch_row())
                     { //when started (and every after 100 command cycle):
-                        if ($st_counter%100 == 0 || $st_counter == 0 )
+                        if ($st_counter % 100 == 0 || $st_counter == 0)
                         {
-                            $content .= "\nINSERT INTO ".$table." VALUES";
+                            $content .= "\nINSERT INTO " . $table . " VALUES";
                         }
                         $content .= "\n(";
-                        for($j=0; $j<$fields_amount; $j++)
+                        for ($j = 0; $j < $fields_amount; $j++)
                         {
-                            $row[$j] = str_replace("\n","\\n", addslashes($row[$j]) );
+                            $row[$j] = str_replace("\n", "\\n", addslashes($row[$j]));
                             if (isset($row[$j]))
                             {
-                                $content .= '"'.$row[$j].'"' ;
+                                $content .= '"' . $row[$j] . '"';
                             }
                             else
                             {
                                 $content .= '""';
                             }
-                            if ($j<($fields_amount-1))
+                            if ($j < ($fields_amount - 1))
                             {
-                                $content.= ',';
+                                $content .= ',';
                             }
                         }
-                        $content .=")";
+                        $content .= ")";
                         //every after 100 command cycle [or at last line] ....p.s. but should be inserted 1 cycle eariler
-                        if ( (($st_counter+1)%100==0 && $st_counter!=0) || $st_counter+1==$rows_num)
+                        if ((($st_counter + 1) % 100 == 0 && $st_counter != 0) || $st_counter + 1 == $rows_num)
                         {
                             $content .= ";";
                         }
@@ -629,19 +629,21 @@ namespace Eszkozok
                         {
                             $content .= ",";
                         }
-                        $st_counter=$st_counter+1;
+                        $st_counter = $st_counter + 1;
                     }
-                } $content .="\n\n\n";
+                }
+                $content .= "\n\n\n";
             }
 
             date_default_timezone_set('Europe/Budapest');
 
             //$backup_name = $backup_name ? $backup_name : $name."___(".date('H-i-s')."_".date('d-m-Y').")__rand".rand(1,11111111).".sql";
-            $backup_name = ($backup_name ? $backup_name : $name)."__". date('Y-m-d_H-i-s', time()) .".sql";
+            $backup_name = ($backup_name ? $backup_name : $name) . "__" . date('Y-m-d_H-i-s', time()) . ".sql";
             header('Content-Type: application/octet-stream');
             header("Content-Transfer-Encoding: Binary");
-            header("Content-disposition: attachment; filename=\"".$backup_name."\"");
-            echo $content; exit;
+            header("Content-disposition: attachment; filename=\"" . $backup_name . "\"");
+            echo $content;
+            exit;
         }
 
         public static function GetBejelentkezettProfilAdat()
@@ -953,7 +955,7 @@ namespace Eszkozok
 
                         $kortagsagok = $resp['eduPersonEntitlement'];
 
-                        if((($tagsag = self::testFoodexKortagsag($kortagsagok)) != false))
+                        if ((($tagsag = self::testFoodexKortagsag($kortagsagok)) != false))
                         {
                             ?>
                             <h3 style="color: green">FoodEx <?php echo $tagsag['status']; ?> vagy!</h3>
@@ -968,7 +970,7 @@ namespace Eszkozok
                             <h3 style="color: red">Nem vagy FoodEx tag!</h3>
                             <?php
 
-                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resp['internal_id'],(isset($resp['displayName']))?$resp['displayName']:'No DisplayName', self::get_client_ip_address()]);
+                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resp['internal_id'], (isset($resp['displayName'])) ? $resp['displayName'] : 'No DisplayName', self::get_client_ip_address()]);
                             self::RedirectUnderRoot('nemkortag.html');
                         }
                         // var_dump($resp);
@@ -1148,7 +1150,7 @@ namespace Eszkozok
             try
             {
                 $logger = new \MonologHelper('Eszk::dieToErrorPage()');
-                $logger->error('$errcode: ' . $errcode, [(isset($_SESSION['profilint_id']))?$_SESSION['profilint_id']:'No Internal ID', self::get_client_ip_address()]);
+                $logger->error('$errcode: ' . $errcode, [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', self::get_client_ip_address()]);
             }
             catch (\Exception $e)
             {
@@ -1281,11 +1283,13 @@ namespace Eszkozok
         {
             try
             {
+                self::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
+
                 $MuszakLetszamok = array();//Cacheli az muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
 
                 $pontszam = 0;
 
-                $stmt = $conn->prepare("SELECT `muszid`, `mosogat` FROM `fxjelentk` WHERE `jelentkezo` = ? AND status = 1;");
+                $stmt = $conn->prepare("SELECT `muszid`, `mosogat` FROM `fxjelentk` WHERE `jelentkezo` = ? AND `status` = 1;");
                 if (!$stmt)
                     throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
@@ -1359,7 +1363,9 @@ namespace Eszkozok
                         {
                             //`idoveg` < NOW() : Csak arra a műszakra kap pontot, ami már lezárult
                             //TODO: idoveg < now() - ból kivenni a TRUE-t
-                            $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
+
+
+                            $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
                             if (!$stmt)
                                 throw new \Exception('SQL hiba: $stmt 3 is \'false\'' . ' :' . $conn->error);
 
@@ -1373,7 +1379,7 @@ namespace Eszkozok
                                 }
                                 if (count($vittMosogatasok) > 0)
                                 {
-                                    $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
+                                    $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
                                     if (!$stmt)
                                         throw new \Exception('SQL hiba: $stmt 4 is \'false\'' . ' :' . $conn->error);
 
@@ -1412,7 +1418,9 @@ namespace Eszkozok
 
         public static function GetAccKompenzaltPontokWithConn($int_id, $conn)
         {
-            $stmt = $conn->prepare("SELECT `pont` FROM `kompenz` WHERE `internal_id` = ?;");
+            self::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
+
+            $stmt = $conn->prepare("SELECT `pont` FROM `kompenz` WHERE ( `ido` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `internal_id` = ?;");
             if (!$stmt)
                 throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
@@ -1433,6 +1441,127 @@ namespace Eszkozok
             }
             else
                 throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
+        }
+
+        public static function GetGlobalSettings(array $options)
+        {
+            $conn = self::initMySqliObject();
+            $ki = self::GetGlobalSettingsWithConn($options, $conn);
+
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
+        }
+
+        public static function GetGlobalSettingsWithConn(array $options, \mysqli $conn)
+        {
+            try
+            {
+                $ki = [];
+
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+
+                $EscapedOptions = [];
+
+                foreach ($options as $opt)
+                {
+                    array_push($EscapedOptions, "'" . $conn->real_escape_string($opt) . "'");
+                }
+
+
+                $stmt = $conn->prepare("SELECT * FROM `globalsettings` WHERE `nev` IN (" . implode(',', $EscapedOptions) . ");");
+
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+
+                    while ($row = $result->fetch_assoc())
+                    {
+                        $ki[$row["nev"]] = $row["ertek"];
+                        $GLOBALS[$row["nev"]] = $row["ertek"];
+                    }
+                }
+                else
+                {
+                    throw new \Exception('$stmt->execute() is false');
+                }
+
+                return $ki;
+            }
+            catch (\Exception $e)
+            {
+                self::dieToErrorPage('8692: ' . $e->getMessage());
+            }
+        }
+
+        public static function SetGlobalSettings($optionNev, $ertek)
+        {
+            $conn = self::initMySqliObject();
+            $ki = self::SetGlobalSettingsWithConn($optionNev, $ertek, $conn);
+
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
+        }
+
+        public static function SetGlobalSettingsWithConn($optionNev, $ertek, \mysqli $conn)
+        {
+            try
+            {
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+                $stmt = $conn->prepare("UPDATE `globalsettings` SET `ertek`=? WHERE `nev`=?");
+
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                $stmt->bind_param('ss', $ertek, $optionNev);
+
+                if ($stmt->execute())
+                {
+                    $GLOBALS[$optionNev] = $ertek;
+                    return;
+
+//                    if($stmt->affected_rows == 1)
+//                        return;
+//                    else
+//                        throw new \Exception('$stmt->affected_rows != 1. (It is '. $stmt->affected_rows . '.');
+                }
+                else
+                {
+                    throw new \Exception('$stmt->execute() is false');
+                }
+
+                throw new \Exception('FUNCTION END unexpectedly REACHED');
+            }
+            catch (\Exception $e)
+            {
+                self::dieToErrorPage('8692: ' . $e->getMessage());
+            }
+        }
+
+        public static function IsDatestringInPontozasiIdoszak($datebe)
+        {
+
+            return $GLOBALS['pontozasi_idoszak_kezdete'] <= $datebe && $datebe <= $GLOBALS['pontozasi_idoszak_vege'];
         }
 
     }
