@@ -22,7 +22,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
 <head>
     <meta charset="UTF-8">
-    <title>Fx Profil</title>
+    <title>Fx - Globális Beállítások</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
@@ -33,16 +33,19 @@ if ($AktProfil->getUjMuszakJog() != 1)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
 </head>
 
 <body style="background-color: #de520d">
 
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, 'settings')
+    NavBar::echonavbar($AktProfil, 'settings');
     ?>
 
 
@@ -53,7 +56,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
             <div class="col-md-3">
                 <div class="list-group" id="sidebar">
                     <a href="#pontozasiidoszak" class="list-group-item">Pontozási Időszak</a>
-                    <a href="#" class="list-group-item">Time Zone Defaults</a>
+                    <a href="#timezone" class="list-group-item">Time Zone Defaults</a>
                     <a href="#adatbazis" class="list-group-item">SAndor Gyermeke</a>
                     <a href="#devlogin" class="list-group-item">Fejlesztői Bejelentkezés</a>
                 </div>
@@ -68,7 +71,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
                     <hr class="col-md-12">
                 </div>
 
-                <div>
+                <div id="timezone">
                     <h2>Time Zone Defaults</h2>
 
                     <p>All of the settings for time zone and daylight savings.

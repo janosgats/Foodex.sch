@@ -60,22 +60,26 @@ if (!$KompSzerkesztes)
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
     <link rel='stylesheet prefetch'
           href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css'>
+
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
-    <link rel='stylesheet' href='../3rdparty/jquery.bootstrap-touchspin.css'>
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
+    <script src='../3rdparty/jquery.bootstrap-touchspin.js'></script>
+
 </head>
-
-
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src='../3rdparty/jquery.bootstrap-touchspin.js'></script>
-
 <body style="background-color: #de520d">
 
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, '')
+    NavBar::echonavbar($AktProfil, '');
     ?>
 
 
@@ -142,9 +146,6 @@ if (!$KompSzerkesztes)
         </form>
     </div>
 </div>
-
-<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
 
 
 <script>
