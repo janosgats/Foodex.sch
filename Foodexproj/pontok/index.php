@@ -41,6 +41,8 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                 <?php
                 try
                 {
+                    \Eszkozok\Eszk::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
+
                     $conn = Eszkozok\Eszk::initMySqliObject();
 
                     if (!$conn)
@@ -139,7 +141,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                                         {
                                             //`idoveg` < NOW() : Csak arra a műszakra kap pontot, ami már lezárult
                                             //TODO: idoveg < now() - ból kivenni a TRUE-t
-                                            $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
+                                            $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
                                             if (!$stmt)
                                                 throw new \Exception('SQL hiba: $stmt 3 is \'false\'' . ' :' . $conn->error);
 
@@ -153,7 +155,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                                                 }
                                                 if (count($vittMosogatasok) > 0)
                                                 {
-                                                    $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
+                                                    $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
                                                     if (!$stmt)
                                                         throw new \Exception('SQL hiba: $stmt 4 is \'false\'' . ' :' . $conn->error);
 

@@ -252,8 +252,10 @@ else
                 <?php
                 try
                 {
+                    \Eszkozok\Eszk::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
+
                     $conn = \Eszkozok\Eszk::initMySqliObject();
-                    $stmt = $conn->prepare("SELECT `ID`, `pont`, `megj` FROM `kompenz` WHERE `internal_id` = ?;");
+                    $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `internal_id` = ? ORDER BY `ido` DESC;");
                     if (!$stmt)
                         throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
@@ -269,7 +271,7 @@ else
                             {
                                 ?>
 
-                                <tr>
+                                <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido']))?'':'style="background-color: #EEEEEE;color: grey"';?>>
                                     <td>
                                         <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
                                     </td>
