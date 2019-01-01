@@ -35,6 +35,8 @@ $SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel='stylesheet prefetch'
@@ -82,7 +84,6 @@ $SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
             </div>
         </div>
     </nav>
-
 
 
     <div class="jumbotron" style="padding-top:10px">
@@ -153,16 +154,17 @@ $SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
                 </div>
             </div>
 
-            <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="submitMuszak()" type="button">
-                Mentés
-            </button>
-            <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-right: 10px"
-                    onclick="deleteMuszak()" type="button">Műszak törlése
-            </button>
-            <a class="btn btn-success pull-right" name="masolas" id="masolas" style="margin-right: 10px"
-                    href="../ujmuszak?<?php echo 'muszmasol=1&muszid=' . urlencode($SzerkMuszak->ID);?>" type="button">Műszak másolása
-            </a>
-
+            <div class="row" style="padding-right: 7%">
+                <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="submitMuszak()" type="button">
+                    Mentés
+                </button>
+                <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-right: 10px"
+                        onclick="deleteMuszak()" type="button">Műszak törlése
+                </button>
+                <a class="btn btn-success pull-right" name="masolas" id="masolas" style="margin-right: 10px"
+                   href="../ujmuszak?<?php echo 'muszmasol=1&muszid=' . urlencode($SzerkMuszak->ID); ?>" type="button">Műszak másolása
+                </a>
+            </div>
         </form>
     </div>
 </div>

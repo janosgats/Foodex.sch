@@ -54,6 +54,9 @@ if (!$KompSzerkesztes)
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel='stylesheet prefetch'
@@ -146,27 +149,29 @@ if (!$KompSzerkesztes)
                            value="<?php if ($KompSzerkesztes)
                            {
                                echo $SzerkesztendoKomp->megj;
-                           }?>" class="form-control">
+                           } ?>" class="form-control">
                 </div>
 
             </div>
 
+            <div class="row" style="padding-right: 7%">
+                <?php
+                if (!$KompSzerkesztes)
+                {
+                    ?>
+                    <button class="btn btn-primary pull-right" name="submit" id="submit" onclick="submitKomp()" type="button">Kompenzálás</button>
+                    <?php
+                }
+                else
+                {
+                    ?>
+                    <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="editKomp()" type="button">Mentés</button>
+                    <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-right: 10px" onclick="deleteKomp()" type="button">Kompenzáció törlése</button>
+                    <?php
+                }
+                ?>
+            </div>
 
-            <?php
-            if (!$KompSzerkesztes)
-            {
-                ?>
-                <button class="btn btn-primary pull-right" name="submit" id="submit"  onclick="submitKomp()" type="button">Kompenzálás</button>
-                <?php
-            }
-            else
-            {
-                ?>
-                <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="editKomp()" type="button">Mentés</button>
-                <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-right: 10px" onclick="deleteKomp()" type="button">Kompenzáció törlése</button>
-                <?php
-            }
-            ?>
         </form>
     </div>
 </div>
@@ -241,8 +246,6 @@ if (!$KompSzerkesztes)
             megj: document.getElementById("megj").value
         });
     }
-
-
 
 
     function HandlePHPPageDataDelete(ret)

@@ -22,6 +22,9 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel='stylesheet prefetch'
@@ -92,11 +95,11 @@ if ($AktProfil->getUjMuszakJog() != 1)
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="musznev">Név</label>
                     <input id="musznev" name="musznev" type="text" placeholder="pl. Pizzásch 1"
-                           value="<?php if($MuszakMasolas) echo $MasoltMuszak->musznev; ?>" class="form-control">
+                           value="<?php if ($MuszakMasolas) echo $MasoltMuszak->musznev; ?>" class="form-control">
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="letszam">Létszám</label>
-                    <input id="letszam" name="letszam" type="text" placeholder="pl. 2" value="<?php if($MuszakMasolas) echo $MasoltMuszak->letszam; ?>" class="form-control">
+                    <input id="letszam" name="letszam" type="text" placeholder="pl. 2" value="<?php if ($MuszakMasolas) echo $MasoltMuszak->letszam; ?>" class="form-control">
                 </div>
             </div>
             <div class="row">
@@ -105,7 +108,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
 
                     <div class="input-group date">
                         <input type="text" class="form-control" id="idokezd" name="idokezd"
-                               placeholder="YYYY/MM/DD HH:mm" value="<?php if($MuszakMasolas) echo $MasoltMuszak->idokezd; ?>"/>
+                               placeholder="YYYY/MM/DD HH:mm" value="<?php if ($MuszakMasolas) echo $MasoltMuszak->idokezd; ?>"/>
                         <span class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </span>
@@ -115,7 +118,7 @@ if ($AktProfil->getUjMuszakJog() != 1)
                     <label for="idoveg">Vég</label>
 
                     <div class="input-group date">
-                        <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY/MM/DD HH:mm" value="<?php if($MuszakMasolas) echo $MasoltMuszak->idoveg; ?>"
+                        <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY/MM/DD HH:mm" value="<?php if ($MuszakMasolas) echo $MasoltMuszak->idoveg; ?>"
                                type="text"/>
 
                         <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
@@ -143,13 +146,15 @@ if ($AktProfil->getUjMuszakJog() != 1)
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="megj">Megjegyzés</label>
-                    <input id="megj" name="megj" type="text" placeholder="pl. Börgör" value="<?php if($MuszakMasolas) echo $MasoltMuszak->megj; ?>" class="form-control">
+                    <input id="megj" name="megj" type="text" placeholder="pl. Börgör" value="<?php if ($MuszakMasolas) echo $MasoltMuszak->megj; ?>" class="form-control">
                 </div>
             </div>
 
-            <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Műszak
-                kiírása
-            </button>
+            <div class="row" style="padding-right: 7%">
+                <button class="btn btn-primary pull-right" name="kiiras" onclick="submitMuszak()" type="button">Műszak
+                    kiírása
+                </button>
+            </div>
 
         </form>
     </div>
