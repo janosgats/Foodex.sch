@@ -23,6 +23,8 @@ class NavBar
 
         ?>
 
+<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -48,6 +50,7 @@ class NavBar
                         {
                             ?>
                             <li<?php self::act('ujmuszak', $ActMenu); ?>><a href="<?php echo $rootURL; ?>ujmuszak">Új műszak kiírása</a></li>
+                            <li<?php self::act('settings', $ActMenu); ?>><a href="<?php echo $rootURL; ?>settings">Beállítások</a></li>
                             <?php
                         }
                         ?>

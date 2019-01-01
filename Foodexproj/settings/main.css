@@ -1,0 +1,18 @@
+.settingsgear {
+    color: rgb(71, 162, 243);
+    cursor: pointer;
+}
+
+.settingsgear:hover {
+    color: rgb(51, 122, 200);
+}
+
+.custbtn.btn{
+    margin-bottom: 5px;
+    margin-top: 5px;
+    background-color: #ffffff;
+}
+
+.custbtn.btn:hover{
+    background-color: #dadada;
+}
