@@ -25,5 +25,8 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="bootstrap" level="application" />
+    <orderEntry type="library" name="moment-with-locales" level="application" />
   </component>
 </module>

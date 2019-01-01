@@ -164,7 +164,7 @@ if ($mosfoglalt)
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, ($MosogatasJelentkezes)?'mosjelentk':'pontok')
+    NavBar::echonavbar($AktProfil, ($MosogatasJelentkezes)?'mosjelentk':'pontok');
     ?>
 
     <div class="panel panel-default">
