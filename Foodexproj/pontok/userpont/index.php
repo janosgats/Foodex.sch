@@ -4,6 +4,7 @@ session_start();
 require_once __DIR__ . '/../../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../../Eszkozok/param.php';
 require_once __DIR__ . '/../../profil/Profil.php';
+require_once __DIR__ . '/../../Eszkozok/navbar.php';
 
 \Eszkozok\Eszk::ValidateLogin();
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
@@ -161,45 +162,11 @@ if ($mosfoglalt)
 }
 ?>
 <div class="container">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1"
-                        aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="../../profil"><img alt="Brand" src="../../res/kepek/favicon1.svg"
-                                                                 style="height: 30px"></a>
-            </div>
 
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="../../jelentkezes">Jelentkezés műszakra <span class="sr-only">(current)</span></a></li>
-                    <li <?php if ($MosogatasJelentkezes) echo 'class="active"'; ?>><a href="../../pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
-                    <li <?php if (!$MosogatasJelentkezes) echo 'class="active"'; ?>><a href="../../pontok">Pontozás</a></li>
-                    <?php
-                    if ($AktProfil->getUjMuszakJog() == 1)
-                    {
-                        ?>
-                        <li><a href="../../ujmuszak">Új műszak kiírása</a></li>
-                        <?php
-                    }
-                    ?>
-                </ul>
-                <ul class="nav navbar-nav navbar-right p-t" style="margin-top: 8px">
-                    <li>
-                        <form action="../../profil/logout.php">
-                            <button type="submit" class="btn btn-danger">Kijelentkezés</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php
+    NavBar::echonavbar($AktProfil, ($MosogatasJelentkezes)?'mosjelentk':'pontok')
+    ?>
+
     <div class="panel panel-default">
         <div class="panel-heading">
 
