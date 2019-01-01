@@ -1,11 +1,10 @@
 <?php
 session_start();
 
-require_once '../Eszkozok/Eszk.php';
-require_once '../Eszkozok/param.php';
-require_once 'Profil.php';
-require_once '../Eszkozok/ProfilInfo.php';
-require_once '../Eszkozok/navbar.php';
+require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/param.php';
+require_once __DIR__ . '/Profil.php';
+require_once __DIR__ . '/../Eszkozok/navbar.php';
 
 \Eszkozok\Eszk::ValidateLogin();
 
@@ -42,6 +41,10 @@ else
 </head>
 
 <body style="background-color: #de520d">
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
 <div class="container">
 
     <?php
@@ -303,11 +306,5 @@ else
         </div>
     </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-
 </body>
 </html>
