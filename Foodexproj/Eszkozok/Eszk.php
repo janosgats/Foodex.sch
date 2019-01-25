@@ -1245,7 +1245,7 @@ namespace Eszkozok
         {
             $ret = $_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER["HTTP_HOST"] . "/";
 
-            if (strpos($_SERVER["HTTP_HOST"], 'sch.bme') !== false)
+            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme') !== false)
             {
                 $ret .= "";
             }
