@@ -5,7 +5,7 @@
       <paths name="XAMPP foodex">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/foodex/" />
           </mappings>
         </serverdata>
       </paths>

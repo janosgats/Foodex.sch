@@ -844,7 +844,7 @@ namespace Eszkozok
         }
 
         // Function to get the client ip address
-        function get_client_ip_address()
+        public static function get_client_ip_address()
         {
             $ipaddress = '';
             if ($_SERVER['HTTP_CLIENT_IP'])
