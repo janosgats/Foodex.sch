@@ -3,6 +3,7 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
+require_once '../Eszkozok/MonologHelper.php';
 require_once '../Eszkozok/Muszak.php';
 
 
@@ -44,21 +45,32 @@ try
     if ($AktProfil->getUjMuszakJog() != 1)
         Eszkozok\Eszk::dieToErrorPage('19077: Nincs jogosultságod a műszak szerkesztésére!');
 
+    $logger;
+    try
+    {
+        $logger = new \MonologHelper('muszedit/edit.php');
+    }
+    catch (\Exception $e)
+    {
+    }
 
     $internal_id = $_SESSION['profilint_id'];
 
+    $MuszakID;
+
     $conn;
     $stmt;
-    if (IsURLParamSet('musztorles') && GetURLParam('musztorles') == 1)
+
+    $MuszakTorlesE = (IsURLParamSet('musztorles') && GetURLParam('musztorles') == 1);
+    $MuszakID = 'URL PARAM IS NOT SET';
+    if (IsURLParamSet('muszid'))
+        $MuszakID = GetURLParam('muszid');
+
+    if ($MuszakTorlesE)
     {//Torles//
 
-        $id = 'URL PARAM IS NOT SET';
-        if (IsURLParamSet('muszid'))
-            $id = GetURLParam('muszid');
-
-
-        if (!is_numeric($id))
-            throw new \Exception('A műszak ID-je nem megfelelő:' . htmlspecialchars(var_dump($id)));
+        if (!is_numeric($MuszakID))
+            throw new \Exception('A műszak ID-je nem megfelelő: ' . htmlspecialchars($MuszakID));
 
         $conn = Eszkozok\Eszk::initMySqliObject();
 
@@ -71,7 +83,7 @@ try
         if (!$stmt)
             throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-        $stmt->bind_param('i', $id);
+        $stmt->bind_param('i', $MuszakID);
 
     }
     else
@@ -79,8 +91,8 @@ try
         $AktMuszak = new \Eszkozok\Muszak();
         $AktMuszak->kiirta = $internal_id;
 
-        if (IsURLParamSet('muszid'))
-            $AktMuszak->ID = GetURLParam('muszid');
+
+            $AktMuszak->ID = $MuszakID;
 
         if (IsURLParamSet('musznev'))
             $AktMuszak->musznev = GetURLParam('musznev');
@@ -148,6 +160,19 @@ try
         if ($stmt->affected_rows == 0)
         {
             throw new Exception("Nem történt módosítás!");
+        }
+
+        try
+        {
+
+            if ($MuszakTorlesE)
+                $logger->info('Műszak törölve! MUSZTOROL', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), $MuszakID]);
+            else
+                $logger->info('Műszak szerkesztve! MUSZSZERK', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), $MuszakID]);
+
+        }
+        catch (\Exception $e)
+        {
         }
 
         die('siker4567');

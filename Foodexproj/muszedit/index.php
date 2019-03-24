@@ -168,6 +168,7 @@ $SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
             });
     }
 
+
     function HandlePHPPageDataTorol(ret)
     {
         if (ret == "siker4567")

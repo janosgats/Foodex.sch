@@ -3,6 +3,7 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
+require_once '../Eszkozok/MonologHelper.php';
 require_once '../Eszkozok/Muszak.php';
 
 
@@ -35,7 +36,6 @@ function verifyDate($date, $strict = true)
 
 try
 {
-
 
     \Eszkozok\Eszk::ValidateLogin();
 
@@ -111,6 +111,16 @@ try
 
     if ($stmt->execute())
     {
+        try
+        {
+
+                $logger = new \MonologHelper('ujmuszak/kiir.php');
+                $logger->info('Új műszak lett kiírva! MUSZKIIR', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), $stmt->insert_id]);
+
+        }
+        catch (\Exception $e)
+        {
+        }
         ob_clean();
         die('siker4567');
     }
