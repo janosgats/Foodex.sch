@@ -32,6 +32,13 @@ if (\Eszkozok\Eszk::IsLoginValid())
 
 <body>
 
+<script>
+    function startgp()
+    {
+        window.open('https://www.pornhub.com/gayporn','_blank')
+    }
+</script>
+
 <div class="outer">
     <div class="middle">
         <div class="inner">
@@ -42,9 +49,9 @@ if (\Eszkozok\Eszk::IsLoginValid())
             <!--        style="display: inline;color: #f4511e;margin-left: -3px">Ex</p>-->
             <!--</h1>-->
 
-            <div style="horiz-align: center; text-align: center;margin-left:20px">
+            <div style="horiz-align: center; text-align: center;margin-left:20px" onclick="startgp();">
 
-                <img class="fxlogo" src="res/kepek/favicon1.svg"">
+                <img class="fxlogo" src="res/kepek/favicon1.svg">
 
             </div>
             <div style="horiz-align: center; text-align: center;">
