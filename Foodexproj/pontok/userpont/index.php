@@ -285,7 +285,6 @@ if ($mosfoglalt)
                             if (count($vittMuszakIDk) > 0)
                             {
                                 //`idoveg` < NOW() : Csak arra a műszakra kap pontot, ami már lezárult
-                                //TODO: idoveg < now() - ból kivenni a TRUE-t
                                 $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` WHERE  (FALSE || `idoveg` < NOW()) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ") ORDER BY `idokezd` DESC;");
                                 if (!$stmt)
                                     throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
