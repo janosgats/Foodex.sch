@@ -49,7 +49,8 @@ class NavBar
                         if ($AktProfil->getUjMuszakJog() == 1)
                         {
                             ?>
-                            <li<?php self::act('ujmuszak', $ActMenu); ?>><a href="<?php echo $rootURL; ?>ujmuszak">Új műszak kiírása</a></li>
+                            <li<?php self::act('ujmuszak', $ActMenu); ?>><a href="<?php echo $rootURL; ?>ujmuszak">Új műszak</a></li>
+                            <li<?php self::act('statisztikak', $ActMenu); ?>><a href="<?php echo $rootURL; ?>statisztikak">Statisztikák</a></li>
                             <li<?php self::act('settings', $ActMenu); ?>><a href="<?php echo $rootURL; ?>settings">Beállítások</a></li>
                             <?php
                         }

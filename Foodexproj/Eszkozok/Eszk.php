@@ -1362,7 +1362,6 @@ namespace Eszkozok
                         if (count($vittMuszakIDk) > 0)
                         {
                             //`idoveg` < NOW() : Csak arra a műszakra kap pontot, ami már lezárult
-                            //TODO: idoveg < now() - ból kivenni a TRUE-t
 
 
                             $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
