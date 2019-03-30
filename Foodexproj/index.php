@@ -76,7 +76,7 @@ if (\Eszkozok\Eszk::IsLoginValid())
                     <button class="button" type="submit" style="vertical-align:middle; horiz-align: center">
                         <span>Belépés </span>
                     </button>
-
+<p style="color: #BBBBBB; font-family: 'Arial';">A belépéssel beleegyezel, hogy a GDPR minden egyes rendeletét teljes mértékben telibe szarod (ezen a weblapon).</p>
                 </div>
 
             </form>

@@ -42,10 +42,13 @@ try
 
     $conn = \Eszkozok\Eszk::initMySqliObject();
 
-    $stmt = $conn->prepare("SELECT jelentkezo FROM fxjelentk
+    $stmt = $conn->prepare("SELECT jelentkezo, nev FROM fxjelentk
 JOIN logs
-ON logs.context = CONCAT('[',  fxjelentk.muszid, ']' )
+ON logs.context = CONCAT('[',  fxjelentk.muszid, ']' ) AND logs.message='MUSZKIIR'
+LEFT JOIN fxaccok
+ON fxaccok.internal_id = fxjelentk.jelentkezo
 GROUP BY fxjelentk.jelentkezo");
+
 
     if ($stmt->execute())
     {
@@ -54,27 +57,47 @@ GROUP BY fxjelentk.jelentkezo");
         while ($row = $result->fetch_assoc())
         {
             //var_dump($row);
-            $InternalIDk[] = $row['jelentkezo'];
+            $InternalIDk[] = [$row['jelentkezo'], $row['nev']];
         }
     }
     else
+    {
         throw new Exception('$stmt->execute() 01 is false!');
+    }
+
 
 //    var_dump($InternalIDk);
 
+
+    $CDcolors = [
+        '#4dc9f6',
+        '#f67019',
+        '#f53794',
+        '#537bc4',
+        '#acc236',
+        '#166a8f',
+        '#00a950',
+        '#58595b',
+        '#8549ba'
+    ];
+    $CDcolorslength = count($CDcolors);
+
     $datasetsDICT = array();
 
+    $colorindex = 0;
     foreach ($InternalIDk as $item)
     {
         $dataset = array();
-        $dataset['label'] = $item;
-        $dataset['backgroundColor'] = 'rgb(255, 99, 132)';
-        $dataset['borderColor'] = 'rgb(255, 99, 132)';
+        $dataset['label'] = $item[1];
+        $dataset['backgroundColor'] = $CDcolors[$colorindex % $CDcolorslength];
+        $dataset['borderColor'] = $CDcolors[$colorindex % $CDcolorslength];
         $dataset['fill'] = false;
         $dataset['cubicInterpolationMode'] = 'monotone';
         $dataset['data'] = array();
 
-        $datasetsDICT[$item] = $dataset;
+        $datasetsDICT[$item[0]] = $dataset;
+
+        ++$colorindex;
     }
 
 
@@ -84,13 +107,15 @@ GROUP BY fxjelentk.jelentkezo");
     $CDlabels = array();
 
 
-    $stmt = $conn->prepare("SELECT jelentkezo, muszid,  TIMEDIFF(MinJelIdo, `datetime`) AS JelIdotartam, TIMESTAMPDIFF(SECOND, `datetime`, MinJelIdo) AS JelIdotartamSec FROM
+    $stmt = $conn->prepare("SELECT jelentkezo, muszid, musznev, TIMEDIFF(MinJelIdo, `datetime`) AS JelIdotartam, TIMESTAMPDIFF(SECOND, `datetime`, MinJelIdo) AS JelIdotartamSec FROM
   (
   SELECT jelentkezo, muszid, min(jelido) AS MinJelIdo FROM fxjelentk
   GROUP BY muszid, jelentkezo
   ) AS MinJel
 JOIN logs
-ON logs.context = CONCAT('[',  MinJel.muszid, ']' )
+ON logs.context = CONCAT('[',  MinJel.muszid, ']' ) AND logs.message='MUSZKIIR'
+LEFT JOIN fxmuszakok
+ON MinJel.muszid = fxmuszakok.id
 ORDER BY muszid ASC;");
 
     if ($stmt->execute())
@@ -108,13 +133,13 @@ ORDER BY muszid ASC;");
             if ($elozomuszid == null)
             {
                 $elozomuszid = $aktmuszid;
-                $CDlabels[] = $aktmuszid;
+                $CDlabels[] = $row['musznev'] . ' (' . $aktmuszid . ')';
                 $muszidLength = 1;
             }
 
             if ($elozomuszid != $aktmuszid)
             {
-                $CDlabels[] = $aktmuszid;
+                $CDlabels[] = $row['musznev'] . ' (' . $aktmuszid . ')';
                 //Üresek feltöltése
                 foreach ($datasetsDICT as $itemkey => $itemvalue)
                 {
@@ -151,27 +176,6 @@ catch (Exception $e)
     \Eszkozok\Eszk::dieToErrorPage('56434: ' . $e->getMessage());
 }
 
-
-////TODO: megcsinálni a két SQL lekérdezést és belőlük még PHP-ban elkészíteni a data-t a graph számára.
-/////======A charton megjelenítendő adat lekérdezése===========================
-//SELECT jelentkezo, muszid,  TIMEDIFF(MinJelIdo, `datetime`) as JelIdotartam, TIMESTAMPDIFF(second, `datetime`, MinJelIdo) as JelIdotartamSec FROM
-//(
-//  select jelentkezo, muszid, min(jelido) as MinJelIdo from fxjelentk
-//  group by muszid, jelentkezo
-//  ) as MinJel
-//JOIN logs
-//ON logs.context = CONCAT('[',  MinJel.muszid, ']' )
-//ORDER BY muszid ASC;
-/////============================================================
-//
-/////=====A logolt időtartamokkal jelentkező internal_id-k lekérdezése=================
-//SELECT jelentkezo FROM fxjelentk
-//JOIN logs
-//ON logs.context = CONCAT('[',  fxjelentk.muszid, ']' )
-//group by fxjelentk.jelentkezo
-/////============================================================
-
-
 ?>
 
 <!DOCTYPE html>
@@ -179,7 +183,7 @@ catch (Exception $e)
 
 <head>
     <meta charset="UTF-8">
-    <title>Fx Profil</title>
+    <title>Fx Statisztikák</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
@@ -222,7 +226,9 @@ catch (Exception $e)
         </div>
         <div class="panel-body">
 
-
+            <div style="text-align: center">
+                <p style="color: #999999; margin-bottom: -4px">Sáv elrejtéséhez kattints a címkékre &#8650</p>
+            </div>
             <div>
                 <canvas id="canvas"></canvas>
             </div>
@@ -230,13 +236,6 @@ catch (Exception $e)
         </div>
     </div>
 </div>
-<br>
-<br>
-<button id="randomizeData">Randomize Data</button>
-<button id="addDataset">Add Dataset</button>
-<button id="removeDataset">Remove Dataset</button>
-<button id="addData">Add Data</button>
-<button id="removeData">Remove Data</button>
 <script>
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var config = {
@@ -281,79 +280,7 @@ catch (Exception $e)
         window.myLine = new Chart(ctx, config);
     };
 
-    document.getElementById('randomizeData').addEventListener('click', function ()
-    {
-        config.data.datasets.forEach(function (dataset)
-        {
-            dataset.data = dataset.data.map(function ()
-            {
-                return randomScalingFactor();
-            });
 
-        });
-
-        window.myLine.update();
-    });
-
-    var colorNames = Object.keys(window.chartColors);
-    document.getElementById('addDataset').addEventListener('click', function ()
-    {
-
-
-        var colorName = colorNames[config.data.datasets.length % colorNames.length];
-        var newColor = window.chartColors[colorName];
-        var newDataset = {
-            type: 'line',
-            label: 'Dataset ' + config.data.datasets.length,
-            backgroundColor: newColor,
-            borderColor: newColor,
-            data: [],
-            fill: false,
-            cubicInterpolationMode: 'monotone'
-        };
-
-        for (var index = 0; index < config.data.labels.length; ++index)
-        {
-            newDataset.data.push(randomScalingFactor());
-        }
-
-        config.data.datasets.push(newDataset);
-        window.myLine.update();
-    });
-
-    document.getElementById('addData').addEventListener('click', function ()
-    {
-        if (config.data.datasets.length > 0)
-        {
-            var month = MONTHS[config.data.labels.length % MONTHS.length];
-            config.data.labels.push(month);
-
-            config.data.datasets.forEach(function (dataset)
-            {
-                dataset.data.push();
-            });
-
-            window.myLine.update();
-        }
-    });
-
-    document.getElementById('removeDataset').addEventListener('click', function ()
-    {
-        config.data.datasets.splice(0, 1);
-        window.myLine.update();
-    });
-
-    document.getElementById('removeData').addEventListener('click', function ()
-    {
-        config.data.labels.splice(-1, 1); // remove the label first
-
-        config.data.datasets.forEach(function (dataset)
-        {
-            dataset.data.pop();
-        });
-
-        window.myLine.update();
-    });
 </script>
 </body>
 </html>
