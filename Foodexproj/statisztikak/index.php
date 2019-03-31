@@ -73,12 +73,15 @@ GROUP BY fxjelentk.jelentkezo");
         '#4dc9f6',
         '#f67019',
         '#f53794',
+        '#FF0000',
         '#537bc4',
         '#acc236',
         '#166a8f',
+        '#00FF00',
         '#00a950',
         '#58595b',
-        '#8549ba'
+        '#8549ba',
+        '#0000FF'
     ];
     $CDcolorslength = count($CDcolors);
 
@@ -220,16 +223,16 @@ catch (Exception $e)
     NavBar::echonavbar($AktProfil, 'statisztikak');
     ?>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="min-width: 1000px">
         <div class="panel-heading">
             <h4>Jelentkezési idők</h4>
         </div>
-        <div class="panel-body">
+        <div class="panel-body" >
 
             <div style="text-align: center">
                 <p style="color: #999999; margin-bottom: -4px">Sáv elrejtéséhez kattints a címkékre &#8650</p>
             </div>
-            <div>
+            <div >
                 <canvas id="canvas"></canvas>
             </div>
 
