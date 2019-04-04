@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Eszkozok
 {
     class GlobalServerInitParams
@@ -15,6 +16,5 @@ namespace Eszkozok
         //public static $DefaultIntID = '5df058f7-d76d-4b03-e9c8-65a78b27fb7e';
 
         public static $DevloginEnabled = true;
-        public static $DevloginPasswordHashed = '04c2cb2650789158be6be942d8f82095ffac6110';
     }
 }

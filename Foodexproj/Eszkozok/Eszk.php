@@ -15,6 +15,7 @@ namespace Eszkozok
     require_once __DIR__ . '/../vendor/autoload.php';
 
     require_once __DIR__ . '/ini.php';
+    require_once __DIR__ . '/../foodexpws.php';
 
     require_once __DIR__ . '/AuthSchProvider.php';
 
@@ -534,8 +535,8 @@ namespace Eszkozok
             $servername = "gjani.sch.bme.hu:3306";
             if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme.hu') !== false)
             {
-                $username = "foodex";
-                $password = "***REMOVED***";
+                $username = \Eszkozok\FoodexPWs::$FoodexSchDBUser;
+                $password = \Eszkozok\FoodexPWs::$FoodexSchDBPassword;
                 $dbname = "wadon_foodex";
                 $servername = "hal-9000.sch.bme.hu:3306";
             }
