@@ -90,6 +90,14 @@ div.example {
     /*text-shadow: 1px 1px orangered;*/
 }
 
+.oszlopNev p {
+    cursor: pointer;
+}
+
+.oszlopNev p:hover {
+    color: yellow;
+}
+
 .oszlopReszletek {
 
 }
