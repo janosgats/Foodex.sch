@@ -113,7 +113,6 @@ try
     {
         try
         {
-
                 $logger = new \MonologHelper('ujmuszak/kiir.php');
             $logger->info('Új műszak lett kiírva! MUSZKIIR', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), $stmt->insert_id]);
             $logger->info('MUSZKIIR', [$stmt->insert_id]);
