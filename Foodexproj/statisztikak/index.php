@@ -79,9 +79,10 @@ GROUP BY fxjelentk.jelentkezo");
         '#166a8f',
         '#00FF00',
         '#00a950',
-        '#58595b',
+        '#999999',
         '#8549ba',
-        '#0000FF'
+        '#0000FF',
+        '#000000'
     ];
     $CDcolorslength = count($CDcolors);
 
@@ -211,6 +212,8 @@ catch (Exception $e)
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
+    <script src='../3rdparty/jquery.bootstrap-touchspin.js'></script>
 
     <script src="../node_modules/chart.js/dist/Chart.min.js"></script>
     <script src="../js/chart.js/utils.js"></script>
@@ -246,8 +249,35 @@ catch (Exception $e)
                 <canvas id="canvas"></canvas>
             </div>
 
+            <div class="row">
+                <div class="form-group col-md-3 col-sm-12">
+
+                    <label for="MaxYsec">Y max</label>
+
+                    <input id="MaxYsec" type="text" value="300" name="MaxYsec">
+                    <script>
+                        $("input[name='MaxYsec']").TouchSpin({
+                            min: 1,
+                            max: 999999,
+                            step: 100,
+                            decimals: 0,
+                            boostat: 300,
+                            maxboostedstep: 100,
+                            postfix: 'sec'
+                        });
+                        $("#MaxYsec").on('change', function(ev){
+                            myLineChart.config.options.scales.yAxes[0].ticks.max = parseInt(ev.target.value);
+                            console.log(ev.target.value);
+                            window.myLine.update();
+                        });
+                    </script>
+                </div>
+
+            </div>
+
         </div>
     </div>
+
 </div>
 <script>
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -258,8 +288,8 @@ catch (Exception $e)
             spanGaps: true,
             responsive: true,
             tooltips: {
-                mode: 'index',
-                intersect: false,
+                mode: 'nearest',
+                intersect: true,
             },
             hover: {
                 mode: 'nearest',
@@ -278,6 +308,11 @@ catch (Exception $e)
                     scaleLabel: {
                         display: true,
                         labelString: 'Jelentkezesi ido kiiras utan [sec]'
+                    },
+                    ticks:
+                    {
+                        min: 0,
+                        max: 300
                     }
                 }]
             }
@@ -286,11 +321,12 @@ catch (Exception $e)
 
     config['data'] = JSON.parse('<?php echo json_encode($ChartData); ?>');
 
-
+var myLineChart;
     window.onload = function ()
     {
         var ctx = document.getElementById('canvas').getContext('2d');
         window.myLine = new Chart(ctx, config);
+        myLineChart = window.myLine;
     };
 
 
