@@ -22,7 +22,10 @@ if ($AktProfil->getUjMuszakJog() != 1)
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137789203-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag()
+        {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'UA-137789203-1');
@@ -141,7 +144,9 @@ if ($AktProfil->getUjMuszakJog() != 1)
                     kiírása
                 </button>
             </div>
-
+            <div style="text-align: center;">
+                <p style="color: gray">A műszakokat kiírás után aktiválni kell a <a href="../jelentkezes">Jelentkezés</a> menüben!</p>
+            </div>
         </form>
     </div>
 </div>

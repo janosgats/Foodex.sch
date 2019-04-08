@@ -44,7 +44,7 @@ try
 
     $stmt = $conn->prepare("SELECT jelentkezo, nev FROM fxjelentk
 JOIN logs
-ON logs.context = CONCAT('[',  fxjelentk.muszid, ']' ) AND logs.message='MUSZKIIR'
+ON logs.context = CONCAT('[',  fxjelentk.muszid, ']' ) AND logs.message='MUSZAKTIVAL'
 LEFT JOIN fxaccok
 ON fxaccok.internal_id = fxjelentk.jelentkezo
 GROUP BY fxjelentk.jelentkezo");
@@ -117,7 +117,7 @@ GROUP BY fxjelentk.jelentkezo");
   GROUP BY muszid, jelentkezo
   ) AS MinJel
 JOIN logs
-ON logs.context = CONCAT('[',  MinJel.muszid, ']' ) AND logs.message='MUSZKIIR'
+ON logs.context = CONCAT('[',  MinJel.muszid, ']' ) AND logs.message='MUSZAKTIVAL'
 LEFT JOIN fxmuszakok
 ON MinJel.muszid = fxmuszakok.id
 ORDER BY muszid ASC;");
