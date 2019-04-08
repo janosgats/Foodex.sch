@@ -3,8 +3,11 @@ session_start();
 
 require_once '../Eszkozok/Eszk.php';
 require_once '../Eszkozok/param.php';
+require_once __DIR__ . '/../Eszkozok/MonologHelper.php';
 include_once '../profil/Profil.php';
 include_once 'jelentkez.php';
+
+$logger = new \MonologHelper('jelentkezes/index.php');
 
 \Eszkozok\Eszk::ValidateLogin();
 
@@ -12,6 +15,62 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 
 doJelentkezes();
+
+if($AktProfil->getUjMuszakJog() == 1)
+{
+    if(IsURLParamSet('muszakokaktival') && GetURLParam('muszakokaktival') == 1)
+    {
+        $conn;
+        try
+        {
+            $conn = \Eszkozok\Eszk::initMySqliObject();
+
+            if($conn->multi_query("SET @uids := -99;
+UPDATE `fxmuszakok`
+   SET aktiv = '1'
+ WHERE aktiv <> '1'
+   AND ( SELECT @uids := CONCAT_WS(',', id, @uids) );
+SELECT @uids as modified_row_IDs;"))
+            {
+                while($conn->more_results())
+                    $conn->next_result();
+
+                $lastres = $conn->store_result();
+                $row = $lastres->fetch_assoc();
+                //var_dump($row);
+
+                $modified_row_IDs = explode(",", $row['modified_row_IDs']);
+
+                //var_dump($modified_row_IDs);
+
+                foreach ($modified_row_IDs as $rowID)
+                {
+                    if((int)$rowID != -99)
+                    {
+                       // var_dump($rowID);
+                    $logger->info('Műszak lett aktiválva! MUSZAKTIVAL', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), (int)$rowID]);
+                    $logger->info('MUSZAKTIVAL', [(int)$rowID]);
+                    }
+                }
+
+            }
+            else
+                throw new Exception('Error at $conn->multi_query()');
+        }
+        catch(\Exception $e)
+        {
+            \Eszkozok\Eszk::dieToErrorPage('76734: ' . $e->getMessage());
+        }
+        finally
+        {
+            try
+            {
+                $conn->close();
+            }
+            catch(Exception $e){}
+        }
+    }
+}
 
 ?>
 
@@ -75,6 +134,21 @@ doJelentkezes();
         </colgroup>
 
         <?php
+
+        if($AktProfil->getUjMuszakJog() == 1)
+        {
+            ?>
+                <form method="POST" action="" id="hiddenmuszakokaktivalpostform" hidden>
+                    <input name="muszakokaktival" value="1" hidden/>
+                </form>
+
+            <a href="#" onclick="var r = confirm('Biztosan aktiválod az összes inaktív műszakot?\nEz a művelet nem visszavonható!'); if(r) document.getElementById('hiddenmuszakokaktivalpostform').submit();" style="font-size: larger; color: yellow"> Az összes inaktív műszak aktiválása most!</a>
+                <br><br>
+            <?php
+        }
+
+
+
         $OsszesMuszakMutat = false;
 
         try
@@ -127,6 +201,9 @@ doJelentkezes();
                 {
                     while ($row = $result->fetch_assoc())
                     {
+                        if($AktProfil->getUjMuszakJog() != 1 && $row['aktiv'] != 1)
+                            continue;
+
                         //var_dump($row);
                         $kiiroProfil = Eszkozok\Eszk::GetTaroltProfilAdat($row['kiirta']);
 
@@ -186,7 +263,7 @@ doJelentkezes();
 
                         <tr class="tablaSor">
                             <td class="tablaCella oszlopNev">
-                                <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
+                                <p style="<?php if($row['aktiv'] != 1) echo 'color:red'; ?>" onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
                             </td>
                             <td class="tablaCella oszlopReszletek">
                                 <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
