@@ -259,7 +259,7 @@ catch (Exception $e)
                         $("input[name='MaxYsec']").TouchSpin({
                             min: 1,
                             max: 999999,
-                            step: 100,
+                            step: 30,
                             decimals: 0,
                             boostat: 300,
                             maxboostedstep: 100,
