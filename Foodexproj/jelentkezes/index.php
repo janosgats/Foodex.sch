@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-require_once '../Eszkozok/Eszk.php';
-require_once '../Eszkozok/param.php';
+require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/param.php';
+require_once __DIR__ . '/../Eszkozok/navbar.php';
 require_once __DIR__ . '/../Eszkozok/MonologHelper.php';
-include_once '../profil/Profil.php';
+include_once __DIR__ . '/../profil/Profil.php';
 include_once 'jelentkez.php';
 
 $logger = new \MonologHelper('jelentkezes/index.php');
@@ -30,7 +31,8 @@ if ($AktProfil->getUjMuszakJog() == 1)
                                        SET aktiv = '1'
                                      WHERE aktiv <> '1'
                                        AND ( SELECT @uids := CONCAT_WS(',', id, @uids) );
-                                    SELECT @uids as modified_row_IDs;"))
+                                    SELECT @uids as modified_row_IDs;")
+            )
             {
                 while ($conn->more_results())
                     $conn->next_result();
@@ -104,17 +106,75 @@ if ($AktProfil->getUjMuszakJog() == 1)
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="../3rdparty/bootstrap-iso.css">
+
     <link rel="stylesheet" href="main.css">
 
     <link rel="stylesheet" href="modal.css">
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
-<body style="background: #151515">
+<body style="background: #151515; margin-top: 0;">
 
-<a href="../profil" style="font-size: larger; text-decoration: none;color: yellow"> << Profil</a>
+<div class="bootstrap-iso" style="background: #151515;">
+    <div class="container">
+        <?php
+        NavBar::echonavbar($AktProfil, 'jelentkezes');
+        ?>
+
+
+        <?php
+        if ($AktProfil->getUjMuszakJog() == 1)
+        {
+            ?>
+            <form method="POST" action="" id="hiddenmuszakokaktivalpostform" hidden>
+                <input name="muszakokaktival" value="1" hidden/>
+            </form>
+
+            <button class="btn btn-warning pull-left" onclick="var r = confirm('Biztosan aktiválod az összes inaktív műszakot?\nEz a művelet nem visszavonható!'); if(r) document.getElementById('hiddenmuszakokaktivalpostform').submit();" type="button">Az összes inaktív műszak aktiválása most!</button>
+
+            <br><br>
+            <?php
+        }
+
+
+        $OsszesMuszakMutat = false;
+
+        try
+        {
+            if (IsURLParamSet('osszmusz') && GetURLParam('osszmusz') == 1)
+            {
+                $OsszesMuszakMutat = true;
+                ?>
+
+
+                <a class="btn btn-primary pull-left" href="?osszmusz=0" type="button">Csak az aktuális műszakokat mutasd!</a>
+                <br><br>
+                <?php
+            }
+            else
+            {
+                ?>
+                <a class="btn btn-primary pull-left" href="?osszmusz=1" type="button">Mutasd az összes műszakot!</a>
+                <br><br>
+                <?php
+            }
+        }
+        catch (\Exception $e)
+        {
+        }
+
+        ?>
+
+
+    </div>
+</div>
 
 <div id="osszhastablazat" class="tablaDiv" style="margin-top: 1.5%;">
 
@@ -140,44 +200,6 @@ if ($AktProfil->getUjMuszakJog() == 1)
 
         <?php
 
-        if ($AktProfil->getUjMuszakJog() == 1)
-        {
-            ?>
-            <form method="POST" action="" id="hiddenmuszakokaktivalpostform" hidden>
-                <input name="muszakokaktival" value="1" hidden/>
-            </form>
-
-            <a href="#" onclick="var r = confirm('Biztosan aktiválod az összes inaktív műszakot?\nEz a művelet nem visszavonható!'); if(r) document.getElementById('hiddenmuszakokaktivalpostform').submit();"
-               style="font-size: larger; color: yellow"> Az összes inaktív műszak aktiválása most!</a>
-            <br><br>
-            <?php
-        }
-
-
-        $OsszesMuszakMutat = false;
-
-        try
-        {
-            if (IsURLParamSet('osszmusz') && GetURLParam('osszmusz') == 1)
-            {
-                $OsszesMuszakMutat = true;
-                ?>
-                <a href="?osszmusz=0" style="font-size: larger; color: greenyellow"> Csak az aktuális műszakokat
-                    mutasd!</a>
-                <br><br>
-                <?php
-            }
-            else
-            {
-                ?>
-                <a href="?osszmusz=1" style="font-size: larger; color: greenyellow"> Mutasd az összes műszakot!</a>
-                <br><br>
-                <?php
-            }
-        }
-        catch (\Exception $e)
-        {
-        }
 
         try
         {
