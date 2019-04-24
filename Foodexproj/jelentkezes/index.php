@@ -6,6 +6,7 @@ require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 require_once __DIR__ . '/../Eszkozok/MonologHelper.php';
 include_once __DIR__ . '/../profil/Profil.php';
+require_once __DIR__ . '/../3rdparty/securimage/securimage.php';
 include_once 'jelentkez.php';
 
 $logger = new \MonologHelper('jelentkezes/index.php');
@@ -16,6 +17,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 
 doJelentkezes();
+
 
 if ($AktProfil->getUjMuszakJog() == 1)
 {
@@ -76,6 +78,25 @@ if ($AktProfil->getUjMuszakJog() == 1)
     }
 }
 
+
+$IsSecurimageCorrect = false;
+$image = new Securimage();
+if (isset($_POST['securimage_captcha_code']) && $image->check($_POST['securimage_captcha_code']) == true)//Captcha
+{
+    $IsSecurimageCorrect = true;
+}
+
+try
+{
+/*
+FEATURE:   Ha elég idő telt el műszakkiírás után, akkor az oldal már semmiképp sem mutatná a captcha-t. (golbal_settings table-ből az értéket hozzáadná a legútóbbi kiírás idejéhez.)
+PROBLÉMA:  Ha kiírnak egy műszakot és e-miatt hirtelen megjelenik a captcha, abból egy crawling bot tudni forga, hogy új műszak lett kiírva, így küldhet a "hackernek" értesítést.
+KONKLÚZIÓ: Még NE implementáld, amíg NINCS a problémára megoldás!
+*/
+}
+catch(\Exception $e)
+{}
+
 ?>
 
 
@@ -129,225 +150,284 @@ if ($AktProfil->getUjMuszakJog() == 1)
         ?>
 
 
+
+
+
         <?php
-        if ($AktProfil->getUjMuszakJog() == 1)
+        if ($IsSecurimageCorrect)
         {
-            ?>
-            <form method="POST" action="" id="hiddenmuszakokaktivalpostform" hidden>
-                <input name="muszakokaktival" value="1" hidden/>
-            </form>
-
-            <button class="btn btn-warning pull-left" onclick="var r = confirm('Biztosan aktiválod az összes inaktív műszakot?\nEz a művelet nem visszavonható!'); if(r) document.getElementById('hiddenmuszakokaktivalpostform').submit();" type="button">Az összes inaktív műszak aktiválása most!</button>
-
-            <br><br>
-            <?php
-        }
-
-
-        $OsszesMuszakMutat = false;
-
-        try
-        {
-            if (IsURLParamSet('osszmusz') && GetURLParam('osszmusz') == 1)
+            if ($AktProfil->getUjMuszakJog() == 1)
             {
-                $OsszesMuszakMutat = true;
                 ?>
+                <form method="POST" action="" id="hiddenmuszakokaktivalpostform" hidden>
+                    <input name="muszakokaktival" value="1" hidden/>
+                </form>
 
+                <button class="btn btn-warning pull-left" onclick="var r = confirm('Biztosan aktiválod az összes inaktív műszakot?\nEz a művelet nem visszavonható!'); if(r) document.getElementById('hiddenmuszakokaktivalpostform').submit();"
+                        type="button">Az összes inaktív műszak aktiválása most!
+                </button>
 
-                <a class="btn btn-primary pull-left" href="?osszmusz=0" type="button">Csak az aktuális műszakokat mutasd!</a>
                 <br><br>
                 <?php
             }
-            else
+
+
+            $OsszesMuszakMutat = false;
+
+            try
             {
-                ?>
-                <a class="btn btn-primary pull-left" href="?osszmusz=1" type="button">Mutasd az összes műszakot!</a>
-                <br><br>
-                <?php
+                if (IsURLParamSet('osszmusz') && GetURLParam('osszmusz') == 1)
+                {
+                    $OsszesMuszakMutat = true;
+                    ?>
+
+
+                    <a class="btn btn-primary pull-left" href="?osszmusz=0" type="button">Csak az aktuális műszakokat mutasd!</a>
+                    <br><br>
+                    <?php
+                }
+                else
+                {
+                    ?>
+                    <a class="btn btn-primary pull-left" href="?osszmusz=1" type="button">Mutasd az összes műszakot!</a>
+                    <br><br>
+                    <?php
+                }
+            }
+            catch (\Exception $e)
+            {
             }
         }
-        catch (\Exception $e)
-        {
-        }
-
         ?>
 
 
     </div>
 </div>
 
-<div id="osszhastablazat" class="tablaDiv" style="margin-top: 1.5%;">
+<?php
+if ($IsSecurimageCorrect)
+{
+    ?>
+    <div id="osszhastablazat" class="tablaDiv" style="margin-top: 1.5%;">
 
-    <table class="tabla">
+        <table class="tabla">
 
-        <colgroup>
-            <col span="1" style="width: 10%;">
-            <col span="1" style="width: 2%;">
-            <col span="1" style="width: 8%;">
-            <col span="1" style="width: 4%;">
-            <col span="1" style="width: 56%;">
-            <?php
-            if ($AktProfil->getUjMuszakJog() == 1)
-            {
+            <colgroup>
+                <col span="1" style="width: 10%;">
+                <col span="1" style="width: 2%;">
+                <col span="1" style="width: 8%;">
+                <col span="1" style="width: 4%;">
+                <col span="1" style="width: 56%;">
+                <?php
+                if ($AktProfil->getUjMuszakJog() == 1)
+                {
+                    ?>
+
+                    <col span="1" style="width: 2%;">
+                    <?php
+                }
                 ?>
 
-                <col span="1" style="width: 2%;">
-                <?php
-            }
-            ?>
+            </colgroup>
 
-        </colgroup>
-
-        <?php
+            <?php
 
 
-        try
-        {
-            $conn = Eszkozok\Eszk::initMySqliObject();
-
-
-            if (!$conn)
-                throw new \Exception('SQL hiba: $conn is \'false\'');
-
-            ///`fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`)
-
-            if ($OsszesMuszakMutat)
-                $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` ORDER BY `idokezd` DESC;");
-            else
-                $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
-
-            if (!$stmt)
-                throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
-
-
-            if ($stmt->execute())
+            try
             {
-                $result = $stmt->get_result();
+                $conn = Eszkozok\Eszk::initMySqliObject();
 
-                if ($result->num_rows > 0)
+
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+                ///`fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`)
+
+                if ($OsszesMuszakMutat)
+                    $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` ORDER BY `idokezd` DESC;");
+                else
+                    $stmt = $conn->prepare("SELECT * FROM `fxmuszakok` WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
+
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+
+                if ($stmt->execute())
                 {
-                    while ($row = $result->fetch_assoc())
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0)
                     {
-                        if ($AktProfil->getUjMuszakJog() != 1 && $row['aktiv'] != 1)
-                            continue;
-
-                        //var_dump($row);
-                        $kiiroProfil = Eszkozok\Eszk::GetTaroltProfilAdat($row['kiirta']);
-
-                        $idokezd = DateTime::createFromFormat("Y-m-d H:i:s", $row['idokezd']);
-
-                        $idostringbuff = \Eszkozok\Eszk::getNameOfDayOfWeek(date('N', $idokezd->getTimestamp()), true);
-                        $idostringbuff .= '<br>';
-                        $idostringbuff .= $idokezd->format('H:i');
-
-                        $idostringbuff .= ' - ';
-
-                        $idoveg = DateTime::createFromFormat("Y-m-d H:i:s", $row['idoveg']);
-                        $idostringbuff .= $idoveg->format('H:i');
-
-                        $jelentkIdoszakVan = 1;
-
-                        if (date("Y-m-d H:i:s") > $idokezd->format('Y-m-d H:i:s'))
-                            $jelentkIdoszakVan = 0;
-
-                        $jelintidtomb = \Eszkozok\Eszk::getJelentkezokListajaWithConn($row['ID'], $conn);
-
-                        if (in_array($_SESSION['profilint_id'], $jelintidtomb))
-                            $felvetel = 0;
-                        else
-                            $felvetel = 1;
-
-                        $jelnevtomb = \Eszkozok\Eszk::getColumnAdatTombFromInternalIdTombWithConn($jelintidtomb, 'nev', $conn);
-
-
-                        $jelnevstring = '';
-
-                        for ($i = 0; $i < count($jelnevtomb);)
+                        while ($row = $result->fetch_assoc())
                         {
-                            $jelnevstring .= '<a style="cursor: pointer;text-decoration: none; color: inherited" href="../profil/?mprof=' . $jelintidtomb[$i] . '" >';
+                            if ($AktProfil->getUjMuszakJog() != 1 && $row['aktiv'] != 1)
+                                continue;
 
+                            //var_dump($row);
+                            $kiiroProfil = Eszkozok\Eszk::GetTaroltProfilAdat($row['kiirta']);
 
-                            if ($i < $row['letszam'])
-                                $jelnevstring .= '<p class="varolistaElso">';
+                            $idokezd = DateTime::createFromFormat("Y-m-d H:i:s", $row['idokezd']);
+
+                            $idostringbuff = \Eszkozok\Eszk::getNameOfDayOfWeek(date('N', $idokezd->getTimestamp()), true);
+                            $idostringbuff .= '<br>';
+                            $idostringbuff .= $idokezd->format('H:i');
+
+                            $idostringbuff .= ' - ';
+
+                            $idoveg = DateTime::createFromFormat("Y-m-d H:i:s", $row['idoveg']);
+                            $idostringbuff .= $idoveg->format('H:i');
+
+                            $jelentkIdoszakVan = 1;
+
+                            if (date("Y-m-d H:i:s") > $idokezd->format('Y-m-d H:i:s'))
+                                $jelentkIdoszakVan = 0;
+
+                            $jelintidtomb = \Eszkozok\Eszk::getJelentkezokListajaWithConn($row['ID'], $conn);
+
+                            if (in_array($_SESSION['profilint_id'], $jelintidtomb))
+                                $felvetel = 0;
                             else
-                                $jelnevstring .= '<p class="varolistaLemaradt">';
+                                $felvetel = 1;
+
+                            $jelnevtomb = \Eszkozok\Eszk::getColumnAdatTombFromInternalIdTombWithConn($jelintidtomb, 'nev', $conn);
 
 
-                            $jelnevstring .= htmlspecialchars($jelnevtomb[$i]);
+                            $jelnevstring = '';
 
-
-                            $jelnevstring .= '</p>';
-                            $jelnevstring .= '</a>';
-
-                            ++$i;
-
-                            if ($i < count($jelnevtomb))
-                                $jelnevstring .= ', ';
-                        }
-                        ?>
-
-                        <!--                        ShowModal(id,kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv)-->
-
-                        <tr class="tablaSor">
-                            <td class="tablaCella oszlopNev">
-                                <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>"
-                                   onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
-                            </td>
-                            <td class="tablaCella oszlopReszletek">
-                                <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
-                                    <i
-                                        class="fa fa-plus-square-o fa-2x"></i></p>
-                            </td>
-                            <td class="tablaCella oszlopPont">
-                                <p><?php echo $idostringbuff; ?></p>
-                            </td>
-                            <td class="tablaCella oszlopLetszam">
-                                <p><?php echo htmlspecialchars($row['letszam']); ?> fő</p>
-                            </td>
-                            <td class="tablaCella oszlopVarolista">
-                                <?php echo $jelnevstring; ?>
-                            </td>
-
-                            <?php
-                            if ($AktProfil->getUjMuszakJog() == 1)
+                            for ($i = 0; $i < count($jelnevtomb);)
                             {
-                                ?>
-                                <td class="tablaCella oszlopReszletek">
-                                    <p>
-                                        <a href="../muszedit?muszid=<?php echo $row['ID']; ?>" target="_blank"
-                                           style="text-decoration: none; color: inherit">
-                                            <i class="fa fa-cog fa-2x"></i>
-                                        </a>
-                                    </p>
-                                </td>
-                                <?php
+                                $jelnevstring .= '<a style="cursor: pointer;text-decoration: none; color: inherited" href="../profil/?mprof=' . $jelintidtomb[$i] . '" >';
+
+
+                                if ($i < $row['letszam'])
+                                    $jelnevstring .= '<p class="varolistaElso">';
+                                else
+                                    $jelnevstring .= '<p class="varolistaLemaradt">';
+
+
+                                $jelnevstring .= htmlspecialchars($jelnevtomb[$i]);
+
+
+                                $jelnevstring .= '</p>';
+                                $jelnevstring .= '</a>';
+
+                                ++$i;
+
+                                if ($i < count($jelnevtomb))
+                                    $jelnevstring .= ', ';
                             }
                             ?>
 
-                        </tr>
-                        <?php
+                            <!--                        ShowModal(id,kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv)-->
+
+                            <tr class="tablaSor">
+                                <td class="tablaCella oszlopNev">
+                                    <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>"
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
+                                </td>
+                                <td class="tablaCella oszlopReszletek">
+                                    <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
+                                        <i
+                                            class="fa fa-plus-square-o fa-2x"></i></p>
+                                </td>
+                                <td class="tablaCella oszlopPont">
+                                    <p><?php echo $idostringbuff; ?></p>
+                                </td>
+                                <td class="tablaCella oszlopLetszam">
+                                    <p><?php echo htmlspecialchars($row['letszam']); ?> fő</p>
+                                </td>
+                                <td class="tablaCella oszlopVarolista">
+                                    <?php echo $jelnevstring; ?>
+                                </td>
+
+                                <?php
+                                if ($AktProfil->getUjMuszakJog() == 1)
+                                {
+                                    ?>
+                                    <td class="tablaCella oszlopReszletek">
+                                        <p>
+                                            <a href="../muszedit?muszid=<?php echo $row['ID']; ?>" target="_blank"
+                                               style="text-decoration: none; color: inherit">
+                                                <i class="fa fa-cog fa-2x"></i>
+                                            </a>
+                                        </p>
+                                    </td>
+                                    <?php
+                                }
+                                ?>
+
+                            </tr>
+                            <?php
+
+                        }
+
 
                     }
 
-
+                }
+                else
+                {
+                    throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
                 }
 
             }
-            else
+            catch (\Exception $e)
             {
-                throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
+                ob_clean();
+                Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
             }
+            ?>
 
-        }
-        catch (\Exception $e)
-        {
-            ob_clean();
-            Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
-        }
-        ?>
+        </table>
+    </div>
 
-    </table>
-</div>
+    <?php
+}//if($IsSecurimageCorrect) vége itt
+?>
+
+<?php
+if (!$IsSecurimageCorrect)
+{
+    ?>
+    <div class="bootstrap-iso" style="text-align: center; width: 100%">
+
+        <br>
+
+        <div style="max-width: 300px; margin-left: auto; margin-right: auto;">
+            <form method="post" autocomplete="off"> <!-- no 'action' parameter => submits to self page -->
+                <div>
+                    <?php
+                    echo Securimage::getCaptchaHtml([], Securimage::HTML_IMG + Securimage::HTML_ICON_REFRESH + Securimage::HTML_AUDIO);
+                    ?>
+                </div>
+                <div>
+                    <input name="securimage_captcha_code" type="text" class="form-control" autofocus>
+                    <br>
+                    <button class="btn btn-success" type="submit">Lássuk a műszakokat!</button>
+                </div>
+
+
+                <div style="display: none">
+
+                    <?php
+                    //Az aktuális lekérés GET paramétereit beletesszük a captcha-val submitolando formba.
+                    //Így azok továbbítódnak az oldal felé a captcha-val együtt, hogy aztán kiértékelődjenek, mint ha nem is lenne captcha.
+                    foreach ($_GET as $key => $value)
+                    {
+                        echo '<input name="' . $key . '" value="' . $value . '" >';
+                    }
+
+                    ?>
+
+                </div>
+
+            </form>
+        </div>
+        <br>
+    </div>
+    <?php
+}
+?>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
