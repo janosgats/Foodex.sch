@@ -171,6 +171,8 @@ ORDER BY muszid ASC;");
         $CDdatasets[] = $item;
     }
 
+    usort($CDdatasets, function($a, $b){ return strcasecmp($a['label'], $b['label']);});//Datasetek név szerinti sorberendezése (hogy a grafikon fölött rendezve jelenjenek meg)
+
     $ChartData['labels'] = $CDlabels;
     $ChartData['datasets'] = $CDdatasets;
 
