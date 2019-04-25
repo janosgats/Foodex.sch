@@ -78,12 +78,18 @@ if ($AktProfil->getUjMuszakJog() == 1)
     }
 }
 
-
+$IsSecurimageBypassed = false;
 $IsSecurimageCorrect = false;
 $image = new Securimage();
 if (isset($_POST['securimage_captcha_code']) && $image->check($_POST['securimage_captcha_code']) == true)//Captcha
 {
     $IsSecurimageCorrect = true;
+}
+
+if($AktProfil->getUjMuszakJog() == 1)
+{
+    $IsSecurimageCorrect = true;
+    $IsSecurimageBypassed = true;
 }
 
 try
@@ -149,11 +155,17 @@ catch(\Exception $e)
         NavBar::echonavbar($AktProfil, 'jelentkezes');
         ?>
 
-
-
-
-
         <?php
+
+        if($IsSecurimageBypassed)
+        {
+            ?>
+            <div style="text-align: center; width: 100%; margin-top: -10px">
+            <p>Admin jogaid miatt a CAPTCHA-t számodra kikapcsoltuk.</p>
+            </div>
+            <?php
+        }
+
         if ($IsSecurimageCorrect)
         {
             if ($AktProfil->getUjMuszakJog() == 1)
@@ -164,7 +176,7 @@ catch(\Exception $e)
                 </form>
 
                 <button class="btn btn-warning pull-left" onclick="var r = confirm('Biztosan aktiválod az összes inaktív műszakot?\nEz a művelet nem visszavonható!'); if(r) document.getElementById('hiddenmuszakokaktivalpostform').submit();"
-                        type="button">Az összes inaktív műszak aktiválása most!
+                        type="button">Összes inaktív műszak aktiválása!
                 </button>
 
                 <br><br>
@@ -213,8 +225,7 @@ if ($IsSecurimageCorrect)
         <table class="tabla">
 
             <colgroup>
-                <col span="1" style="width: 10%;">
-                <col span="1" style="width: 2%;">
+                <col span="1" style="width: 12%;">
                 <col span="1" style="width: 8%;">
                 <col span="1" style="width: 4%;">
                 <col span="1" style="width: 56%;">
@@ -282,6 +293,11 @@ if ($IsSecurimageCorrect)
                             if (date("Y-m-d H:i:s") > $idokezd->format('Y-m-d H:i:s'))
                                 $jelentkIdoszakVan = 0;
 
+                            $jelentkezesAktiv = 0;
+
+                            if($jelentkIdoszakVan == 1 && $row['aktiv'] == 1)
+                                $jelentkezesAktiv = 1;
+
                             $jelintidtomb = \Eszkozok\Eszk::getJelentkezokListajaWithConn($row['ID'], $conn);
 
                             if (in_array($_SESSION['profilint_id'], $jelintidtomb))
@@ -321,20 +337,18 @@ if ($IsSecurimageCorrect)
                             <!--                        ShowModal(id,kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, jelaktiv)-->
 
                             <tr class="tablaSor">
-                                <td class="tablaCella oszlopNev">
-                                    <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>"
-                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
+                                <td class="tablaCella oszlopNev oszlopModalMegnyito">
+                                    <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1)?'red':'white'; ?>')"
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
                                 </td>
-                                <td class="tablaCella oszlopReszletek">
-                                    <p onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkIdoszakVan; ?>', '<?php echo $felvetel; ?>');">
-                                        <i
-                                            class="fa fa-plus-square-o fa-2x"></i></p>
+
+                                <td class="tablaCella oszlopPont oszlopModalMegnyito">
+                                    <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1)?'red':'white'; ?>')"
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>', '<?php echo $felvetel; ?>');"><?php echo $idostringbuff; ?></p>
                                 </td>
-                                <td class="tablaCella oszlopPont">
-                                    <p><?php echo $idostringbuff; ?></p>
-                                </td>
-                                <td class="tablaCella oszlopLetszam">
-                                    <p><?php echo htmlspecialchars($row['letszam']); ?> fő</p>
+                                <td class="tablaCella oszlopLetszam oszlopModalMegnyito">
+                                    <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1)?'red':'white'; ?>')"
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['letszam']); ?> fő</p>
                                 </td>
                                 <td class="tablaCella oszlopVarolista">
                                     <?php echo $jelnevstring; ?>
@@ -380,6 +394,29 @@ if ($IsSecurimageCorrect)
 
         </table>
     </div>
+
+    <script>
+        function setRowColor(p, colorstyle)
+        {
+            var row = p.parentNode.parentNode;
+
+            row.childNodes.forEach(function(node)
+            {
+                console.log(node);
+
+                if(node.nodeName == "TD" && node.classList.contains("oszlopModalMegnyito"))
+                {
+                    node.childNodes.forEach(function(node2)
+                    {
+                        if(node2.nodeName == "P")
+                        {
+                            node2.style.color = colorstyle;
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 
     <?php
 }//if($IsSecurimageCorrect) vége itt
