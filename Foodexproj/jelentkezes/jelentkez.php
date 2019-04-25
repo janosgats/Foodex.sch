@@ -55,12 +55,31 @@ function doJelentkezes()
             if (!$conn)
                 throw new \Exception('SQL hiba: $conn is \'false\'');
 
+
+
+            $stmt = $conn->prepare("SELECT aktiv FROM fxmuszakok WHERE ID = ?");
+            if (!$stmt)
+                throw new \Exception('SQL hiba: $stmt 0 is \'false\'' . ' :' . $conn->error);
+
+            $stmt->bind_param('i', $muszakID);
+
+            if (!$stmt->execute())
+                throw new \Exception('Az SQL parancs végrehajtása nem sikerült: Műszak aktívság ellenőrzés');
+
+            $result = $stmt->get_result();
+            if ($result->num_rows != 1)
+                throw new \Exception('Műszak aktívság ellenőrzés hiba: $result->num_rows != 1');
+
+            if($result->fetch_assoc()['aktiv'] != 1)
+                throw new \Exception('Műszakfelvétel és leadás NEM lehetséges, mert a műszak NEM aktív!');
+
+
             if (GetURLParam('muszmuv') == 'felvesz')
             {
 
                 $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
                 if (!$stmt)
-                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+                    throw new \Exception('SQL hiba: $stmt 1 is \'false\'' . ' :' . $conn->error);
 
                 $intid = $_SESSION['profilint_id'];
                 $stmt->bind_param('si', $intid, $muszakID);
@@ -79,7 +98,7 @@ function doJelentkezes()
 
                     $stmt = $conn->prepare("INSERT INTO `fxjelentk` (`jelentkezo`, `muszid`, `status`, `jelido`) VALUES (?, ?, 1,NOW());");
                     if (!$stmt)
-                        throw new \Exception('$stmt is \'false\'');
+                        throw new \Exception('$stmt 2 is \'false\'');
 
                     $intid = $_SESSION['profilint_id'];
                     $stmt->bind_param('si', $intid, $muszakID);
@@ -108,7 +127,7 @@ function doJelentkezes()
 
                 $stmt = $conn->prepare("UPDATE `fxjelentk` SET `status` = 0, `leadido` = NOW() WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
                 if (!$stmt)
-                    throw new \Exception('$stmt is \'false\'');
+                    throw new \Exception('$stmt 3 is \'false\'');
 
                 $intid = $_SESSION['profilint_id'];
                 $stmt->bind_param('si', $intid, $muszakID);

@@ -90,13 +90,13 @@ div.example {
     /*text-shadow: 1px 1px orangered;*/
 }
 
-.oszlopNev p {
+.oszlopModalMegnyito p {
     cursor: pointer;
 }
 
-.oszlopNev p:hover {
-    color: yellow;
-}
+/*.oszlopModalMegnyito p:hover {*/
+    /*color: yellow;*/
+/*}*/
 
 .oszlopReszletek {
 
