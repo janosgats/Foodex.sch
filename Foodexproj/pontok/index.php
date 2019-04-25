@@ -203,12 +203,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                                         <a style="cursor: pointer" href="<?php echo '../profil/?mprof=' . $rowAcc['internal_id']; ?>"><p><?php echo htmlspecialchars($rowAcc['nev']); ?></p></a>
                                     </td>
                                     <td>
-                                        <a href="userpont/?int_id=<?php echo $rowAcc['internal_id']; ?>">
-                                            <i class="fa fa-plus-square-o fa-2x"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <span class="badge"><?php echo htmlspecialchars($pontszam) . ' pont'; ?></span>
+                                        <a class="badge"  href="userpont/?int_id=<?php echo $rowAcc['internal_id']; ?>"><?php echo htmlspecialchars($pontszam) . ' pont'; ?></a>
                                     </td>
                                 </tr>
                                 <?php
