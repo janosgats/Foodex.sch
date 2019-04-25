@@ -44,7 +44,7 @@ class NavBar
                     <ul class="nav navbar-nav">
                         <li<?php self::act('jelentkezes', $ActMenu); ?>><a href="<?php echo $rootURL; ?>jelentkezes">Jelentkezés műszakra <span class="sr-only">(current)</span></a></li>
                         <li<?php self::act('mosjelentk', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
-                        <li<?php self::act('pontok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok">Pontozás</a></li>
+                        <li<?php self::act('pontok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok">Pontok</a></li>
                         <?php
                         if ($AktProfil->getUjMuszakJog() == 1)
                         {
