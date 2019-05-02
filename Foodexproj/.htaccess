@@ -3,3 +3,5 @@
 #DirectoryIndex /underconst.html
 #</If>
 #</If>
+
+#php_flag session.cookie_httponly on

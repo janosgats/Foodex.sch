@@ -19,6 +19,20 @@ if (\Eszkozok\GlobalServerInitParams::$DevloginEnabled)
         if (sha1($password) == \Eszkozok\FoodexPWs::$DevloginPasswordHashed)
         {
             $_SESSION['profilint_id'] = $int_id;
+
+            $session_token = base64_encode(openssl_random_pseudo_bytes(64));
+
+            $conn = \Eszkozok\Eszk::initMySqliObject();
+            $stmt = $conn->prepare("UPDATE `fxaccok` SET `session_token` = ? WHERE `fxaccok`.`internal_id` = ?");
+            $stmt->bind_param('ss', $session_token, $int_id);
+
+            if ($stmt->execute())
+            {
+
+            }
+
+            $_SESSION['session_token'] = $session_token;
+
             \Eszkozok\Eszk::RedirectUnderRoot('profil');
         }
         else

@@ -56,6 +56,9 @@ namespace Eszkozok
                 if (!isset($_SESSION['profilint_id']))
                     throw new Exception();
 
+                if (!isset($_SESSION['session_token']))
+                    throw new Exception();
+
 
                 $conn = self::initMySqliObject();
 
@@ -75,8 +78,16 @@ namespace Eszkozok
                     $result = $stmt->get_result();
                     if ($result->num_rows == 1)
                     {
-                        $conn->close();
-                        return true;
+                        $row = $result->fetch_array();
+
+                        if($_SESSION['session_token'] == $row['session_token'])
+                        {
+                            $conn->close();
+                            return true;
+                        }
+                        else
+                            throw new \Exception();
+
                     }
                     else
                         throw new \Exception();
@@ -1029,6 +1040,9 @@ namespace Eszkozok
                     $email = $resresp['mail'];
 
 
+                $session_token = base64_encode(openssl_random_pseudo_bytes(64));
+
+
                 $conn = self::initMySqliObject();
 
                 if (!$conn)
@@ -1048,8 +1062,8 @@ namespace Eszkozok
                     {//Még nem regisztrált, új acc
                         $ujmuszakjog = 0;
 
-                        $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `ujmuszakjog`, `email`) VALUES (?, ?, ?, ?);");
-                        $stmt->bind_param('ssis', $internal_id, $displayName, $ujmuszakjog, $email);
+                        $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `ujmuszakjog`, `email`, `session_token`) VALUES (?, ?, ?, ?, ?);");
+                        $stmt->bind_param('ssiss', $internal_id, $displayName, $ujmuszakjog, $email, $session_token);
 
 
                         if ($stmt->execute())
@@ -1107,6 +1121,17 @@ namespace Eszkozok
 
                         }
                     }
+
+                    //Session_token frissítése
+                    $stmt = $conn->prepare("UPDATE `fxaccok` SET `session_token` = ? WHERE `fxaccok`.`internal_id` = ?");
+                    $stmt->bind_param('ss', $session_token, $internal_id);
+
+                    if ($stmt->execute())
+                    {
+
+                    }
+                    else
+                        throw new \Exception('Hiba a session_token frissítése során');
                 }
                 else
                 {
@@ -1115,6 +1140,7 @@ namespace Eszkozok
 
 
                 $_SESSION['profilint_id'] = $internal_id;
+                $_SESSION['session_token'] = $session_token;
 
                 ?>
 
