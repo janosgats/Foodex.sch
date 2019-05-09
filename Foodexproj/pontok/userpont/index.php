@@ -420,7 +420,7 @@ if ($mosfoglalt)
                         <th>Megjegyzés</th>
 
                         <?php
-                        if ($AktProfil->getUjMuszakJog() == 1)
+                        if ($AktProfil->getAdminJog() == 1)
                         {
                             ?>
                             <th></th>
@@ -459,7 +459,7 @@ if ($mosfoglalt)
                                         </td>
 
                                         <?php
-                                        if ($AktProfil->getUjMuszakJog() == 1)
+                                        if ($AktProfil->getAdminJog() == 1)
                                         {
                                             ?>
                                             <td>

@@ -10,7 +10,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
-if ($AktProfil->getUjMuszakJog() != 1)
+if ($AktProfil->getAdminJog() != 1)
     Eszkozok\Eszk::RedirectUnderRoot('');
 
 $InternalIDk = array();

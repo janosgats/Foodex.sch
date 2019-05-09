@@ -731,7 +731,9 @@ namespace Eszkozok
         public static function GetTaroltProfilAdat($internal_id)
         {
             $ProfilNev = "";
-            $UjMuszakJog = 0;
+            $AdminJog = 0;
+            $email = "";
+
 
             $conn = 0;
             try
@@ -760,9 +762,9 @@ namespace Eszkozok
 
                         if (isset($row['nev']))
                             $ProfilNev = $row['nev'];
-                        if (isset($row['ujmuszakjog']))
-                            $UjMuszakJog = $row['ujmuszakjog'];
-                        if (isset($row['ujmuszakjog']))
+                        if (isset($row['adminjog']))
+                            $AdminJog = $row['adminjog'];
+                        if (isset($row['adminjog']))
                             $email = $row['email'];
 
                     }
@@ -788,7 +790,7 @@ namespace Eszkozok
             }
 
             require_once __DIR__ . '/../profil/Profil.php';
-            return new Profil($internal_id, $ProfilNev, $UjMuszakJog, $email);
+            return new Profil($internal_id, $ProfilNev, $AdminJog, $email);
         }
 
         public static function initNewAuthSchProvider()
@@ -1060,10 +1062,10 @@ namespace Eszkozok
 
                     if ($result->num_rows == 0)
                     {//Még nem regisztrált, új acc
-                        $ujmuszakjog = 0;
+                        $adminjog = 0;
 
-                        $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `ujmuszakjog`, `email`, `session_token`) VALUES (?, ?, ?, ?, ?);");
-                        $stmt->bind_param('ssiss', $internal_id, $displayName, $ujmuszakjog, $email, $session_token);
+                        $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `adminjog`, `email`, `session_token`) VALUES (?, ?, ?, ?, ?);");
+                        $stmt->bind_param('ssiss', $internal_id, $displayName, $adminjog, $email, $session_token);
 
 
                         if ($stmt->execute())

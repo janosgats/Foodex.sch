@@ -8,14 +8,14 @@ class Profil
 {
     private $InternalID = '';
     private $Nev = '';
-    private $UjMuszakJog = 0;
+    private $AdminJog = 0;
     private $Email = '';
 
-    public function __construct($internalid, $nev, $ujmuszakjog, $email)
+    public function __construct($internalid, $nev, $adminjog, $email)
     {
         $this->InternalID = $internalid;
         $this->Nev = $nev;
-        $this->UjMuszakJog = $ujmuszakjog;
+        $this->AdminJog = $adminjog;
         $this->Email = $email;
     }
 
@@ -24,9 +24,9 @@ class Profil
         return $this->Nev;
     }
 
-    public function getUjMuszakJog()
+    public function getAdminJog()
     {
-        return $this->UjMuszakJog;
+        return $this->AdminJog;
     }
 
     public function getInternalID()

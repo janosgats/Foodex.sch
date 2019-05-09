@@ -46,7 +46,7 @@ class NavBar
                         <li<?php self::act('mosjelentk', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
                         <li<?php self::act('pontok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok">Pontok</a></li>
                         <?php
-                        if ($AktProfil->getUjMuszakJog() == 1)
+                        if ($AktProfil->getAdminJog() == 1)
                         {
                             ?>
                             <li<?php self::act('ujmuszak', $ActMenu); ?>><a href="<?php echo $rootURL; ?>ujmuszak">Új műszak</a></li>

@@ -11,7 +11,7 @@ require_once '../Eszkozok/navbar.php';
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
-if ($AktProfil->getUjMuszakJog() != 1)
+if ($AktProfil->getAdminJog() != 1)
     Eszkozok\Eszk::dieToErrorPage('19965: Nincs jogod a műszak szerkesztéséhez!');
 
 if (IsURLParamSet('muszid') == false)

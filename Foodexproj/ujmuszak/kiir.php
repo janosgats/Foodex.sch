@@ -41,7 +41,7 @@ try
 
     $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
-    if ($AktProfil->getUjMuszakJog() != 1)
+    if ($AktProfil->getAdminJog() != 1)
         Eszkozok\Eszk::dieToErrorPage('2077: Nincs jogosultságod új műszakot kiírni!');
 
 
