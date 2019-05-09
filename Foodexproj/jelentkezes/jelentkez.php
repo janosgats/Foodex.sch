@@ -5,10 +5,11 @@ require_once '../Eszkozok/param.php';
 include_once '../3rdparty/reCaptcha/autoload.php';
 
 include_once __DIR__ . '/../Eszkozok/SMTPSender.php';
+include_once __DIR__ . '/../foodexpws.php';
 
 function isReCaptchaValid()
 {
-    $secret = '***REMOVED***';
+    $secret = \Eszkozok\FoodexPWs::$ReCAPTCHA_Secretkey_1;
 
     if (IsURLParamSet('g-recaptcha-response'))
     {

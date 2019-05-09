@@ -19,7 +19,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 doJelentkezes();
 
 
-if ($AktProfil->getUjMuszakJog() == 1)
+if ($AktProfil->getAdminJog() == 1)
 {
     if (IsURLParamSet('muszakokaktival') && GetURLParam('muszakokaktival') == 1)
     {
@@ -86,7 +86,7 @@ if (isset($_POST['securimage_captcha_code']) && $image->check($_POST['securimage
     $IsSecurimageCorrect = true;
 }
 
-if($AktProfil->getUjMuszakJog() == 1)
+if($AktProfil->getAdminJog() == 1)
 {
     $IsSecurimageCorrect = true;
     $IsSecurimageBypassed = true;
@@ -168,7 +168,7 @@ catch(\Exception $e)
 
         if ($IsSecurimageCorrect)
         {
-            if ($AktProfil->getUjMuszakJog() == 1)
+            if ($AktProfil->getAdminJog() == 1)
             {
                 ?>
                 <form method="POST" action="" id="hiddenmuszakokaktivalpostform" hidden>
@@ -230,7 +230,7 @@ if ($IsSecurimageCorrect)
                 <col span="1" style="width: 4%;">
                 <col span="1" style="width: 56%;">
                 <?php
-                if ($AktProfil->getUjMuszakJog() == 1)
+                if ($AktProfil->getAdminJog() == 1)
                 {
                     ?>
 
@@ -271,7 +271,7 @@ if ($IsSecurimageCorrect)
                     {
                         while ($row = $result->fetch_assoc())
                         {
-                            if ($AktProfil->getUjMuszakJog() != 1 && $row['aktiv'] != 1)
+                            if ($AktProfil->getAdminJog() != 1 && $row['aktiv'] != 1)
                                 continue;
 
                             //var_dump($row);
@@ -355,7 +355,7 @@ if ($IsSecurimageCorrect)
                                 </td>
 
                                 <?php
-                                if ($AktProfil->getUjMuszakJog() == 1)
+                                if ($AktProfil->getAdminJog() == 1)
                                 {
                                     ?>
                                     <td class="tablaCella oszlopReszletek">
@@ -509,7 +509,7 @@ if (!$IsSecurimageCorrect)
                     <div>
                         <div class="g-recaptcha" style=" margin: 0 auto;display: inline-block;"
                              data-callback="greDataCallback"
-                             data-sitekey="6LfTxl8UAAAAAO05DCRMYxdnDnRHd5E-uzN-J8fs"></div>
+                             data-sitekey="6LeGvaIUAAAAAKkBPMXKJsSKY1BRvq8HTWkeqIOh"></div>
                     </div>
                     <br>
                     <input name="muszid" id="modalmuszakid" style="display: none">

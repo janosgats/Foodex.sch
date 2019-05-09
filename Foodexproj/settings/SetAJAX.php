@@ -36,7 +36,7 @@ try
 
     $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
-    if ($AktProfil->getUjMuszakJog() != 1)
+    if ($AktProfil->getAdminJog() != 1)
         Eszkozok\Eszk::dieToErrorPage('9077: Nincs jogosultságod módosítani a pontozási beállításokat!');
 
     if (IsURLParamSet('beallID'))

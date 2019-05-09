@@ -118,7 +118,7 @@ else
         <br><br>
 
         <?php
-        if ($AktProfil->getUjMuszakJog() == 1)
+        if ($AktProfil->getAdminJog() == 1)
         {
             ?>
             <a class="btn btn-primary pull-right" name="kompenz" id="kompenz" style="margin-right: 10px"
@@ -249,7 +249,7 @@ else
                     <th>Megjegyzés</th>
 
                     <?php
-                    if ($AktProfil->getUjMuszakJog() == 1)
+                    if ($AktProfil->getAdminJog() == 1)
                     {
                         ?>
                         <th></th>
@@ -290,7 +290,7 @@ else
                                     </td>
 
                                     <?php
-                                    if ($AktProfil->getUjMuszakJog() == 1)
+                                    if ($AktProfil->getAdminJog() == 1)
                                     {
                                         ?>
                                         <td>

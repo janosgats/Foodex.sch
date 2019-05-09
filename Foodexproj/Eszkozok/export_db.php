@@ -7,7 +7,7 @@ require_once __DIR__ . '/../Eszkozok/Eszk.php';
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
-if ($AktProfil->getUjMuszakJog() != 1)
+if ($AktProfil->getAdminJog() != 1)
     Eszkozok\Eszk::RedirectUnderRoot('');
 
 
