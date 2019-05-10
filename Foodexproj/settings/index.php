@@ -325,7 +325,7 @@ if ($AktProfil->getAdminJog() != 1)
 
                     var thead = jQuery.parseHTML('<thead>' +
                         '<tr >' +
-                        '<th scope="col" style="text-align: center">Minimum pont</th>' +
+                        '<th scope="col" style="text-align: center">Alsó ponthatár</th>' +
                         '<th scope="col" style="text-align: center">Kivárás (perc)</th>' +
                         '<th scope="col" style="text-align: center">Törlés</th>' +
                         '</tr>' +
