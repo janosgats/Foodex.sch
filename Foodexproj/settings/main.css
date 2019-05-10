@@ -16,3 +16,23 @@
 .custbtn.btn:hover{
     background-color: #dadada;
 }
+
+.ujszabalyrow{
+    cursor: pointer;
+    color: lightskyblue;
+}
+
+.ujszabalyrow:hover{
+    /*background-color: #dadada;*/
+    color: deepskyblue;
+}
+
+.szabalytorles{
+    cursor: pointer;
+    color: red;
+}
+
+.szabalytorles:hover{
+    /*background-color: #dadada;*/
+    color: darkred;
+}
