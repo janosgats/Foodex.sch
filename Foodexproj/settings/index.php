@@ -25,7 +25,10 @@ if ($AktProfil->getAdminJog() != 1)
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137789203-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag()
+        {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'UA-137789203-1');
@@ -48,8 +51,8 @@ if ($AktProfil->getAdminJog() != 1)
           href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css'>
 
 
-
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <!--    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>-->
+    <script src='../node_modules/jquery/dist/jquery.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
     <script
@@ -184,57 +187,56 @@ if ($AktProfil->getAdminJog() != 1)
 
                     <p>Állítsd be, hogy milyen pontszám felett mennyi idővel a műszak kiírása után jelentkezhet rá egy tag!</p>
 
-                    <table class="table" style="background-color: white">
+                    <table class="table" name="jeldelaytable" id="jeldelaytable" style="background-color: white">
                         <thead>
-                        <tr >
+                        <tr>
                             <th scope="col">Minimum pont</th>
                             <th scope="col">Kivárás (perc)</th>
                             <th scope="col">Törlés</th>
                         </tr>
                         </thead>
-                        <tbody>
-
-                        <tr >
-                            <td>1</td>
-                            <td>Fsdf</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr >
-                            <td>
-                                <input id="pont" type="text" value="25" name="pont">
-                                <script>
-                                    $("input[name='pont']").TouchSpin({
-                                        min: 0,
-                                        max: 999,
-                                        step: 0.5,
-                                        decimals: 1,
-                                        boostat: 5,
-                                        maxboostedstep: 10
-                                    });
-                                    $("input[name='pont']").on.
-                                </script>
-                            </td>
-                            <td >
-                                <input id="perc" type="text" value="25" name="perc">
-                                <script>
-                                    $("input[name='perc']").TouchSpin({
-                                        min: 0,
-                                        max: 999,
-                                        step: 0.5,
-                                        decimals: 1,
-                                        boostat: 5,
-                                        maxboostedstep: 10
-                                    });
-                                </script>
-                            </td>
-                            <td><i class="fas fa-trash-alt fa-2x szabalytorles"></i></td>
-                        </tr>
-                        <tr class="ujszabalyrow">
-                            <td><p style="font-size: large; padding: 0;margin: 0">Új szabály hozzáadása</p></td>
-                            <td> <i class="fa fa-plus fa-2x"></i></td>
-                            <td> <i class="fa fa-plus fa-2x"></i></td>
-                        </tr>
-                        </tbody>
+                        <!--                        <tbody>-->
+                        <!---->
+                        <!--                        <tr>-->
+                        <!--                            <td>1</td>-->
+                        <!--                            <td>Fsdf</td>-->
+                        <!--                            <td>Otto</td>-->
+                        <!--                        </tr>-->
+                        <!--                        <tr>-->
+                        <!--                            <td>-->
+                        <!--                                <input id="jeldelpont" type="text" value="25" name="jeldelpont">-->
+                        <!--                                <script>-->
+                        <!--                                    $("input[name='jeldelpont']").TouchSpin({-->
+                        <!--                                        min: 0,-->
+                        <!--                                        max: 999,-->
+                        <!--                                        step: 0.5,-->
+                        <!--                                        decimals: 1,-->
+                        <!--                                        boostat: 5,-->
+                        <!--                                        maxboostedstep: 10-->
+                        <!--                                    });-->
+                        <!--                                </script>-->
+                        <!--                            </td>-->
+                        <!--                            <td>-->
+                        <!--                                <input id="jeldelperc" type="text" value="25" name="jeldelperc">-->
+                        <!--                                <script>-->
+                        <!--                                    $("input[name='jeldelperc']").TouchSpin({-->
+                        <!--                                        min: 0,-->
+                        <!--                                        max: 999,-->
+                        <!--                                        step: 0.5,-->
+                        <!--                                        decimals: 1,-->
+                        <!--                                        boostat: 5,-->
+                        <!--                                        maxboostedstep: 10-->
+                        <!--                                    });-->
+                        <!--                                </script>-->
+                        <!--                            </td>-->
+                        <!--                            <td><i class="fas fa-trash-alt fa-2x szabalytorles"></i></td>-->
+                        <!--                        </tr>-->
+                        <!--                        <tr class="ujszabalyrow">-->
+                        <!--                            <td><p style="font-size: large; padding: 0;margin: 0">Új szabály hozzáadása</p></td>-->
+                        <!--                            <td><i class="fa fa-plus fa-2x"></i></td>-->
+                        <!--                            <td><i class="fa fa-plus fa-2x"></i></td>-->
+                        <!--                        </tr>-->
+                        <!--                        </tbody>-->
                     </table>
 
                     <hr class="col-md-12">
@@ -280,6 +282,141 @@ if ($AktProfil->getAdminJog() != 1)
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
         }
+
+        function HandlePHPPageDataJelDelay(ret)
+        {
+            if (ret == "")
+            {
+                alert("#1 Hiba a jelentkezési delayek lekérésekor. Próbáld frissíteni az oldalt!");
+            }
+            else
+            {
+                var delaytimes = JSON.parse(ret);
+
+                if (typeof delaytimes['error'] === 'undefined')
+                {
+                    var thead = jQuery.parseHTML('<thead>' +
+                        '<tr >' +
+                        '<th scope="col">Minimum pont</th>' +
+                        '<th scope="col">Kivárás (perc)</th>' +
+                        '<th scope="col">Törlés</th>' +
+                        '</tr>' +
+                        '</thead>')[0];
+
+                    var tbody = jQuery.parseHTML('<tbody></tbody>')[0];
+
+                    delaytimes.forEach(function (delaytimesrow)
+                    {
+
+                        var tr = jQuery.parseHTML('<tr></tr>')[0];
+
+                        var td_minpont = jQuery.parseHTML('<td></td>')[0];
+                        var td_delay = jQuery.parseHTML('<td></td>')[0];
+                        var td_delete = jQuery.parseHTML('<td></td>')[0];
+
+
+                        var num_minpont = jQuery.parseHTML('<input type="text">')[0];
+                        num_minpont.id = 'jeldelpont' + escapeHtml(delaytimesrow['id'].toString());
+                        num_minpont.name = 'jeldelpont' + escapeHtml(delaytimesrow['id'].toString());
+                        num_minpont.value = escapeHtml(delaytimesrow['minpont'].toString());
+                        num_minpont.onclick = function ()
+                        {
+                            alert(delaytimesrow['id']);
+                        };
+
+
+                        var num_delay = jQuery.parseHTML('<input type="text">')[0];
+                        num_delay.id = 'jeldeldelay' + escapeHtml(delaytimesrow['id'].toString());
+                        num_delay.name = 'jeldeldelay' + escapeHtml(delaytimesrow['id'].toString());
+                        num_delay.value = escapeHtml((delaytimesrow['delay'] / 60).toString());
+                        num_delay.onclick = function ()
+                        {
+                            alert(delaytimesrow['id']);
+                        };
+
+                        var i_delete = jQuery.parseHTML('<i class="fas fa-trash-alt fa-2x szabalytorles"></i>')[0];
+                        i_delete.onclick = function ()
+                        {
+                            alert(delaytimesrow['id']);
+                        };
+
+
+                        td_minpont.appendChild(num_minpont);
+                        td_delay.appendChild(num_delay);
+                        td_delete.appendChild(i_delete);
+
+                        tr.appendChild(td_minpont);
+                        tr.appendChild(td_delay);
+                        tr.appendChild(td_delete);
+
+                        tbody.appendChild(tr);
+
+                        $(num_minpont).TouchSpin({
+                            min: 0,
+                            max: 99999,
+                            step: 0.1,
+                            decimals: 1,
+                            boostat: 5,
+                            maxboostedstep: 10
+                        });
+                        $(num_delay).TouchSpin({
+                            min: 0,
+                            max: 99999,
+                            step: 1,
+                            decimals: 0,
+                            boostat: 5,
+                            maxboostedstep: 10
+                        });
+                    });
+
+                    var taddnewitemrow = jQuery.parseHTML('<tr class="ujszabalyrow">' +
+                        '<td><p style="font-size: x-large; margin-left: 10px; text-decoration: underline">Új szabály hozzáadása</p></td>' +
+                        '<td> <i class="fa fa-plus fa-2x"></i></td>' +
+                        '<td> <i class="fa fa-plus fa-2x"></i></td>' +
+                        '</tr>')[0];
+                    taddnewitemrow.onclick = submitJelDelayHozzaad;
+
+                    var table = document.getElementById('jeldelaytable');
+                    table.innerHTML = '';
+
+                    table.appendChild(thead);
+                    table.appendChild(tbody);
+                    table.appendChild(taddnewitemrow);
+                }
+                else
+                {
+                    alert("#2 Hiba a jelentkezési delayek lekérésekor: " + delaytimes['error'] + " Próbáld frissíteni az oldalt!");
+                }
+
+            }
+
+        }
+
+
+        function callPHPPageJelDelay(postdata)
+        {
+            $.post('SetandGetJelDelayAJAX.php', postdata, HandlePHPPageDataJelDelay).fail(
+                function ()
+                {
+                    alert("Error at AJAX call! A Jelentkezési delayek hibásan jelenhetnek meg. Próbáld frissíteni az oldalt!");
+                });
+        }
+
+        function submitJelDelayLekeres()
+        {
+            callPHPPageJelDelay({
+                muvelet: 'lekeres',
+                ajaxuse: 1
+            });
+        }
+        function submitJelDelayHozzaad()
+        {
+            callPHPPageJelDelay({
+                muvelet: 'hozzaadas',
+                ajaxuse: 1
+            });
+        }
+
 
         function HandlePHPPageData(ret)
         {
@@ -335,27 +472,32 @@ if ($AktProfil->getAdminJog() != 1)
         });
     </script>
 
+    <script>
+        $(document).ready(function ()
+        {
+            submitJelDelayLekeres();
+        });
+    </script>
 
-
-<!--    <script>-->
-<!---->
-<!--        var PageIsDirty = false;-->
-<!---->
-<!--        window.addEventListener("beforeunload", function (e) {-->
-<!--            if(PageIsDirty)-->
-<!--            {-->
-<!--                var confirmationMessage = 'Nem mentett változtatások vannak az oldalon.'-->
-<!--                    + 'Biztosan kilép?';-->
-<!---->
-<!--                (e || window.event).returnValue = confirmationMessage; //Gecko + IE-->
-<!--                return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.-->
-<!--            }-->
-<!--            else-->
-<!--            {-->
-<!--                return;-->
-<!--            }-->
-<!--        });-->
-<!--    </script>-->
+    <!--    <script>-->
+    <!---->
+    <!--        var PageIsDirty = false;-->
+    <!---->
+    <!--        window.addEventListener("beforeunload", function (e) {-->
+    <!--            if(PageIsDirty)-->
+    <!--            {-->
+    <!--                var confirmationMessage = 'Nem mentett változtatások vannak az oldalon.'-->
+    <!--                    + 'Biztosan kilép?';-->
+    <!---->
+    <!--                (e || window.event).returnValue = confirmationMessage; //Gecko + IE-->
+    <!--                return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.-->
+    <!--            }-->
+    <!--            else-->
+    <!--            {-->
+    <!--                return;-->
+    <!--            }-->
+    <!--        });-->
+    <!--    </script>-->
 
 </body>
 </html>

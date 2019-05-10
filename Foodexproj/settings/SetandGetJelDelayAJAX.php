@@ -14,9 +14,13 @@ try
         throw new \Exception('Nincs jogosultságod módosítani a  beállításokat!');
 
     if (IsURLParamSet('muvelet'))
-        $muvelet = GetURLParam('$muvelet');//hozzaadas, torles, modositas
+        $muvelet = GetURLParam('muvelet');//hozzaadas, torles, modositas, lekeres
     else
         throw new \Exception('IsURLParamSet(\'muvelet\') is false! ');
+
+
+    if (IsURLParamSet('ajaxuse') && GetURLParam('ajaxuse') == 1)
+        error_reporting(0);//Disable displaying errors, to not to disturbe AJAX queryes processed by JSON in JS.
 
 
     $conn = Eszkozok\Eszk::initMySqliObject();
@@ -27,7 +31,11 @@ try
     {
         case 'hozzaadas':
         {
-
+            $stmt = $conn->prepare("INSERT INTO pontjeldelay (`minpont`, `delay`) VALUES (20, 60);");
+            if (!$stmt->execute())
+            {
+                throw new Exception('SQL hiba 2: Nem sikerült a beillesztés. $stmt->execute() is \'false\'');
+            }
             break;
         }
         case 'torles':
@@ -40,9 +48,11 @@ try
 
             break;
         }
+        case 'lekeres':
+            break;
     }
 
-    $stmt = $conn->prepare("SELECT * FROM pontjeldelay;");
+    $stmt = $conn->prepare("SELECT * FROM pontjeldelay ORDER BY minpont;");
 
     if ($stmt->execute())
     {
@@ -60,7 +70,12 @@ try
 }
 catch (\Exception $e)
 {
+
+    $ki = Array();
+    $ki['error'] = '9087: ' . $e->getMessage();
+
     ob_clean();
-    //Eszkozok\Eszk::dieToErrorPage('2085: ' . $e->getMessage());
-    echo '9087: ' . $e->getMessage();
+    echo json_encode($ki);
+
+    $conn->close();
 }
