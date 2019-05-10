@@ -185,7 +185,7 @@ if ($AktProfil->getAdminJog() != 1)
                 <div id="jeldelay">
                     <h2>Jelentkezés delay</h2>
 
-                    <p>Állítsd be, hogy milyen pontszám felett mennyi idővel a műszak kiírása után jelentkezhet rá egy tag!</p>
+                    <p>Állítsd be, hogy milyen pontszám felett mennyi idővel a műszak aktiválása után jelentkezhet a műszakra egy tag!</p>
 
                     <table class="table" name="jeldelaytable" id="jeldelaytable" style="background-color: white">
                         <thead>
@@ -283,11 +283,16 @@ if ($AktProfil->getAdminJog() != 1)
                 .replace(/'/g, "&#039;");
         }
 
+        var JelDelayQueryInProgress = false;
+        var JelDelayRowIDToAnimate = null;
+        var ElsoJelDelayLekeres = true;
         function HandlePHPPageDataJelDelay(ret)
         {
+            JelDelayQueryInProgress = false;
             if (ret == "")
             {
                 alert("#1 Hiba a jelentkezési delayek lekérésekor. Próbáld frissíteni az oldalt!");
+                StartShowHiba();
             }
             else
             {
@@ -295,6 +300,29 @@ if ($AktProfil->getAdminJog() != 1)
 
                 if (typeof delaytimes['error'] === 'undefined')
                 {
+                    if(delaytimes['new_inserted_row_id'] !== 'undefined' && delaytimes['new_inserted_row_id'] != null)
+                    {
+                        JelDelayRowIDToAnimate = 'jeldelrow' + escapeHtml(delaytimes['new_inserted_row_id'].toString());
+
+                        //////////Ez azért, hogy az Object()-ből Array()-t csináljon és működjön rajta a forEach().
+                        delete delaytimes['new_inserted_row_id'];
+
+console.log(delaytimes);
+                        var arr = [];
+
+                        var i = 0;
+                        for (var key in delaytimes)
+                        {
+                            if (delaytimes.hasOwnProperty(key))
+                                arr[i] = delaytimes[key];
+                            ++i;
+                        }
+
+                        delaytimes = arr;
+                        /////////////////////////////////////////////////////////////
+                    }
+    console.log(delaytimes);
+
                     var thead = jQuery.parseHTML('<thead>' +
                         '<tr >' +
                         '<th scope="col">Minimum pont</th>' +
@@ -309,6 +337,7 @@ if ($AktProfil->getAdminJog() != 1)
                     {
 
                         var tr = jQuery.parseHTML('<tr></tr>')[0];
+                        tr.id = 'jeldelrow' + escapeHtml(delaytimesrow['id'].toString());
 
                         var td_minpont = jQuery.parseHTML('<td></td>')[0];
                         var td_delay = jQuery.parseHTML('<td></td>')[0];
@@ -319,25 +348,34 @@ if ($AktProfil->getAdminJog() != 1)
                         num_minpont.id = 'jeldelpont' + escapeHtml(delaytimesrow['id'].toString());
                         num_minpont.name = 'jeldelpont' + escapeHtml(delaytimesrow['id'].toString());
                         num_minpont.value = escapeHtml(delaytimesrow['minpont'].toString());
-                        num_minpont.onclick = function ()
-                        {
-                            alert(delaytimesrow['id']);
-                        };
 
 
                         var num_delay = jQuery.parseHTML('<input type="text">')[0];
                         num_delay.id = 'jeldeldelay' + escapeHtml(delaytimesrow['id'].toString());
                         num_delay.name = 'jeldeldelay' + escapeHtml(delaytimesrow['id'].toString());
                         num_delay.value = escapeHtml((delaytimesrow['delay'] / 60).toString());
-                        num_delay.onclick = function ()
+
+
+                        function SubAktModositas()
                         {
-                            alert(delaytimesrow['id']);
-                        };
+//                            if(JelDelayQueryInProgress)
+//                                return;
+                            JelDelayRowIDToAnimate = tr.id;
+                            submitJelDelayModosit(delaytimesrow['id'], num_minpont.value, num_delay.value * 60);
+                        }
+
+                        $(num_minpont).on('touchspin.on.stopspin', SubAktModositas);
+                        $(num_delay).on('touchspin.on.stopspin', SubAktModositas);
+                        num_minpont.addEventListener('blur', SubAktModositas, false);
+                        num_delay.addEventListener('blur', SubAktModositas, false);
 
                         var i_delete = jQuery.parseHTML('<i class="fas fa-trash-alt fa-2x szabalytorles"></i>')[0];
                         i_delete.onclick = function ()
                         {
-                            alert(delaytimesrow['id']);
+//                            if(JelDelayQueryInProgress)
+//                                return;
+                            tr.style.display = "none";
+                            submitJelDelayTorol(delaytimesrow['id']);
                         };
 
 
@@ -370,22 +408,33 @@ if ($AktProfil->getAdminJog() != 1)
                     });
 
                     var taddnewitemrow = jQuery.parseHTML('<tr class="ujszabalyrow">' +
-                        '<td><p style="font-size: x-large; margin-left: 10px; text-decoration: underline">Új szabály hozzáadása</p></td>' +
+                        '<td><p style="font-size: x-large; text-decoration: underline">Új szabály hozzáadása</p></td>' +
                         '<td> <i class="fa fa-plus fa-2x"></i></td>' +
                         '<td> <i class="fa fa-plus fa-2x"></i></td>' +
                         '</tr>')[0];
                     taddnewitemrow.onclick = submitJelDelayHozzaad;
+
+                    tbody.appendChild(taddnewitemrow);
 
                     var table = document.getElementById('jeldelaytable');
                     table.innerHTML = '';
 
                     table.appendChild(thead);
                     table.appendChild(tbody);
-                    table.appendChild(taddnewitemrow);
+
+                    if (JelDelayRowIDToAnimate != null)
+                    {
+                        document.getElementById(JelDelayRowIDToAnimate).style.backgroundColor = '#50FF73';
+                    }
+
+                    if (!ElsoJelDelayLekeres)
+                        StartShowMentve();
+                    ElsoJelDelayLekeres = false;
                 }
                 else
                 {
                     alert("#2 Hiba a jelentkezési delayek lekérésekor: " + delaytimes['error'] + " Próbáld frissíteni az oldalt!");
+                    StartShowHiba();
                 }
 
             }
@@ -395,10 +444,16 @@ if ($AktProfil->getAdminJog() != 1)
 
         function callPHPPageJelDelay(postdata)
         {
+//            if(JelDelayQueryInProgress)
+//            return;
+
+            JelDelayQueryInProgress = true;
             $.post('SetandGetJelDelayAJAX.php', postdata, HandlePHPPageDataJelDelay).fail(
                 function ()
                 {
+                    JelDelayQueryInProgress = false;
                     alert("Error at AJAX call! A Jelentkezési delayek hibásan jelenhetnek meg. Próbáld frissíteni az oldalt!");
+                    StartShowHiba();
                 });
         }
 
@@ -413,6 +468,24 @@ if ($AktProfil->getAdminJog() != 1)
         {
             callPHPPageJelDelay({
                 muvelet: 'hozzaadas',
+                ajaxuse: 1
+            });
+        }
+        function submitJelDelayTorol(id)
+        {
+            callPHPPageJelDelay({
+                muvelet: 'torles',
+                id: id,
+                ajaxuse: 1
+            });
+        }
+        function submitJelDelayModosit(id, minpont, delay)
+        {
+            callPHPPageJelDelay({
+                muvelet: 'modositas',
+                id: id,
+                minpont: minpont,
+                delay: delay,
                 ajaxuse: 1
             });
         }
@@ -437,6 +510,7 @@ if ($AktProfil->getAdminJog() != 1)
                 function ()
                 {
                     alert("Error at AJAX call!");
+                    StartShowHiba();
                 });
         }
 
