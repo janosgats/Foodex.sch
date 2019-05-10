@@ -3,7 +3,6 @@
 SET NAMES utf8;
 SET time_zone = '+00:00';
 
-DROP TABLE IF EXISTS `fxaccok`;
 CREATE TABLE `fxaccok` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `internal_id` varchar(120) CHARACTER SET latin2 COLLATE latin2_hungarian_ci DEFAULT NULL COMMENT 'AuthSch internal_id',
@@ -18,7 +17,6 @@ CREATE TABLE `fxaccok` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 
-DROP TABLE IF EXISTS `fxjelentk`;
 CREATE TABLE `fxjelentk` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `jelentkezo` varchar(120) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL COMMENT 'A jelentkezo ember internal_id-je ',
@@ -33,7 +31,6 @@ CREATE TABLE `fxjelentk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `fxmuszakok`;
 CREATE TABLE `fxmuszakok` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `kiirta` varchar(120) CHARACTER SET latin2 COLLATE latin2_hungarian_ci DEFAULT NULL COMMENT 'A muszak kiirojanak internal_id-je',
@@ -49,7 +46,6 @@ CREATE TABLE `fxmuszakok` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `globalsettings`;
 CREATE TABLE `globalsettings` (
   `nev` varchar(200) COLLATE latin2_hungarian_ci NOT NULL,
   `ertek` text COLLATE latin2_hungarian_ci NOT NULL,
@@ -57,7 +53,6 @@ CREATE TABLE `globalsettings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
 
 
-DROP TABLE IF EXISTS `kompenz`;
 CREATE TABLE `kompenz` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `internal_id` varchar(120) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL,
@@ -68,7 +63,6 @@ CREATE TABLE `kompenz` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `logs`;
 CREATE TABLE `logs` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `datetime` datetime NOT NULL,
@@ -82,7 +76,6 @@ CREATE TABLE `logs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
 
 
-DROP TABLE IF EXISTS `pontjeldelay`;
 CREATE TABLE `pontjeldelay` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `minpont` float NOT NULL,
@@ -91,7 +84,6 @@ CREATE TABLE `pontjeldelay` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
 
 
-DROP TABLE IF EXISTS `profilinfo`;
 CREATE TABLE `profilinfo` (
   `int_id` varchar(120) COLLATE latin2_hungarian_ci NOT NULL,
   `kedv_vicc` text COLLATE latin2_hungarian_ci COMMENT 'Kedvenc vicc',
@@ -99,4 +91,4 @@ CREATE TABLE `profilinfo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
 
 
--- 2019-05-10 00:47:02
+-- 2019-05-10 18:51:18

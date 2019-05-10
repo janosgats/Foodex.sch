@@ -187,7 +187,7 @@ if ($AktProfil->getAdminJog() != 1)
 
                     <p>Állítsd be, hogy milyen pontszám felett mennyi idővel a műszak aktiválása után jelentkezhet a műszakra egy tag!</p>
 
-                    <table class="table" name="jeldelaytable" id="jeldelaytable" style="background-color: white">
+                    <table class="table" name="jeldelaytable" id="jeldelaytable" style="background-color: transparent; min-width: 360px">
                         <thead>
                         <tr>
                             <th scope="col">Minimum pont</th>
@@ -300,14 +300,14 @@ if ($AktProfil->getAdminJog() != 1)
 
                 if (typeof delaytimes['error'] === 'undefined')
                 {
-                    if(delaytimes['new_inserted_row_id'] !== 'undefined' && delaytimes['new_inserted_row_id'] != null)
+                    if (delaytimes['new_inserted_row_id'] !== 'undefined' && delaytimes['new_inserted_row_id'] != null)
                     {
                         JelDelayRowIDToAnimate = 'jeldelrow' + escapeHtml(delaytimes['new_inserted_row_id'].toString());
 
                         //////////Ez azért, hogy az Object()-ből Array()-t csináljon és működjön rajta a forEach().
                         delete delaytimes['new_inserted_row_id'];
 
-console.log(delaytimes);
+                        console.log(delaytimes);
                         var arr = [];
 
                         var i = 0;
@@ -321,13 +321,13 @@ console.log(delaytimes);
                         delaytimes = arr;
                         /////////////////////////////////////////////////////////////
                     }
-    console.log(delaytimes);
+                    console.log(delaytimes);
 
                     var thead = jQuery.parseHTML('<thead>' +
                         '<tr >' +
-                        '<th scope="col">Minimum pont</th>' +
-                        '<th scope="col">Kivárás (perc)</th>' +
-                        '<th scope="col">Törlés</th>' +
+                        '<th scope="col" style="text-align: center">Minimum pont</th>' +
+                        '<th scope="col" style="text-align: center">Kivárás (perc)</th>' +
+                        '<th scope="col" style="text-align: center">Törlés</th>' +
                         '</tr>' +
                         '</thead>')[0];
 
@@ -341,7 +341,7 @@ console.log(delaytimes);
 
                         var td_minpont = jQuery.parseHTML('<td></td>')[0];
                         var td_delay = jQuery.parseHTML('<td></td>')[0];
-                        var td_delete = jQuery.parseHTML('<td></td>')[0];
+                        var td_delete = jQuery.parseHTML('<td style="text-align: center"></td>')[0];
 
 
                         var num_minpont = jQuery.parseHTML('<input type="text">')[0];
@@ -368,6 +368,17 @@ console.log(delaytimes);
                         $(num_delay).on('touchspin.on.stopspin', SubAktModositas);
                         num_minpont.addEventListener('blur', SubAktModositas, false);
                         num_delay.addEventListener('blur', SubAktModositas, false);
+                        num_minpont.addEventListener("keyup", function (event)
+                        {
+                            if (event.keyCode === 13)//Enter
+                                SubAktModositas();
+                        });
+                        num_delay.addEventListener("keyup", function (event)
+                        {
+                            if (event.keyCode === 13)//Enter
+                                SubAktModositas();
+                        });
+
 
                         var i_delete = jQuery.parseHTML('<i class="fas fa-trash-alt fa-2x szabalytorles"></i>')[0];
                         i_delete.onclick = function ()
@@ -408,9 +419,9 @@ console.log(delaytimes);
                     });
 
                     var taddnewitemrow = jQuery.parseHTML('<tr class="ujszabalyrow">' +
-                        '<td><p style="font-size: x-large; text-decoration: underline">Új szabály hozzáadása</p></td>' +
-                        '<td> <i class="fa fa-plus fa-2x"></i></td>' +
-                        '<td> <i class="fa fa-plus fa-2x"></i></td>' +
+                        '<td style="text-align: center"><p style="font-size: x-large; text-decoration: underline">Új szabály hozzáadása</p></td>' +
+                        '<td style="text-align: center"> <i class="fa fa-plus fa-2x"></i></td>' +
+                        '<td style="text-align: center"> <i class="fa fa-plus fa-2x"></i></td>' +
                         '</tr>')[0];
                     taddnewitemrow.onclick = submitJelDelayHozzaad;
 
@@ -424,7 +435,8 @@ console.log(delaytimes);
 
                     if (JelDelayRowIDToAnimate != null)
                     {
-                        document.getElementById(JelDelayRowIDToAnimate).style.backgroundColor = '#50FF73';
+                        document.getElementById(JelDelayRowIDToAnimate).style.backgroundColor = '#FFFFFF77';
+                        document.getElementById(JelDelayRowIDToAnimate).firstChild.focus();
                     }
 
                     if (!ElsoJelDelayLekeres)

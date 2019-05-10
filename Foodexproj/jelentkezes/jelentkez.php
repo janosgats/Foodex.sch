@@ -35,26 +35,53 @@ function isReCaptchaValid()
     return false;
 }
 
+
+function isJelentkezesDelayTimeValid($conn, $muszakID)
+{
+    $delaysec = \Eszkozok\Eszk::GetJelDelayTimeByPontWithConn(\Eszkozok\Eszk::GetAccKompenzaltPontokWithConn($_SESSION['profilint_id'], $conn), $conn);
+
+    if (!is_numeric($delaysec) || $delaysec < 0)
+        throw new \Exception('Hiba a delaytime megállapításakor.');
+
+    $muszaktdatetimestr = \Eszkozok\Eszk::GetMuszakActivationTimeByMuszidWithConn($muszakID, $conn);
+
+    $muszaktDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $muszaktdatetimestr);
+
+    //die('AAAAAAAAAAAAA: '. $muszaktDateTime->format('Y/m/d H:i:s'));
+
+    $muszaktDateTime->add(\DateInterval::createFromDateString($delaysec . ' seconds'));
+
+    //die('BBBBBBBBBBBBBBB: '. $muszaktDateTime->format('Y/m/d H:i:s'));
+
+
+    if($muszaktDateTime < new DateTime())
+    {
+        return true;
+    }
+
+    return false;
+}
+
 function doJelentkezes()
 {
-    \Eszkozok\Eszk::ValidateLogin();
+    try
+    {
+        \Eszkozok\Eszk::ValidateLogin();
 
-    if (!IsURLParamSet('g-recaptcha-response'))
-        return;
+        $conn = \Eszkozok\Eszk::initMySqliObject();
+
+
+        if (!IsURLParamSet('g-recaptcha-response'))
+            return;
 //Ha a 'g-recaptcha-response' paraméter meg van adva, megy tovább az ellenőrzés és végrehajtás...
 
-    if (!isReCaptchaValid())
-        \Eszkozok\Eszk::dieToErrorPage('3211: A ReCaptcha megoldása (már) nem érvényes!');
+        if (!isReCaptchaValid())
+            \Eszkozok\Eszk::dieToErrorPage('3211: A ReCaptcha megoldása (már) nem érvényes!');
 
-    if (IsURLParamSet('muszid') && IsURLParamSet('muszmuv'))
-    {
-        $muszakID = GetURLParam('muszid');
-        try
+        if (IsURLParamSet('muszid') && IsURLParamSet('muszmuv'))
         {
-            $conn = \Eszkozok\Eszk::initMySqliObject();
+            $muszakID = GetURLParam('muszid');
 
-            if (!$conn)
-                throw new \Exception('SQL hiba: $conn is \'false\'');
 
 
 
@@ -71,12 +98,15 @@ function doJelentkezes()
             if ($result->num_rows != 1)
                 throw new \Exception('Műszak aktívság ellenőrzés hiba: $result->num_rows != 1');
 
-            if($result->fetch_assoc()['aktiv'] != 1)
+            if ($result->fetch_assoc()['aktiv'] != 1)
                 throw new \Exception('Műszakfelvétel és leadás NEM lehetséges, mert a műszak NEM aktív!');
 
 
             if (GetURLParam('muszmuv') == 'felvesz')
             {
+
+                if (!isJelentkezesDelayTimeValid($conn, $muszakID))//Csak a felvételt tiltjuk meg, a leadást nem. Hisz lehet, hogy a várakozási idők menet közben módosulnak.
+                    throw new \Exception('Még nem járt le a pontszámodból adódó kivárási időd, így nem jelentkezhetsz a műszakra!');
 
                 $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
                 if (!$stmt)
@@ -115,7 +145,7 @@ function doJelentkezes()
             }
             else if (GetURLParam('muszmuv') == 'lead')
             {
-                $leadottMuszak = \Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszakID, true,$conn);
+                $leadottMuszak = \Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszakID, true, $conn);
 
 
                 $eredetivarolista = \Eszkozok\Eszk::getJelentkezokListajaWithConn($muszakID, $conn);
@@ -152,13 +182,13 @@ function doJelentkezes()
                     throw new \Exception('Az SQL parancs végrehajtása nem sikerült: Leadás');
 
             }
+            $conn->close();
         }
-        catch
-        (\Exception $e)
-        {
-            \Eszkozok\Eszk::dieToErrorPage('3217: ' . $e->getMessage());
-        }
-        $conn->close();
+    }
+    catch
+    (\Exception $e)
+    {
+        \Eszkozok\Eszk::dieToErrorPage('3217: ' . $e->getMessage());
     }
 
 }
