@@ -80,7 +80,7 @@ namespace Eszkozok
                     {
                         $row = $result->fetch_array();
 
-                        if($_SESSION['session_token'] == $row['session_token'])
+                        if ($_SESSION['session_token'] == $row['session_token'])
                         {
                             $conn->close();
                             return true;
@@ -568,11 +568,11 @@ namespace Eszkozok
 
             if ($conn->connect_errno)
             {
-                self::dieToErrorPage('3219: ' . $conn->connect_error);
+                throw new \Exception('3219: ' . $conn->connect_error);
             }
 
             if (!$conn)
-                self::dieToErrorPage('3218: ' . '$conn is false!');
+                throw new \Exception('3218: ' . '$conn is false!');
             return $conn;
         }
 
@@ -764,7 +764,7 @@ namespace Eszkozok
                             $ProfilNev = $row['nev'];
                         if (isset($row['adminjog']))
                             $AdminJog = $row['adminjog'];
-                        if (isset($row['adminjog']))
+                        if (isset($row['email']))
                             $email = $row['email'];
 
                     }
@@ -1590,6 +1590,59 @@ namespace Eszkozok
         {
 
             return $GLOBALS['pontozasi_idoszak_kezdete'] <= $datebe && $datebe <= $GLOBALS['pontozasi_idoszak_vege'];
+        }
+
+
+        public static function GetJelDelayTimeByPont($pontszam)
+        {
+            $conn = self::initMySqliObject();
+            $ki = self::GetJelDelayTimeByPontWithConn($pontszam, $conn);
+
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
+        }
+
+        public static function GetJelDelayTimeByPontWithConn($pontszam, \mysqli $conn)
+        {
+            $stmt = $conn->prepare("SELECT delay FROM pontjeldelay WHERE minpont <= ? ORDER BY minpont DESC LIMIT 1;");
+            $stmt->bind_param("d", $pontszam);
+
+            if ($stmt->execute())
+            {
+                $result = $stmt->get_result();
+                if ($result->num_rows == 0)
+                    return 0;//no delay time
+                else
+                {
+                    return $result->fetch_assoc()['delay'];
+                }
+            }
+            else
+                throw new \Exception('34525: Cannot calculate delay time for score. $stmt->execute() is false');
+        }
+
+        public static function GetMuszakActivationTimeByMuszidWithConn($muszid, \mysqli $conn)
+        {
+            $stmt = $conn->prepare("SELECT `datetime` FROM `logs` WHERE `message` = 'MUSZAKTIVAL' AND `context` = CONCAT('[',  ?, ']' );");
+            $stmt->bind_param("i", $muszid);
+
+            if ($stmt->execute())
+            {
+                $result = $stmt->get_result();
+                if ($result->num_rows == 1)
+                {
+                    return $result->fetch_assoc()['datetime'];
+                }
+            }
+
+            throw new \Exception('34525: Hiba  a műszak aktiválási idejének megállapításakor. $stmt->execute() is false');
         }
 
     }

@@ -19,20 +19,21 @@
 
 .ujszabalyrow{
     cursor: pointer;
-    color: lightskyblue;
+    color: white;
 }
 
 .ujszabalyrow:hover{
     /*background-color: #dadada;*/
-    color: deepskyblue;
+    color: lightskyblue;
 }
 
 .szabalytorles{
     cursor: pointer;
-    color: red;
+    color: darkred;
 }
 
 .szabalytorles:hover{
     /*background-color: #dadada;*/
-    color: darkred;
+    color: #AA0000;
+    font-size: xx-large;
 }
