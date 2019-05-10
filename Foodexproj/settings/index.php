@@ -40,7 +40,7 @@ if ($AktProfil->getAdminJog() != 1)
 
     <link rel="stylesheet" href="main.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -48,11 +48,16 @@ if ($AktProfil->getAdminJog() != 1)
           href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css'>
 
 
+
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
     <script
         src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js'></script>
+    <script
+
+    <script src='../3rdparty/jquery.bootstrap-touchspin.js'></script>
+
 </head>
 
 <body style="background-color: #de520d">
@@ -112,10 +117,11 @@ if ($AktProfil->getAdminJog() != 1)
 
             <div class="col-md-3">
                 <div class="list-group" id="sidebar">
-                    <a href="#pontozasiidoszak" class="list-group-item">Pontozási Időszak</a>
-                    <a href="#timezone" class="list-group-item">Time Zone Defaults</a>
-                    <a href="#adatbazis" class="list-group-item">SAndor Gyermeke</a>
-                    <a href="#devlogin" class="list-group-item">Fejlesztői Bejelentkezés</a>
+                    <a href="#pontozasiidoszak" class="list-group-item">Pontozási időszak</a>
+                    <a href="#timezone" class="list-group-item">Time zone defaults</a>
+                    <a href="#jeldelay" class="list-group-item">Jelentkezés delay</a>
+                    <a href="#adatbazis" class="list-group-item">SAndor gyermeke</a>
+                    <a href="#devlogin" class="list-group-item">Fejlesztői bejelentkezés</a>
                 </div>
             </div>
 
@@ -173,6 +179,66 @@ if ($AktProfil->getAdminJog() != 1)
                     </p>
                     <hr class="col-md-12">
                 </div>
+                <div id="jeldelay">
+                    <h2>Jelentkezés delay</h2>
+
+                    <p>Állítsd be, hogy milyen pontszám felett mennyi idővel a műszak kiírása után jelentkezhet rá egy tag!</p>
+
+                    <table class="table" style="background-color: white">
+                        <thead>
+                        <tr >
+                            <th scope="col">Minimum pont</th>
+                            <th scope="col">Kivárás (perc)</th>
+                            <th scope="col">Törlés</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr >
+                            <td>1</td>
+                            <td>Fsdf</td>
+                            <td>Otto</td>
+                        </tr>
+                        <tr >
+                            <td>
+                                <input id="pont" type="text" value="25" name="pont">
+                                <script>
+                                    $("input[name='pont']").TouchSpin({
+                                        min: 0,
+                                        max: 999,
+                                        step: 0.5,
+                                        decimals: 1,
+                                        boostat: 5,
+                                        maxboostedstep: 10
+                                    });
+                                    $("input[name='pont']").on.
+                                </script>
+                            </td>
+                            <td >
+                                <input id="perc" type="text" value="25" name="perc">
+                                <script>
+                                    $("input[name='perc']").TouchSpin({
+                                        min: 0,
+                                        max: 999,
+                                        step: 0.5,
+                                        decimals: 1,
+                                        boostat: 5,
+                                        maxboostedstep: 10
+                                    });
+                                </script>
+                            </td>
+                            <td><i class="fas fa-trash-alt fa-2x szabalytorles"></i></td>
+                        </tr>
+                        <tr class="ujszabalyrow">
+                            <td><p style="font-size: large; padding: 0;margin: 0">Új szabály hozzáadása</p></td>
+                            <td> <i class="fa fa-plus fa-2x"></i></td>
+                            <td> <i class="fa fa-plus fa-2x"></i></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <hr class="col-md-12">
+                </div>
                 <div id="adatbazis">
                     <h2>Adatbázis</h2>
 
@@ -218,7 +284,9 @@ if ($AktProfil->getAdminJog() != 1)
         function HandlePHPPageData(ret)
         {
             if (ret == "siker4567")
+            {
                 StartShowMentve();
+            }
             else
             {
                 alert(escapeHtml(ret));
@@ -266,6 +334,28 @@ if ($AktProfil->getAdminJog() != 1)
             bindDatetimePicker("pontidoveg");
         });
     </script>
+
+
+
+<!--    <script>-->
+<!---->
+<!--        var PageIsDirty = false;-->
+<!---->
+<!--        window.addEventListener("beforeunload", function (e) {-->
+<!--            if(PageIsDirty)-->
+<!--            {-->
+<!--                var confirmationMessage = 'Nem mentett változtatások vannak az oldalon.'-->
+<!--                    + 'Biztosan kilép?';-->
+<!---->
+<!--                (e || window.event).returnValue = confirmationMessage; //Gecko + IE-->
+<!--                return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.-->
+<!--            }-->
+<!--            else-->
+<!--            {-->
+<!--                return;-->
+<!--            }-->
+<!--        });-->
+<!--    </script>-->
 
 </body>
 </html>
