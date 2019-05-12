@@ -16,6 +16,8 @@ $logger = new \MonologHelper('jelentkezes/index.php');
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 
+\Eszkozok\Eszk::GetGlobalSettings(['mas_muszakra_ennyivel_elotte_jelentkezhet']);
+
 doJelentkezes();
 
 
@@ -249,9 +251,10 @@ if ($IsSecurimageCorrect)
             {
                 $conn = Eszkozok\Eszk::initMySqliObject();
 
-                $UserJelentkezesDelayInSeconds = \Eszkozok\Eszk::GetJelDelayTimeByPontWithConn(\Eszkozok\Eszk::GetAccKompenzaltPontokWithConn($_SESSION['profilint_id'], $conn), $conn);
+                $AktUserJelentkezesDelayInSeconds = \Eszkozok\Eszk::GetJelDelayTimeByPontWithConn(\Eszkozok\Eszk::GetAccKompenzaltPontokWithConn($_SESSION['profilint_id'], $conn), $conn);
+                $DoesAktUserHaveAktivJelentkezes = DoesAktUserHaveAktivJelentkezes($conn);
 
-                ///`fxmuszakok` (`kiirta`, `musznev`, `idokezd`, `idoveg`, `letszam`, `pont`)
+
 
                 if ($OsszesMuszakMutat)
                     $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context` ORDER BY `idokezd` DESC;");
@@ -276,15 +279,28 @@ if ($IsSecurimageCorrect)
                             //////////////////////////////////////////////////////////////
 
 
-                            $AktMuszakFelvetelKezdete_AktUserSzamara = null;
+                            $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan = null;
                             if (isset($row['aktivalas_ideje']))
                             {
-                                $AktMuszakFelvetelKezdete_AktUserSzamara = \DateTime::createFromFormat('Y-m-d H:i:s', $row['aktivalas_ideje']);
-                                $AktMuszakFelvetelKezdete_AktUserSzamara->add(\DateInterval::createFromDateString($UserJelentkezesDelayInSeconds . ' seconds'));
+                                $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan = \DateTime::createFromFormat('Y-m-d H:i:s', $row['aktivalas_ideje']);
+                                $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan->add(\DateInterval::createFromDateString($AktUserJelentkezesDelayInSeconds . ' seconds'));
                             }
                             else
                             {
-                                $AktMuszakFelvetelKezdete_AktUserSzamara = DateTime::createFromFormat('Y-m-d H:i:s', '1998-10-01 00:00:00');
+                                $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan = DateTime::createFromFormat('Y-m-d H:i:s', '1998-10-01 00:00:00');
+                            }
+
+                            //////////////////////////////////////////////////////////////
+
+                            $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan = null;
+
+                            if($DoesAktUserHaveAktivJelentkezes)
+                            {
+                                //TODO
+                            }
+                            else
+                            {
+                                $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan = DateTime::createFromFormat('Y-m-d H:i:s', '1998-10-01 00:00:00');
                             }
 
                             //////////////////////////////////////////////////////////////
@@ -360,16 +376,16 @@ if ($IsSecurimageCorrect)
                             <tr class="tablaSor">
                                 <td class="tablaCella oszlopNev oszlopModalMegnyito">
                                     <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1) ? 'red' : 'white'; ?>')"
-                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',   '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara->format('Y-m-d H:i:s'); ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',   '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan->format('Y-m-d H:i:s'); ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
                                 </td>
 
                                 <td class="tablaCella oszlopPont oszlopModalMegnyito">
                                     <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1) ? 'red' : 'white'; ?>')"
-                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',   '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara->format('Y-m-d H:i:s'); ?>', '<?php echo $felvetel; ?>');"><?php echo $idostringbuff; ?></p>
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',   '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan->format('Y-m-d H:i:s'); ?>', '<?php echo $felvetel; ?>');"><?php echo $idostringbuff; ?></p>
                                 </td>
                                 <td class="tablaCella oszlopLetszam oszlopModalMegnyito">
                                     <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1) ? 'red' : 'white'; ?>')"
-                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara->format('Y-m-d H:i:s'); ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['letszam']); ?>
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan->format('Y-m-d H:i:s'); ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['letszam']); ?>
                                         fő</p>
                                 </td>
                                 <td class="tablaCella oszlopVarolista">
