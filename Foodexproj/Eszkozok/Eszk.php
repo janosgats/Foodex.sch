@@ -796,32 +796,32 @@ namespace Eszkozok
         public static function initNewAuthSchProvider()
         {
             $redirectUri = "https://feverkill.com/bme/foodex/login.php";
-            $clientId = "***REMOVED***";
-            $clientSecret = "***REMOVED***";
+            $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_Feverkill;
+            $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_Feverkill;
 
             if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme.hu') !== false)
             {
                 $redirectUri = "https://foodex.sch.bme.hu/login.php";
-                $clientId = "***REMOVED***";
-                $clientSecret = "***REMOVED***";
+                $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_FoodexSCH;
+                $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_FoodexSCH;
             }
             else if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
             {
                 $redirectUri = "http://gjani.sch.bme.hu/foodex/login.php";
-                $clientId = "***REMOVED***";
-                $clientSecret = "***REMOVED***";
+                $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_GjaniSCH;
+                $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_GjaniSCH;
             }
             else if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)//Contains()
             {
                 $redirectUri = "http://gjani.ddns.net/foodex/login.php";
-                $clientId = "***REMOVED***";
-                $clientSecret = "***REMOVED***";
+                $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_GjaniDDNS;
+                $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_GjaniDDNS;
             }
             else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
             {
                 $redirectUri = "https://feverkill.com/bme/foodex/login.php";
-                $clientId = "***REMOVED***";
-                $clientSecret = "***REMOVED***";
+                $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_Feverkill;
+                $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_Feverkill;
             }
 
 
