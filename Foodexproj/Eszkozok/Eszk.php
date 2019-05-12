@@ -20,6 +20,7 @@ namespace Eszkozok
     require_once __DIR__ . '/AuthSchProvider.php';
 
     require_once __DIR__ . '/MonologHelper.php';
+    require_once __DIR__ . '/GlobalSettings.php';
 
 
     class Eszk
@@ -1312,7 +1313,6 @@ namespace Eszkozok
         {
             try
             {
-                self::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
 
                 $MuszakLetszamok = array();//Cacheli az muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
 
@@ -1393,7 +1393,7 @@ namespace Eszkozok
                             //`idoveg` < NOW() : Csak arra a műszakra kap pontot, ami már lezárult
 
 
-                            $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
+                            $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
                             if (!$stmt)
                                 throw new \Exception('SQL hiba: $stmt 3 is \'false\'' . ' :' . $conn->error);
 
@@ -1407,7 +1407,7 @@ namespace Eszkozok
                                 }
                                 if (count($vittMosogatasok) > 0)
                                 {
-                                    $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
+                                    $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
                                     if (!$stmt)
                                         throw new \Exception('SQL hiba: $stmt 4 is \'false\'' . ' :' . $conn->error);
 
@@ -1446,9 +1446,8 @@ namespace Eszkozok
 
         public static function GetAccKompenzaltPontokWithConn($int_id, $conn)
         {
-            self::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
 
-            $stmt = $conn->prepare("SELECT `pont` FROM `kompenz` WHERE ( `ido` BETWEEN '" . $GLOBALS['pontozasi_idoszak_kezdete'] . "' AND '" . $GLOBALS['pontozasi_idoszak_vege'] . "' ) AND `internal_id` = ?;");
+            $stmt = $conn->prepare("SELECT `pont` FROM `kompenz` WHERE ( `ido` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ) AND `internal_id` = ?;");
             if (!$stmt)
                 throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
@@ -1471,122 +1470,122 @@ namespace Eszkozok
                 throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
         }
 
-        public static function GetGlobalSettings(array $options)
-        {
-            $conn = self::initMySqliObject();
-            $ki = self::GetGlobalSettingsWithConn($options, $conn);
-
-            try
-            {
-                $conn->close();
-            }
-            catch (\Exception $e)
-            {
-            }
-
-            return $ki;
-        }
-
-        public static function GetGlobalSettingsWithConn(array $options, \mysqli $conn)
-        {
-            try
-            {
-                $ki = [];
-
-                if (!$conn)
-                    throw new \Exception('SQL hiba: $conn is \'false\'');
-
-
-                $EscapedOptions = [];
-
-                foreach ($options as $opt)
-                {
-                    array_push($EscapedOptions, "'" . $conn->real_escape_string($opt) . "'");
-                }
-
-
-                $stmt = $conn->prepare("SELECT * FROM `globalsettings` WHERE `nev` IN (" . implode(',', $EscapedOptions) . ");");
-
-                if (!$stmt)
-                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
-
-                if ($stmt->execute())
-                {
-                    $result = $stmt->get_result();
-
-                    while ($row = $result->fetch_assoc())
-                    {
-                        $ki[$row["nev"]] = $row["ertek"];
-                        $GLOBALS[$row["nev"]] = $row["ertek"];
-                    }
-                }
-                else
-                {
-                    throw new \Exception('$stmt->execute() is false');
-                }
-
-                return $ki;
-            }
-            catch (\Exception $e)
-            {
-                self::dieToErrorPage('8692: ' . $e->getMessage());
-            }
-        }
-
-        public static function SetGlobalSettings($optionNev, $ertek)
-        {
-            $conn = self::initMySqliObject();
-            $ki = self::SetGlobalSettingsWithConn($optionNev, $ertek, $conn);
-
-            try
-            {
-                $conn->close();
-            }
-            catch (\Exception $e)
-            {
-            }
-
-            return $ki;
-        }
-
-        public static function SetGlobalSettingsWithConn($optionNev, $ertek, \mysqli $conn)
-        {
-            try
-            {
-                if (!$conn)
-                    throw new \Exception('SQL hiba: $conn is \'false\'');
-
-                $stmt = $conn->prepare("UPDATE `globalsettings` SET `ertek`=? WHERE `nev`=?");
-
-                $stmt->bind_param('ss', $ertek, $optionNev);
-
-                if ($stmt->execute())
-                {
-                    $GLOBALS[$optionNev] = $ertek;
-                    return;
-
-//                    if($stmt->affected_rows == 1)
-//                        return;
-//                    else
-//                        throw new \Exception('$stmt->affected_rows != 1. (It is '. $stmt->affected_rows . '.');
-                }
-                else
-                {
-                    throw new \Exception('$stmt->execute() is false');
-                }
-
-                throw new \Exception('FUNCTION END unexpectedly REACHED');
-            }
-            catch (\Exception $e)
-            {
-                self::dieToErrorPage('8692: ' . $e->getMessage());
-            }
-        }
+//        public static function GetGlobalSettings(array $options)
+//        {
+//            $conn = self::initMySqliObject();
+//            $ki = self::GetGlobalSettingsWithConn($options, $conn);
+//
+//            try
+//            {
+//                $conn->close();
+//            }
+//            catch (\Exception $e)
+//            {
+//            }
+//
+//            return $ki;
+//        }
+//
+//        public static function GetGlobalSettingsWithConn(array $options, \mysqli $conn)
+//        {
+//            try
+//            {
+//                $ki = [];
+//
+//                if (!$conn)
+//                    throw new \Exception('SQL hiba: $conn is \'false\'');
+//
+//
+//                $EscapedOptions = [];
+//
+//                foreach ($options as $opt)
+//                {
+//                    array_push($EscapedOptions, "'" . $conn->real_escape_string($opt) . "'");
+//                }
+//
+//
+//                $stmt = $conn->prepare("SELECT * FROM `globalsettings` WHERE `nev` IN (" . implode(',', $EscapedOptions) . ");");
+//
+//                if (!$stmt)
+//                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+//
+//                if ($stmt->execute())
+//                {
+//                    $result = $stmt->get_result();
+//
+//                    while ($row = $result->fetch_assoc())
+//                    {
+//                        $ki[$row["nev"]] = $row["ertek"];
+//                        $GLOBALS[$row["nev"]] = $row["ertek"];
+//                    }
+//                }
+//                else
+//                {
+//                    throw new \Exception('$stmt->execute() is false');
+//                }
+//
+//                return $ki;
+//            }
+//            catch (\Exception $e)
+//            {
+//                self::dieToErrorPage('8692: ' . $e->getMessage());
+//            }
+//        }
+//
+//        public static function SetGlobalSettings($optionNev, $ertek)
+//        {
+//            $conn = self::initMySqliObject();
+//            $ki = self::SetGlobalSettingsWithConn($optionNev, $ertek, $conn);
+//
+//            try
+//            {
+//                $conn->close();
+//            }
+//            catch (\Exception $e)
+//            {
+//            }
+//
+//            return $ki;
+//        }
+//
+//        public static function SetGlobalSettingsWithConn($optionNev, $ertek, \mysqli $conn)
+//        {
+//            try
+//            {
+//                if (!$conn)
+//                    throw new \Exception('SQL hiba: $conn is \'false\'');
+//
+//                $stmt = $conn->prepare("UPDATE `globalsettings` SET `ertek`=? WHERE `nev`=?");
+//
+//                $stmt->bind_param('ss', $ertek, $optionNev);
+//
+//                if ($stmt->execute())
+//                {
+//                    $GLOBALS[$optionNev] = $ertek;
+//                    return;
+//
+////                    if($stmt->affected_rows == 1)
+////                        return;
+////                    else
+////                        throw new \Exception('$stmt->affected_rows != 1. (It is '. $stmt->affected_rows . '.');
+//                }
+//                else
+//                {
+//                    throw new \Exception('$stmt->execute() is false');
+//                }
+//
+//                throw new \Exception('FUNCTION END unexpectedly REACHED');
+//            }
+//            catch (\Exception $e)
+//            {
+//                self::dieToErrorPage('8692: ' . $e->getMessage());
+//            }
+//        }
 
         public static function IsDatestringInPontozasiIdoszak($datebe)
         {
 
-            return $GLOBALS['pontozasi_idoszak_kezdete'] <= $datebe && $datebe <= $GLOBALS['pontozasi_idoszak_vege'];
+            return \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') <= $datebe && $datebe <= \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege');
         }
 
 

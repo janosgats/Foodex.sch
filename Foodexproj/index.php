@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-set_include_path(getcwd());
-include_once 'Eszkozok/Eszk.php';
+include_once __DIR__ . '/Eszkozok/Eszk.php';
+include_once __DIR__ . '/Eszkozok/GlobalSettings.php';
 
 if (\Eszkozok\Eszk::IsLoginValid())
 {

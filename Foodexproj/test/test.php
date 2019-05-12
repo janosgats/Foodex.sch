@@ -1,5 +1,5 @@
 <?php
 
-include __DIR__ . '/../Eszkozok/Eszk.php';
+include __DIR__ . '/../Eszkozok/GlobalSettings.php';
 
-echo \Eszkozok\Eszk::GetJelDelayTimeByPont($_REQUEST['pont']);
+echo \Eszkozok\GlobalSettings::GetSetting("nev2s");

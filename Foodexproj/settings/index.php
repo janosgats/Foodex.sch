@@ -6,6 +6,7 @@ require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../profil/Profil.php';
 require_once __DIR__ . '/../Eszkozok/ProfilInfo.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
+require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
 
 \Eszkozok\Eszk::ValidateLogin();
 
@@ -133,13 +134,6 @@ if ($AktProfil->getAdminJog() != 1)
 
                 <div id="pontozasiidoszak">
 
-
-                    <?php
-
-                    \Eszkozok\Eszk::GetGlobalSettings(['pontozasi_idoszak_kezdete', 'pontozasi_idoszak_vege', 'mas_muszakra_ennyivel_elotte_jelentkezhet']);
-
-                    ?>
-
                     <h2>Pontozási Időszak</h2>
 
                     <p>A pontok, műszakok és kompenzációk kezelése erre az időszakra vonatkozóan történik.</p>
@@ -151,7 +145,7 @@ if ($AktProfil->getAdminJog() != 1)
 
                             <div class="input-group date">
                                 <input type="text" class="form-control" id="pontidokezd" name="pontidokezd"
-                                       placeholder="YYYY/MM/DD HH:mm" value="<?php echo $GLOBALS["pontozasi_idoszak_kezdete"]; ?>"/>
+                                       placeholder="YYYY/MM/DD HH:mm" value="<?php echo \Eszkozok\GlobalSettings::GetSetting("pontozasi_idoszak_kezdete"); ?>"/>
                         <span class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </span>
@@ -161,7 +155,7 @@ if ($AktProfil->getAdminJog() != 1)
                             <label for="pontidoveg">Vég</label>
 
                             <div class="input-group date">
-                                <input class="form-control" id="pontidoveg" name="pontidoveg" placeholder="YYYY/MM/DD HH:mm" value="<?php echo $GLOBALS["pontozasi_idoszak_vege"]; ?>"
+                                <input class="form-control" id="pontidoveg" name="pontidoveg" placeholder="YYYY/MM/DD HH:mm" value="<?php echo \Eszkozok\GlobalSettings::GetSetting("pontozasi_idoszak_vege"); ?>"
                                        type="text"/>
 
                                 <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
@@ -188,7 +182,7 @@ if ($AktProfil->getAdminJog() != 1)
                     <h2>Második Műszak</h2>
 
                     <p>Állítsd be, hogy legfeljebb mennyi idővel a műszak kezdete előtt vehet fel új műszakot egy tag, ha aktuálisan már van egy aktív jelentkezése!</p>
-                    <input id="masmuszjelido" type="text" value="<?php echo ($GLOBALS["mas_muszakra_ennyivel_elotte_jelentkezhet"] / (60*60)); ?>" name="masmuszjelido">
+                    <input id="masmuszjelido" type="text" value="<?php echo (\Eszkozok\GlobalSettings::GetSetting("mas_muszakra_ennyivel_elotte_jelentkezhet") / (60*60)); ?>" name="masmuszjelido">
                     <script>
                         $("input[name='masmuszjelido']").TouchSpin({
                             min: 0,

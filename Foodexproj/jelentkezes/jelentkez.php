@@ -92,7 +92,7 @@ function isMasodikMuszakJelentkezesiIdoValid(mysqli $conn, $muszakID) : bool
 
         $muszakKezdetDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $muszak->idokezd);
 
-        $muszakKezdetDateTime->sub(\DateInterval::createFromDateString($GLOBALS['mas_muszakra_ennyivel_elotte_jelentkezhet'] . ' seconds'));
+        $muszakKezdetDateTime->sub(\DateInterval::createFromDateString(\Eszkozok\GlobalSettings::GetSetting('mas_muszakra_ennyivel_elotte_jelentkezhet') . ' seconds'));
 
         if($muszakKezdetDateTime < new DateTime())
         {
@@ -149,7 +149,7 @@ function doJelentkezes()
 
 
                 if (!isMasodikMuszakJelentkezesiIdoValid($conn, $muszakID))//Csak a felvétel ágába tesszük, a leadásba nem. Így nem kell foglalkozni az aktuális művelet irányával.
-                    throw new \Exception('Van már egy aktív jelentkezésed, így újabb műszakokra csak azok kezdete előtt ' . ($GLOBALS["mas_muszakra_ennyivel_elotte_jelentkezhet"] / (60*60)) . ' órával jelentkezhetsz!');
+                    throw new \Exception('Van már egy aktív jelentkezésed, így újabb műszakokra csak azok kezdete előtt ' . (\Eszkozok\GlobalSettings::GetSetting("mas_muszakra_ennyivel_elotte_jelentkezhet") / (60*60)) . ' órával jelentkezhetsz!');
 
                 $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
                 if (!$stmt)
