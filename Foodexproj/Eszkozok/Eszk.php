@@ -1558,9 +1558,6 @@ namespace Eszkozok
 
                 $stmt = $conn->prepare("UPDATE `globalsettings` SET `ertek`=? WHERE `nev`=?");
 
-                if (!$stmt)
-                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
-
                 $stmt->bind_param('ss', $ertek, $optionNev);
 
                 if ($stmt->execute())

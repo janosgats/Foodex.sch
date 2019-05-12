@@ -72,6 +72,24 @@ try
 
             break;
         }
+        case 'masmuszjelido':
+        {
+
+            if (IsURLParamSet('ido'))
+                $ido = GetURLParam('ido');
+            else
+                throw new \Exception('Nincs megadva az ido!');
+
+            if (!(is_numeric($ido) || $ido < 0 ))
+                throw new \Exception('Az idő nem megfelelő!');
+
+            \Eszkozok\Eszk::SetGlobalSettingsWithConn('mas_muszakra_ennyivel_elotte_jelentkezhet', $ido, $conn);
+
+            $conn->close();
+            QuitHost('siker4567');
+
+            break;
+        }
     }
 
 

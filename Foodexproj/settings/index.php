@@ -122,6 +122,7 @@ if ($AktProfil->getAdminJog() != 1)
                 <div class="list-group" id="sidebar">
                     <a href="#pontozasiidoszak" class="list-group-item">Pontozási időszak</a>
                     <a href="#timezone" class="list-group-item">Time zone defaults</a>
+                    <a href="#timezone" class="list-group-item">Második műszak</a>
                     <a href="#jeldelay" class="list-group-item">Jelentkezés delay</a>
                     <a href="#adatbazis" class="list-group-item">SAndor gyermeke</a>
                     <a href="#devlogin" class="list-group-item">Fejlesztői bejelentkezés</a>
@@ -135,7 +136,7 @@ if ($AktProfil->getAdminJog() != 1)
 
                     <?php
 
-                    \Eszkozok\Eszk::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
+                    \Eszkozok\Eszk::GetGlobalSettings(['pontozasi_idoszak_kezdete', 'pontozasi_idoszak_vege', 'mas_muszakra_ennyivel_elotte_jelentkezhet']);
 
                     ?>
 
@@ -169,7 +170,7 @@ if ($AktProfil->getAdminJog() != 1)
                     </div>
 
 
-                    <button class="btn custbtn" contenteditable="false" onclick="submitPontIdoszak('pontidoszak')">Időszak Módosítása</button>
+                    <button class="btn custbtn" contenteditable="false" onclick="submitPontIdoszak()">Időszak Módosítása</button>
 
 
                     <hr class="col-md-12">
@@ -182,8 +183,29 @@ if ($AktProfil->getAdminJog() != 1)
                     </p>
                     <hr class="col-md-12">
                 </div>
+
+                <div id="masodikmuszak">
+                    <h2>Második Műszak</h2>
+
+                    <p>Állítsd be, hogy legfeljebb mennyi idővel a műszak kezdete előtt vehet fel új műszakot egy tag, ha aktuálisan már van egy aktív jelentkezése!</p>
+                    <input id="masmuszjelido" type="text" value="<?php echo ($GLOBALS["mas_muszakra_ennyivel_elotte_jelentkezhet"] / (60*60)); ?>" name="masmuszjelido">
+                    <script>
+                        $("input[name='masmuszjelido']").TouchSpin({
+                            min: 0,
+                            max: 999,
+                            step: 0.5,
+                            decimals: 1,
+                            boostat: 5,
+                            maxboostedstep: 10,
+                            postfix: 'óra'
+                        });
+                        $("input[name='masmuszjelido']").on('change', function(){submitMasMuszJelIdo();});
+                    </script>
+                    <hr class="col-md-12">
+                </div>
+
                 <div id="jeldelay">
-                    <h2>Jelentkezés delay</h2>
+                    <h2>Jelentkezés Delay</h2>
 
                     <p>Állítsd be, hogy milyen pontszám felett mennyi idővel a műszak aktiválása után jelentkezhet a műszakra egy tag!</p>
 
@@ -526,12 +548,19 @@ if ($AktProfil->getAdminJog() != 1)
                 });
         }
 
-        function submitPontIdoszak(beallID)
+        function submitPontIdoszak()
         {
             callPHPPage({
-                beallID: beallID,
+                beallID: 'pontidoszak',
                 pontidokezd: document.getElementById("pontidokezd").value,
                 pontidoveg: document.getElementById("pontidoveg").value
+            });
+        }
+        function submitMasMuszJelIdo()
+        {
+            callPHPPage({
+                beallID: 'masmuszjelido',
+                ido: (document.getElementById("masmuszjelido").value*60*60)
             });
         }
 

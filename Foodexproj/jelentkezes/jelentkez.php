@@ -62,6 +62,45 @@ function isJelentkezesDelayTimeValid($conn, $muszakID)
     return false;
 }
 
+function DoesAktUserHaveAktivJelentkezes(mysqli $conn) : bool
+{
+    $stmt = $conn->prepare("SELECT `status`  FROM `fxjelentk` JOIN `fxmuszakok` ON `fxjelentk`.`muszid` = `fxmuszakok`.`ID` WHERE `fxjelentk`.`jelentkezo` = ? AND `fxmuszakok`.`idoveg` >= NOW() AND `fxjelentk`.`status` = 1;");
+
+    $stmt->bind_param('s', $_SESSION['profilint_id']);
+
+    if($stmt->execute())
+    {
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 0)
+            return false;//Nincs aktív jelentkezés
+        else
+            return true;
+    }
+    else
+    {
+        throw new Exception('Error: $stmt->execute() is false in ' . __FUNCTION__);
+    }
+}
+
+function isMasodikMuszakJelentkezesiIdoValid(mysqli $conn, $muszakID) : bool
+{
+    if(!DoesAktUserHaveAktivJelentkezes($conn))
+        return true;//Nincs aktív jelentkezés => a jelentkezes ideje ebből a szempontból valid
+
+        $muszak = \Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszakID, true, $conn);
+
+        $muszakKezdetDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $muszak->idokezd);
+
+        $muszakKezdetDateTime->sub(\DateInterval::createFromDateString($GLOBALS['mas_muszakra_ennyivel_elotte_jelentkezhet'] . ' seconds'));
+
+        if($muszakKezdetDateTime < new DateTime())
+        {
+            return true;
+        }
+        return false;
+}
+
 function doJelentkezes()
 {
     try
@@ -107,6 +146,10 @@ function doJelentkezes()
 
                 if (!isJelentkezesDelayTimeValid($conn, $muszakID))//Csak a felvételt tiltjuk meg, a leadást nem. Hisz lehet, hogy a várakozási idők menet közben módosulnak.
                     throw new \Exception('Még nem járt le a pontszámodból adódó kivárási időd, így nem jelentkezhetsz a műszakra!');
+
+
+                if (!isMasodikMuszakJelentkezesiIdoValid($conn, $muszakID))//Csak a felvétel ágába tesszük, a leadásba nem. Így nem kell foglalkozni az aktuális művelet irányával.
+                    throw new \Exception('Van már egy aktív jelentkezésed, így újabb műszakokra csak azok kezdete előtt ' . ($GLOBALS["mas_muszakra_ennyivel_elotte_jelentkezhet"] / (60*60)) . ' órával jelentkezhetsz!');
 
                 $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE `jelentkezo` = ? AND `muszid` = ? AND `status` = 1;");
                 if (!$stmt)
