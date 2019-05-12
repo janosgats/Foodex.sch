@@ -24,7 +24,7 @@ namespace Eszkozok
 
                     while ($row = $result->fetch_assoc())
                     {
-                        $settings[$row["nev"]] = $row["ertek"];
+                        self::$settings[$row["nev"]] = $row["ertek"];
                     }
                 }
                 else
@@ -60,9 +60,8 @@ namespace Eszkozok
             try
             {
                 $conn = Eszk::initMySqliObject();
-                $stmt = $conn->prepare("INSERT INTO `globalsettings` (`nev`,`ertek`) VALUES (?,?) ON DUPLICATE KEY UPDATE `nev`=VALUES(`nev`)+VALUES(`ertek`);");
 
-
+                $stmt = $conn->prepare("INSERT INTO `globalsettings` (`nev`,`ertek`) VALUES (?,?) ON DUPLICATE KEY UPDATE `nev`=VALUES(`nev`), `ertek`=VALUES(`ertek`);");
                 $stmt->bind_param('ss', $name, $value);
 
                 if ($stmt->execute())

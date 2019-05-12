@@ -262,8 +262,6 @@ else
                 <?php
                 try
                 {
-                    \Eszkozok\Eszk::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
-
                     $conn = \Eszkozok\Eszk::initMySqliObject();
                     $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `internal_id` = ? ORDER BY `ido` DESC;");
                     if (!$stmt)

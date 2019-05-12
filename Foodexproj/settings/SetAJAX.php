@@ -2,6 +2,7 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/AJAXhost.php';
 
@@ -56,16 +57,21 @@ try
 
             if (IsURLParamSet('pontidokezd'))
                 $pontidokezd = GetURLParam('pontidokezd');
+            else
+                throw new \Exception('Nincs megadva a pontidokezd!');
+
             if (IsURLParamSet('pontidoveg'))
                 $pontidoveg = GetURLParam('pontidoveg');
+            else
+                throw new \Exception('Nincs megadva a pontidoveg!');
 
             if (!verifyDate($pontidokezd))
                 throw new \Exception('A kezdési idő nem megfelelő.');
             if (!verifyDate($pontidoveg))
                 throw new \Exception('A vég idő nem megfelelő.');
 
-            \Eszkozok\Eszk::SetGlobalSettingsWithConn('pontozasi_idoszak_kezdete', $pontidokezd, $conn);
-            \Eszkozok\Eszk::SetGlobalSettingsWithConn('pontozasi_idoszak_vege', $pontidoveg, $conn);
+            Eszkozok\GlobalSettings::SetSetting('pontozasi_idoszak_kezdete', $pontidokezd);
+            Eszkozok\GlobalSettings::SetSetting('pontozasi_idoszak_vege', $pontidoveg);
 
             $conn->close();
             QuitHost('siker4567');
@@ -83,7 +89,7 @@ try
             if (!(is_numeric($ido) || $ido < 0 ))
                 throw new \Exception('Az idő nem megfelelő!');
 
-            \Eszkozok\Eszk::SetGlobalSettingsWithConn('mas_muszakra_ennyivel_elotte_jelentkezhet', $ido, $conn);
+            Eszkozok\GlobalSettings::SetSetting('mas_muszakra_ennyivel_elotte_jelentkezhet', $ido);
 
             $conn->close();
             QuitHost('siker4567');

@@ -16,7 +16,6 @@ $logger = new \MonologHelper('jelentkezes/index.php');
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 
-\Eszkozok\Eszk::GetGlobalSettings(['mas_muszakra_ennyivel_elotte_jelentkezhet']);
 
 doJelentkezes();
 

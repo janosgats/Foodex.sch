@@ -26,8 +26,6 @@ elseif (!IsURLParamSet('int_id'))
 $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'));
 
 
-\Eszkozok\Eszk::GetGlobalSettings(["pontozasi_idoszak_kezdete", "pontozasi_idoszak_vege"]);
-
 
 $mosfoglalt = false;
 
