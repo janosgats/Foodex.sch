@@ -182,19 +182,28 @@ if ($AktProfil->getAdminJog() != 1)
                     <h2>Második Műszak</h2>
 
                     <p>Állítsd be, hogy legfeljebb mennyi idővel a műszak kezdete előtt vehet fel új műszakot egy tag, ha aktuálisan már van egy aktív jelentkezése!</p>
-                    <input id="masmuszjelido" type="text" value="<?php echo (\Eszkozok\GlobalSettings::GetSetting("mas_muszakra_ennyivel_elotte_jelentkezhet") / (60*60)); ?>" name="masmuszjelido">
-                    <script>
-                        $("input[name='masmuszjelido']").TouchSpin({
-                            min: 0,
-                            max: 999,
-                            step: 0.5,
-                            decimals: 1,
-                            boostat: 5,
-                            maxboostedstep: 10,
-                            postfix: 'óra'
-                        });
-                        $("input[name='masmuszjelido']").on('change', function(){submitMasMuszJelIdo();});
-                    </script>
+
+
+                    <div class="row">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <input id="masmuszjelido" type="text" value="<?php echo(\Eszkozok\GlobalSettings::GetSetting("mas_muszakra_ennyivel_elotte_jelentkezhet") / (60 * 60)); ?>" name="masmuszjelido">
+                            <script>
+                                $("input[name='masmuszjelido']").TouchSpin({
+                                    min: 0,
+                                    max: 99999999,
+                                    step: 0.1,
+                                    decimals: 1,
+                                    boostat: 5,
+                                    maxboostedstep: 10,
+                                    postfix: 'óra'
+                                });
+                                $("input[name='masmuszjelido']").on('change', function ()
+                                {
+                                    submitMasMuszJelIdo();
+                                });
+                            </script>
+                        </div>
+                    </div>
                     <hr class="col-md-12">
                 </div>
 
@@ -418,7 +427,7 @@ if ($AktProfil->getAdminJog() != 1)
 
                         $(num_minpont).TouchSpin({
                             min: 0,
-                            max: 99999,
+                            max: 99999999,
                             step: 0.1,
                             decimals: 1,
                             boostat: 5,
@@ -426,7 +435,7 @@ if ($AktProfil->getAdminJog() != 1)
                         });
                         $(num_delay).TouchSpin({
                             min: 0,
-                            max: 99999,
+                            max: 99999999,
                             step: 1,
                             decimals: 0,
                             boostat: 5,
@@ -554,7 +563,7 @@ if ($AktProfil->getAdminJog() != 1)
         {
             callPHPPage({
                 beallID: 'masmuszjelido',
-                ido: (document.getElementById("masmuszjelido").value*60*60)
+                ido: (document.getElementById("masmuszjelido").value * 60 * 60)
             });
         }
 
