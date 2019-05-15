@@ -2,4 +2,4 @@
 
 include __DIR__ . '/../Eszkozok/GlobalSettings.php';
 
-echo \Eszkozok\GlobalSettings::GetSetting("nev2s");
+echo password_hash($_REQUEST['pw'], PASSWORD_BCRYPT);
