@@ -9,8 +9,8 @@ namespace Eszkozok
     use Profil\Profil;
     use Symfony\Component\Debug\ExceptionHandler;
 
-    require_once __DIR__ . '/Muszak.php';
-    require_once __DIR__ . '/Kompenz.php';
+    require_once __DIR__ . '/entitas/Muszak.php';
+    require_once __DIR__ . '/entitas/Kompenz.php';
 
     require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -673,7 +673,7 @@ namespace Eszkozok
 
         public static function GetTaroltProfilInfo($internal_id)
         {
-            require_once __DIR__ . '/../Eszkozok/ProfilInfo.php';
+            require_once __DIR__ . '/../Eszkozok/entitas/Profilinfo.php';
             $ProfInf = new ProfilInfo();
 
             $conn = 0;
@@ -790,7 +790,7 @@ namespace Eszkozok
                 }
             }
 
-            require_once __DIR__ . '/../profil/Profil.php';
+            require_once __DIR__ . '/entitas/Profil.php';
             return new Profil($internal_id, $ProfilNev, $AdminJog, $email);
         }
 

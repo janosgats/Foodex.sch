@@ -4,7 +4,7 @@ session_start();
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
 require_once '../Eszkozok/MonologHelper.php';
-require_once '../Eszkozok/Muszak.php';
+require_once '../Eszkozok/entitas/Muszak.php';
 
 
 require_once __DIR__ . '/../Eszkozok/param.php';

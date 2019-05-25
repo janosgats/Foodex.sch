@@ -3,7 +3,7 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
-include_once '../Eszkozok/Muszak.php';
+include_once '../Eszkozok/entitas/Muszak.php';
 include_once '../Eszkozok/param.php';
 require_once '../Eszkozok/navbar.php';
 

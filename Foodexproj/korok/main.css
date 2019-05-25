@@ -1,0 +1,144 @@
+/* W3.CSS 4.00 Mar 2017 by Jan Egil and Borge Refsnes */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.pipa {
+    margin: 0;
+    padding: 0;
+    color: greenyellow;
+    font-size: 25px
+}
+
+.kereszt {
+    margin: 0;
+    padding: 0;
+    color: red;
+    font-size: 25px
+}
+
+.tablaDiv {
+    width: 100%;
+    margin-top: 5%;
+}
+
+.tabla {
+    color: white;
+    margin: auto;
+    border: 1px solid white;
+    text-align: center;
+
+    width: 80%;
+
+    font-size: 18px;
+}
+
+div.example {
+    background-color: yellow;
+    padding: 20px;
+}
+
+@media screen and (max-width: 800px) {
+    .tabla {
+        width: 95%;
+    }
+}
+
+.tablaSor {
+    border: 1px solid white;
+}
+
+.tablaCella {
+    border: 1px solid #c4c4c4;
+    text-shadow: 1px 1px #333333;
+    vertical-align: middle;
+}
+
+.tablaCella p {
+    margin: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: medium;
+}
+
+.tablaElso {
+}
+
+.oszlopNev {
+    font-weight: bold;
+    /*text-shadow: 1px 1px orangered;*/
+}
+.oszlopNev p {
+    display: inline-block;
+}
+
+.tablaElsosor {
+    font-weight: bold;
+    /*text-shadow: 1px 1px orangered;*/
+}
+
+.oszlopPont {
+
+}
+
+.oszlopLetszam {
+
+}
+
+.oszlopKiirta {
+
+}
+
+.oszlopKiirta p {
+    display: inline;
+    margin: 0;
+}
+
+.oszlopMosogatas {
+
+}
+
+.oszlopMosogatas p {
+    cursor: pointer;
+}
+
+.oszlopMosogatas p:hover {
+    color: yellow;
+}
+.varolistaElso {
+    color: gold;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.settingsgear {
+    color: rgb(71, 162, 243);
+    cursor: pointer;
+}
+
+.settingsgear:hover {
+    color: rgb(51, 122, 200);
+}
