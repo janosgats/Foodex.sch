@@ -673,7 +673,7 @@ namespace Eszkozok
 
         public static function GetTaroltProfilInfo($internal_id)
         {
-            require_once __DIR__ . '/../Eszkozok/entitas/Profilinfo.php';
+            require_once __DIR__ . '/entitas/ProfilInfo.php';
             $ProfInf = new ProfilInfo();
 
             $conn = 0;
