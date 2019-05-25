@@ -16,7 +16,6 @@ $logger = new \MonologHelper('jelentkezes/index.php');
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 
-
 doJelentkezes();
 
 
@@ -254,11 +253,10 @@ if ($IsSecurimageCorrect)
                 $DoesAktUserHaveAktivJelentkezes = DoesAktUserHaveAktivJelentkezes($conn);
 
 
-
                 if ($OsszesMuszakMutat)
-                    $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context` ORDER BY `idokezd` DESC;");
+                    $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `korok`.`nev` as KorNev, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `korok` ON `korok`.`id` = `fxmuszakok`.`korid` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context` ORDER BY `idokezd` DESC;");
                 else
-                    $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context`  WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
+                    $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `korok`.`nev` as KorNev, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `korok` ON `korok`.`id` = `fxmuszakok`.`korid` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context`  WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
 
                 if (!$stmt)
                     throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
@@ -290,9 +288,8 @@ if ($IsSecurimageCorrect)
                             }
 
 
-
                             $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan = null;
-                            if($DoesAktUserHaveAktivJelentkezes)
+                            if ($DoesAktUserHaveAktivJelentkezes)
                             {
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan = \DateTime::createFromFormat('Y-m-d H:i:s', $row['idokezd']);
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan->sub(\DateInterval::createFromDateString(\Eszkozok\GlobalSettings::GetSetting('mas_muszakra_ennyivel_elotte_jelentkezhet') . ' seconds'));
@@ -304,7 +301,7 @@ if ($IsSecurimageCorrect)
 
                             $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges = null;
                             $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas = null;
-                            if($AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan > $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan)
+                            if ($AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan > $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan)
                             {
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges = $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan;
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas = 'pontszam';
@@ -388,16 +385,16 @@ if ($IsSecurimageCorrect)
                             <tr class="tablaSor">
                                 <td class="tablaCella oszlopNev oszlopModalMegnyito">
                                     <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1) ? 'red' : 'white'; ?>')"
-                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',   '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges->format('Y-m-d H:i:s'); ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas; ?>',  '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['KorNev']) ?: 'Nincs megadva'; ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',   '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges->format('Y-m-d H:i:s'); ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas; ?>',  '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['musznev']); ?></p>
                                 </td>
 
                                 <td class="tablaCella oszlopPont oszlopModalMegnyito">
                                     <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1) ? 'red' : 'white'; ?>')"
-                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',   '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges->format('Y-m-d H:i:s'); ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas; ?>', '<?php echo $felvetel; ?>');"><?php echo $idostringbuff; ?></p>
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>',  '<?php echo htmlspecialchars($row['KorNev']) ?: 'Nincs megadva'; ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',   '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges->format('Y-m-d H:i:s'); ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas; ?>', '<?php echo $felvetel; ?>');"><?php echo $idostringbuff; ?></p>
                                 </td>
                                 <td class="tablaCella oszlopLetszam oszlopModalMegnyito">
                                     <p style="<?php if ($row['aktiv'] != 1) echo 'color:red'; ?>" onmouseover="setRowColor(this, 'yellow')" onmouseout="setRowColor(this, '<?php echo ($row['aktiv'] != 1) ? 'red' : 'white'; ?>')"
-                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges->format('Y-m-d H:i:s'); ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['letszam']); ?>
+                                       onclick="ShowModal('<?php echo $row['ID']; ?>','<?php echo htmlspecialchars($kiiroProfil->getNev()); ?>', '<?php echo $row['musznev']; ?>', '<?php echo $idokezd->format('Y-m-d     H:i'); ?>', '<?php echo $idoveg->format('Y-m-d     H:i'); ?>', '<?php echo htmlspecialchars($row['letszam']); ?>', '<?php echo htmlspecialchars($row['pont']); ?>','<?php echo htmlspecialchars($row['mospont']); ?>',  '<?php echo htmlspecialchars($row['KorNev']) ?: 'Nincs megadva'; ?>', '<?php echo htmlspecialchars($row['megj']); ?>', '<?php echo $jelentkezesAktiv; ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges->format('Y-m-d H:i:s'); ?>',  '<?php echo $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas; ?>', '<?php echo $felvetel; ?>');"><?php echo htmlspecialchars($row['letszam']); ?>
                                         fő</p>
                                 </td>
                                 <td class="tablaCella oszlopVarolista">
@@ -549,6 +546,7 @@ if (!$IsSecurimageCorrect)
 
             <p id="modalmospont">Pont mosogatásért: </p>
 
+            <p id="modalertekelokornev">Értékelő kör: </p>
             <p id="modalmegj">Wukker intelmei: </p>
 
         </div>
@@ -601,7 +599,7 @@ if (!$IsSecurimageCorrect)
     {
         var dhours = Math.floor((d1.valueOf() - d2.valueOf()) / (3600 * 1000));
         var dmin = Math.floor((d1.valueOf() - d2.valueOf() - dhours * 3600 * 1000) / (60 * 1000));
-        var dsec = Math.floor((d1.valueOf() - d2.valueOf() - dhours * 3600 * 1000 - dmin * 60 * 1000)/(1000));
+        var dsec = Math.floor((d1.valueOf() - d2.valueOf() - dhours * 3600 * 1000 - dmin * 60 * 1000) / (1000));
 
         return dhours + ':' + dmin + ':' + dsec;
     }
@@ -610,7 +608,7 @@ if (!$IsSecurimageCorrect)
 
     function JelntKezdeteVisszaszamolo(JelentkKezdeteDate, id)
     {
-        if(RunningVisszaszamlaloID != id)
+        if (RunningVisszaszamlaloID != id)
             return;//Ha már másik modalnyitás számlálója fut, akkor megszakítja ezt a visszaszámlálást
 
         if (new Date() > JelentkKezdeteDate)
@@ -628,7 +626,7 @@ if (!$IsSecurimageCorrect)
         }
     }
 
-    function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, megj, jelaktiv, jelentk_kezdete, jelentk_visszaszaml_indok, felvetel)
+    function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, kornev, megj, jelaktiv, jelentk_kezdete, jelentk_visszaszaml_indok, felvetel)
     {
         document.getElementById('modalheadertext').innerHTML = musznev + ' Jelentkezés';
         document.getElementById('modalkiirta').innerHTML = 'Kiírta: ' + kiirta;
@@ -637,6 +635,7 @@ if (!$IsSecurimageCorrect)
         document.getElementById('modalletszam').innerHTML = 'Maximális létszám: ' + letszam;
         document.getElementById('modalpont').innerHTML = 'Közösségi pont: ' + pont;
         document.getElementById('modalmospont').innerHTML = 'Pont mosogatásért: ' + mospont;
+        document.getElementById('modalertekelokornev').innerHTML = 'Értékelő kör: ' + kornev;
         document.getElementById('modalmegj').innerHTML = 'Wukker intelmei: ' + megj;
         document.getElementById('modalmuszakid').value = id;
 
@@ -667,12 +666,13 @@ if (!$IsSecurimageCorrect)
             }
             else
             {
-                if(jelentk_visszaszaml_indok == 'pontszam')
+                if (jelentk_visszaszaml_indok == 'pontszam')
                 {
                     document.getElementById('visszaszamlalo_indok_header').innerHTML = "A pontszámodból adódóan ennyi idő múlva jelentkezhetsz:";
                 }
                 else
-                { document.getElementById('visszaszamlalo_indok_header').innerHTML = "Jelenleg van más aktív jelentkezésed, így ide csak <?php echo (\Eszkozok\GlobalSettings::GetSetting('mas_muszakra_ennyivel_elotte_jelentkezhet') / (60*60)); ?> órával a műszak előtt jelentkezhetsz.";
+                {
+                    document.getElementById('visszaszamlalo_indok_header').innerHTML = "Jelenleg van más aktív jelentkezésed, így ide csak <?php echo (\Eszkozok\GlobalSettings::GetSetting('mas_muszakra_ennyivel_elotte_jelentkezhet') / (60*60)); ?> órával a műszak előtt jelentkezhetsz.";
 
                 }
 
