@@ -3,7 +3,7 @@ session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
-require_once __DIR__ . '/Profil.php';
+require_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
 \Eszkozok\Eszk::ValidateLogin();

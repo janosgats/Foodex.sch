@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE)
 }
 
 require_once __DIR__ . '/Eszk.php';
-require_once __DIR__ . '/../profil/Profil.php';
+require_once __DIR__ . '/entitas/Profil.php';
 
 class NavBar
 {
@@ -42,7 +42,7 @@ class NavBar
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li<?php self::act('jelentkezes', $ActMenu); ?>><a href="<?php echo $rootURL; ?>jelentkezes">Jelentkezés műszakra <span class="sr-only">(current)</span></a></li>
+                        <li<?php self::act('jelentkezes', $ActMenu); ?>><a href="<?php echo $rootURL; ?>jelentkezes">Jelentkezés<span class="sr-only">(current)</span></a></li>
                         <li<?php self::act('mosjelentk', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
                         <li<?php self::act('pontok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok">Pontok</a></li>
                         <?php
@@ -50,6 +50,7 @@ class NavBar
                         {
                             ?>
                             <li<?php self::act('ujmuszak', $ActMenu); ?>><a href="<?php echo $rootURL; ?>ujmuszak">Új műszak</a></li>
+                            <li<?php self::act('korok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>korok">Körök</a></li>
                             <li<?php self::act('statisztikak', $ActMenu); ?>><a href="<?php echo $rootURL; ?>statisztikak">Statisztikák</a></li>
                             <li<?php self::act('settings', $ActMenu); ?>><a href="<?php echo $rootURL; ?>settings">Beállítások</a></li>
                             <?php

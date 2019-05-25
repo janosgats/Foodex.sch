@@ -5,7 +5,7 @@ require_once __DIR__ . '/../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 require_once __DIR__ . '/../Eszkozok/MonologHelper.php';
-include_once __DIR__ . '/../profil/Profil.php';
+include_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../3rdparty/securimage/securimage.php';
 include_once 'jelentkez.php';
 

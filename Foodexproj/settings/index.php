@@ -3,8 +3,8 @@ session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
-require_once __DIR__ . '/../profil/Profil.php';
-require_once __DIR__ . '/../Eszkozok/ProfilInfo.php';
+require_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
+require_once __DIR__ . '/../Eszkozok/entitas/Profilinfo.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
 
