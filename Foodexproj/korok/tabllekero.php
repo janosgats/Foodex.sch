@@ -11,9 +11,6 @@ require_once __DIR__ . '/../Eszkozok/Eszk.php';
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
-if ($AktProfil->getAdminJog() != 1)
-    Eszkozok\Eszk::RedirectUnderRoot('');
-
 ob_start();
 $conn;
 try
@@ -23,7 +20,7 @@ try
 $keresett = '';
 
 if (isset($_REQUEST['keresett']) && $_REQUEST['keresett'] != '')
-    $keresett = GetURLParam('keresett');
+    $keresett = $_REQUEST['keresett'];
 
 $conn = \Eszkozok\Eszk::initMySqliObject();
 $stmt;

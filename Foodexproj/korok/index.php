@@ -43,7 +43,7 @@ if ($AktProfil->getAdminJog() != 1)
             crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body style="background-color: #de520d">
 
 <div class="container">
 
@@ -86,17 +86,19 @@ if ($AktProfil->getAdminJog() != 1)
     function HandlePHPPageData(ret)
     {
         var out = '<thead><tr><th>Név</th> ' /* . '<th>Lakcím</th><th>Születési dátum</th></tr></thead>' */;
-        out += '<tr><td><a href="../editkor">+ Új kör felvétele</a></td></tr>';
+        out += '<tr><td><a href="editkor">+ Új kör felvétele</a></td></tr>';
         var fullres = JSON.parse(ret);
 
 
         fullres.forEach(function (row)
         {
+
             out += '<tr>';
-            out += '<td>' + '<a href="../editkor?szerk=1&korid=' + row['id'] + '">' + escapeHtml(row['nev']) + '</a>'+ '</td>';
+            out += '<td>' + '<a href="editkor?szerk=1&korid=' + row['id'] + '"><div style="width: 100%">' + escapeHtml(row['nev']) + '</div></a>'+ '</td>';
             //out += '<td>' + escapeHtml(row['lakcim']) + '</td>';
             //out += '<td>' + escapeHtml(row['szuldat']) + '</td>';
             out += '</tr>';
+
         });
 
         tsorokdiv.innerHTML = out;
