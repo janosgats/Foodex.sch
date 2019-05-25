@@ -288,7 +288,7 @@ namespace Eszkozok
             return $ki;
         }
 
-        public static function GetTaroltMuszakAdatWithConn($muszakid, $statpageerr, $conn)
+        public static function GetTaroltMuszakAdatWithConn($muszakid, $statpageerr, \mysqli $conn)
         {
             try
             {
@@ -320,6 +320,7 @@ namespace Eszkozok
                         $ki->letszam = $row['letszam'];
                         $ki->pont = $row['pont'];
                         $ki->mospont = $row['mospont'];
+                        $ki->korID = $row['korID'];
                         $ki->megj = $row['megj'];
 
                         return $ki;

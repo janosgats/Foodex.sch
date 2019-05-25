@@ -22,7 +22,26 @@ if ($muszidbuff == '')
     Eszkozok\Eszk::dieToErrorPage('19985: muszid URL param is empty!');
 
 
-$SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
+$SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true);
+
+$Korok = array();
+
+{
+    $conn = Eszkozok\Eszk::initMySqliObject();
+
+    if (!$conn)
+        \Eszkozok\Eszk::dieToErrorPage('34254: $conn is false!');
+
+    $stmt = $conn->prepare("SELECT * FROM korok ORDER BY nev ASC;");
+    if ($stmt->execute())
+    {
+        $res = $stmt->get_result();
+        while ($row = $res->fetch_assoc())
+            $Korok[] = $row;
+    }
+    else
+        \Eszkozok\Eszk::dieToErrorPage('34254: $stmt->execute() is false!');
+}
 
 
 ?>
@@ -35,7 +54,10 @@ $SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137789203-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag()
+        {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'UA-137789203-1');
@@ -124,6 +146,23 @@ $SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
             </div>
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
+                    <label for="korid">Értékelő kör</label>
+                    <select id="korid" name="korid" class="form-control">
+                        <option <?php if ($SzerkMuszak->korID == null) echo ' selected="selected" '; ?> value="NINCS">Nincs</option>
+
+                        <?php
+                        foreach ($Korok as $kor)
+                        {
+                            ?>
+
+                            <option <?php if ($SzerkMuszak->korID == $kor['id']) echo ' selected="selected" '; ?> value="<?= $kor['id']; ?>"><?= htmlentities($kor['nev']); ?></option>
+
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group col-md-6 col-sm-12">
                     <label for="megj">Megjegyzés</label>
                     <input id="megj" name="megj" type="text" placeholder="pl. Börgör"
                            value="<?php echo $SzerkMuszak->megj; ?>" class="form-control">
@@ -210,6 +249,7 @@ $SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true)
             letszam: document.getElementById("letszam").value,
             pont: document.getElementById("pont").value,
             mospont: document.getElementById("mospont").value,
+            korid: document.getElementById("korid").value,
             megj: document.getElementById("megj").value,
             muszid: <?php echo $SzerkMuszak->ID; ?>
         });
