@@ -55,16 +55,16 @@ namespace Eszkozok
             {
 
                 if (!isset($_SESSION['profilint_id']))
-                    throw new Exception();
+                    throw new \Exception();
 
                 if (!isset($_SESSION['session_token']))
-                    throw new Exception();
+                    throw new \Exception();
 
 
                 $conn = self::initMySqliObject();
 
                 if (!$conn)
-                    throw new Exception();
+                    throw new \Exception();
 
                 $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
                 if (!$stmt)
