@@ -1,10 +1,17 @@
 <?php
+session_start();
 
-require_once __DIR__ . '/../Eszkozok/Eszk.php';
-require_once __DIR__ . '/../Eszkozok/param.php';
-require_once __DIR__ . '/../Eszkozok/navbar.php';
-require_once __DIR__ . '/../entitas/Szemely.php';
+require_once __DIR__ . '/../../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../../Eszkozok/param.php';
+require_once __DIR__ . '/../../Eszkozok/navbar.php';
+require_once __DIR__ . '/../../Eszkozok/entitas/Kor.php';
 
+\Eszkozok\Eszk::ValidateLogin();
+
+$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
+
+if ($AktProfil->getAdminJog() != 1)
+    Eszkozok\Eszk::RedirectUnderRoot('');
 
 $Hibauzenet = '';
 $HibasBemenet = false;
@@ -114,7 +121,7 @@ if (IsURLParamSet('felvetel') || IsURLParamSet('mentes') || IsURLParamSet('torle
                             {
                                 try
                                 {
-                                    if(!IsURLParamSet('szemid') || !is_numeric($id = GetURLParam('szemid')) || $id < 0)
+                                    if(!IsURLParamSet('korid') || !is_numeric($id = GetURLParam('korid')) || $id < 0)
                                         throw new Exception('3213: Sikertelen szerkesztés. Hibás $id');
 
                                     $conn = \Eszkozok\Eszk::initMySqliObject();
@@ -164,9 +171,9 @@ if (IsURLParamSet('felvetel') || IsURLParamSet('mentes') || IsURLParamSet('torle
     {
         try
         {
-            if (IsURLParamSet('szemid'))
+            if (IsURLParamSet('korid'))
             {
-                $id = GetURLParam('szemid');
+                $id = GetURLParam('korid');
 
                 if (is_numeric($id) && $id >= 0)
                 {
@@ -209,11 +216,11 @@ if (!$HibasBemenet)
 
     if (IsURLParamSet('szerk') && GetURLParam('szerk') == 1)
     {
-        if (IsURLParamSet('szemid'))
+        if (IsURLParamSet('korid'))
         {
-            $szemid = GetURLParam('szemid');
+            $korid = GetURLParam('korid');
 
-            $SzerkesztendoSzem = \Eszkozok\Eszk::GetTaroltSzemelyAdat($szemid);
+            $SzerkesztendoSzem = \Eszkozok\Eszk::GetTaroltSzemelyAdat($korid);
 
             if ($SzerkesztendoSzem != null)
                 $SzemSzerkesztes = true;
@@ -229,8 +236,8 @@ else
     $SzerkesztendoSzem->lakcim = '';
     $SzerkesztendoSzem->szuldat = '';
 
-    if (IsURLParamSet('szemid'))
-        $SzerkesztendoSzem->id = GetURLParam('szemid');
+    if (IsURLParamSet('korid'))
+        $SzerkesztendoSzem->id = GetURLParam('korid');
     if (IsURLParamSet('nev'))
         $SzerkesztendoSzem->nev = GetURLParam('nev');
     if (IsURLParamSet('lakcim'))
@@ -303,7 +310,7 @@ $MezokFeltoltendoek = $HibasBemenet || $SzemSzerkesztes;
             if ($MezokFeltoltendoek)
             {
                 ?>
-                <input name="szemid" value="<?php echo htmlspecialchars($SzerkesztendoSzem->id); ?>" hidden>
+                <input name="korid" value="<?php echo htmlspecialchars($SzerkesztendoSzem->id); ?>" hidden>
                 <?php
             }
             ?>

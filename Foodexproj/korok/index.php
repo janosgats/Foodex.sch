@@ -2,8 +2,17 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
-require_once __DIR__ . '/../entitas/Szemely.php';
+require_once __DIR__ . '/../Eszkozok/entitas/Kor.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
+
+\Eszkozok\Eszk::ValidateLogin();
+
+$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
+
+if ($AktProfil->getAdminJog() != 1)
+    Eszkozok\Eszk::RedirectUnderRoot('');
+
+
 
 ?>
 
@@ -12,9 +21,9 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 
 <head>
     <meta charset="UTF-8">
-    <title>Személyek</title>
+    <title>Fx - Körök</title>
 
-    <link rel="icon" href="../res/kepek/kilometerora_64.png">
+    <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,7 +35,6 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="../res/stylesheet/default.css">
     <link rel="stylesheet" href="main.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -40,20 +48,20 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 <div class="container">
 
     <?php
-    NavBar::echonavbar('szemelyek');
+    NavBar::echonavbar($AktProfil,'korok');
     ?>
 
     <div class="panel panel-default">
         <div class="panel-heading">
 
             <label for="exampleInputEmail1">Keresés:</label>
-            <input onkeyup="keresesFgv(this);" type="text" class="form-control" id="kereses" aria-describedby="emailHelp" placeholder="Példa Béla">
-            <small id="emailHelp" class="form-text text-muted">Kezdje gépelni a személy nevét!</small>
+            <input onkeyup="keresesFgv(this);" type="text" class="form-control" id="kereses" aria-describedby="emailHelp" placeholder="Csicska vödör">
+            <small id="emailHelp" class="form-text text-muted">Kezdd gépelni a kör nevét!</small>
 
         </div>
 
         <div class="panel-body">
-            <table class="table table-hover" id="szemelyektable">
+            <table class="table table-hover" id="koroktable">
 
             </table>
         </div>
@@ -74,20 +82,20 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             .replace(/'/g, "&#039;");
     }
 
-    var tsorokdiv = document.getElementById('szemelyektable');
+    var tsorokdiv = document.getElementById('koroktable');
     function HandlePHPPageData(ret)
     {
-        var out = '<thead><tr><th>Név</th> <th>Lakcím</th><th>Születési dátum</th></tr></thead>';
-        out += '<tr><td><a href="../editszemely">+ Új személy felvétele</a></td></tr>';
+        var out = '<thead><tr><th>Név</th> ' /* . '<th>Lakcím</th><th>Születési dátum</th></tr></thead>' */;
+        out += '<tr><td><a href="../editkor">+ Új kör felvétele</a></td></tr>';
         var fullres = JSON.parse(ret);
 
 
         fullres.forEach(function (row)
         {
             out += '<tr>';
-            out += '<td>' + '<a href="../editszemely?szerk=1&szemid=' + row['id'] + '">' + escapeHtml(row['nev']) + '</a>'+ '</td>';
-            out += '<td>' + escapeHtml(row['lakcim']) + '</td>';
-            out += '<td>' + escapeHtml(row['szuldat']) + '</td>';
+            out += '<td>' + '<a href="../editkor?szerk=1&korid=' + row['id'] + '">' + escapeHtml(row['nev']) + '</a>'+ '</td>';
+            //out += '<td>' + escapeHtml(row['lakcim']) + '</td>';
+            //out += '<td>' + escapeHtml(row['szuldat']) + '</td>';
             out += '</tr>';
         });
 
