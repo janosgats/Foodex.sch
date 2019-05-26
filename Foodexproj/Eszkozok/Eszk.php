@@ -11,6 +11,7 @@ namespace Eszkozok
 
     require_once __DIR__ . '/entitas/Muszak.php';
     require_once __DIR__ . '/entitas/Kompenz.php';
+    require_once __DIR__ . '/entitas/Kor.php';
 
     require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -55,16 +56,16 @@ namespace Eszkozok
             {
 
                 if (!isset($_SESSION['profilint_id']))
-                    throw new Exception();
+                    throw new \Exception();
 
                 if (!isset($_SESSION['session_token']))
-                    throw new Exception();
+                    throw new \Exception();
 
 
                 $conn = self::initMySqliObject();
 
                 if (!$conn)
-                    throw new Exception();
+                    throw new \Exception();
 
                 $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
                 if (!$stmt)
@@ -287,7 +288,7 @@ namespace Eszkozok
             return $ki;
         }
 
-        public static function GetTaroltMuszakAdatWithConn($muszakid, $statpageerr, $conn)
+        public static function GetTaroltMuszakAdatWithConn($muszakid, $statpageerr, \mysqli $conn)
         {
             try
             {
@@ -319,6 +320,7 @@ namespace Eszkozok
                         $ki->letszam = $row['letszam'];
                         $ki->pont = $row['pont'];
                         $ki->mospont = $row['mospont'];
+                        $ki->korID = $row['korID'];
                         $ki->megj = $row['megj'];
 
                         return $ki;
@@ -537,7 +539,67 @@ namespace Eszkozok
                 self::dieToErrorPage('8512: ' . $e->getMessage());
             }
         }
+        public static function GetTaroltKorAdat($korid, $statpageerr)
+        {
+            $conn = self::initMySqliObject();
+            $ki = self::GetTaroltKorAdatWithConn($korid, $statpageerr, $conn);
 
+            try
+            {
+                $conn->close();
+            }
+            catch (\Exception $e)
+            {
+            }
+
+            return $ki;
+        }
+
+        public static function GetTaroltKorAdatWithConn($korid, $statpageerr, \mysqli $conn)
+        {
+            try
+            {
+                $ki = new Kor();
+
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+                $stmt = $conn->prepare("SELECT * FROM `korok` WHERE `ID` = ?;");
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                $stmt->bind_param('i', $korid);
+
+                if ($stmt->execute())
+                {
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows == 1)
+                    {
+                        $row = $result->fetch_assoc();
+
+
+                        $ki->id = $korid;
+                        $ki->nev = $row['nev'];
+
+                        return $ki;
+                    }
+                    else
+                    {
+                        throw new \Exception('$result->num_rows != 1');
+                    }
+                }
+                else
+                {
+                    throw new \Exception('$stmt->execute() is false');
+                }
+            }
+            catch (\Exception $e)
+            {
+                if ($statpageerr)
+                    self::dieToErrorPage('8492: ' . $e->getMessage());
+            }
+        }
         public static function initMySqliObject()
         {
             $username = "fxtestuser";

@@ -1,13 +1,17 @@
 <?php
 /**
- * A személyek táblázatát frissítő AJAX requesthez
+ * A körök táblázatát frissítő AJAX requesthez
  */
 
-ob_start();
+session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
-require_once __DIR__ . '/../Eszkozok/param.php';
 
+\Eszkozok\Eszk::ValidateLogin();
+
+$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
+
+ob_start();
 $conn;
 try
 {
@@ -15,16 +19,16 @@ try
 
 $keresett = '';
 
-if (IsURLParamSet('keresett') && GetURLParam('keresett') != '')
-    $keresett = GetURLParam('keresett');
+if (isset($_REQUEST['keresett']) && $_REQUEST['keresett'] != '')
+    $keresett = $_REQUEST['keresett'];
 
 $conn = \Eszkozok\Eszk::initMySqliObject();
 $stmt;
 if ($keresett == '')
-    $stmt = $conn->prepare(" SELECT * FROM `szemely` ORDER BY nev ASC;");
+    $stmt = $conn->prepare(" SELECT * FROM `korok` ORDER BY nev ASC;");
 else
 {
-    $stmt = $conn->prepare(" SELECT * FROM szemely WHERE `nev` LIKE CONCAT('%', ? , '%') ORDER BY nev ASC;");
+    $stmt = $conn->prepare(" SELECT * FROM `korok` WHERE `nev` LIKE CONCAT('%', ? , '%') ORDER BY nev ASC;");
     $stmt->bind_param('s', $keresett);
 }
 

@@ -36,7 +36,7 @@ namespace Eszkozok
             }
             catch (\Exception $e)
             {
-                Eszk::dieToErrorPage('8692: ' . $e->getMessage());
+                Eszk::dieToErrorPage('7692: ' . $e->getMessage());
             }
         }
 

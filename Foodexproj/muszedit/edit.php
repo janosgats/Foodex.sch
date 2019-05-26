@@ -106,6 +106,8 @@ try
             $AktMuszak->idokezd = GetURLParam('idokezd');
         if (IsURLParamSet('idoveg'))
             $AktMuszak->idoveg = GetURLParam('idoveg');
+        if (IsURLParamSet('korid'))
+            $AktMuszak->korID = GetURLParam('korid');
         if (IsURLParamSet('megj'))
             $AktMuszak->megj = GetURLParam('megj');
 
@@ -117,6 +119,13 @@ try
             throw new \Exception('A létszám nem egy szám.');
         if (!is_numeric($AktMuszak->ID))
             throw new \Exception('Az ID nem egy szám.');
+
+
+        if (!(is_numeric($AktMuszak->korID) || $AktMuszak->korID == 'NULL'  || $AktMuszak->korID == 'NINCS' ))
+            throw new \Exception('Hibás értékelő kör ID!');
+        if($AktMuszak->korID == 'NULL'  || $AktMuszak->korID == 'NINCS' )
+            $AktMuszak->korID = null;
+
 
         if ($AktMuszak->pont < 0)
             throw new \Exception('A közösségi pontszám nagyobb, vagy egyenlő kell, hogy legyen, mint 0.');
@@ -147,11 +156,11 @@ try
         if (!$conn)
             throw new \Exception('SQL hiba: $conn is \'false\'');
 
-        $stmt = $conn->prepare("UPDATE `fxmuszakok` SET `musznev` = ?, `idokezd` = ?, `idoveg` = ?, `letszam` = ?, `pont` = ?, `mospont` = ? , `megj` = ? WHERE `fxmuszakok`.`ID` = ?;");
+        $stmt = $conn->prepare("UPDATE `fxmuszakok` SET `musznev` = ?, `korid` = ?, `idokezd` = ?, `idoveg` = ?, `letszam` = ?, `pont` = ?, `mospont` = ? , `megj` = ? WHERE `fxmuszakok`.`ID` = ?;");
         if (!$stmt)
             throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-        $stmt->bind_param('ssssidds', $AktMuszak->musznev, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
+        $stmt->bind_param('sisssidds', $AktMuszak->musznev, $AktMuszak->korID, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
     }
 
     if ($stmt->execute())

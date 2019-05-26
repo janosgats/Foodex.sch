@@ -13,6 +13,25 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 if ($AktProfil->getAdminJog() != 1)
     Eszkozok\Eszk::RedirectUnderRoot('');
 
+$Korok = array();
+
+{
+    $conn = Eszkozok\Eszk::initMySqliObject();
+
+    if (!$conn)
+        \Eszkozok\Eszk::dieToErrorPage('34254: $conn is false!');
+
+    $stmt = $conn->prepare("SELECT * FROM korok ORDER BY nev ASC;");
+    if ($stmt->execute())
+    {
+        $res = $stmt->get_result();
+        while($row = $res->fetch_assoc())
+            $Korok[] = $row;
+    }
+    else
+        \Eszkozok\Eszk::dieToErrorPage('34254: $stmt->execute() is false!');
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -119,8 +138,8 @@ if ($AktProfil->getAdminJog() != 1)
                     <label for="pont">Pont</label>
                     <select id="pont" name="pont" class="form-control">
                         <option <?php if ($MuszakMasolas && $MasoltMuszak->pont == 1) echo ' selected="selected" '; ?> >1</option>
-                        <option <?php if ($MasoltMuszak->pont == 2) echo ' selected="selected" '; ?>>2</option>
-                        <option <?php if ($MasoltMuszak->pont == 3) echo ' selected="selected" '; ?>>3</option>
+                        <option <?php if ($MuszakMasolas && $MasoltMuszak->pont == 2) echo ' selected="selected" '; ?>>2</option>
+                        <option <?php if ($MuszakMasolas && $MasoltMuszak->pont == 3) echo ' selected="selected" '; ?>>3</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
@@ -133,6 +152,24 @@ if ($AktProfil->getAdminJog() != 1)
                 </div>
             </div>
             <div class="row">
+                <div class="form-group col-md-6 col-sm-12">
+                    <label for="korid">Értékelő kör</label>
+                    <select id="korid" name="korid" class="form-control">
+                        <option <?php if (!$MuszakMasolas ||  $MasoltMuszak->korID == null) echo ' selected="selected" '; ?> value="NINCS">Nincs</option>
+
+
+                        <?php
+                        foreach($Korok as $kor)
+                        {
+                            ?>
+
+                            <option <?php if ($MuszakMasolas && $MasoltMuszak->korID == $kor['id']) echo ' selected="selected" '; ?> value="<?= $kor['id'];?>"><?= htmlentities($kor['nev']); ?></option>
+
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="megj">Megjegyzés</label>
                     <input id="megj" name="megj" type="text" placeholder="pl. Börgör" value="<?php if ($MuszakMasolas) echo $MasoltMuszak->megj; ?>" class="form-control">
@@ -189,6 +226,7 @@ if ($AktProfil->getAdminJog() != 1)
             letszam: document.getElementById("letszam").value,
             pont: document.getElementById("pont").value,
             mospont: document.getElementById("mospont").value,
+            korid: document.getElementById("korid").value,
             megj: document.getElementById("megj").value
         });
     }
