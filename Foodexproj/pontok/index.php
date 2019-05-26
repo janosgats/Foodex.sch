@@ -18,7 +18,10 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137789203-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag()
+        {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'UA-137789203-1');
@@ -57,166 +60,77 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
                 <?php
                 try
                 {
-                    $conn = Eszkozok\Eszk::initMySqliObject();
-
-                    if (!$conn)
-                        throw new \Exception('SQL hiba: $conn is \'false\'');
+                    $conn = \Eszkozok\Eszk::initMySqliObject();
 
 
-                    $MuszakLetszamok = array();//Cacheli az muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
+                    $stmtKomp = $conn->prepare("SELECT internal_id, SUM(pont) AS SumPont FROM kompenz WHERE ( `ido` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ) GROUP BY internal_id;");
 
+                    if (!$stmtKomp->execute())
+                        throw new \Exception('$stmt->execute() 1 is false!');
 
-                    $stmt = $conn->prepare("SELECT `internal_id`,`nev` FROM `fxaccok` ORDER BY `nev` ASC;");
-                    if (!$stmt)
-                        throw new \Exception('SQL hiba: $stmt 2 is \'false\'' . ' :' . $conn->error);
-
-
-                    if ($stmt->execute())
+                    $resKomp = $stmtKomp->get_result();
+                    $Kompenzalasok = [];
+                    while ($row = $resKomp->fetch_assoc())
                     {
-                        $resultAcc = $stmt->get_result();
-
-                        if ($resultAcc->num_rows > 0)
-                        {
-                            while ($rowAcc = $resultAcc->fetch_assoc())
-                            {
-                                $pontszam = 0;
-
-                                $stmt = $conn->prepare("SELECT `muszid`, `mosogat` FROM `fxjelentk` WHERE `jelentkezo` = ? AND status = 1;");
-                                if (!$stmt)
-                                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
-
-                                $stmt->bind_param('s', $rowAcc['internal_id']);
-
-                                if ($stmt->execute())
-                                {
-                                    $resultJelentk = $stmt->get_result();
-                                    if ($resultJelentk->num_rows > 0)
-                                    {
-                                        $jelMuszakIDk = array();//Jelentkezett műszakok ID-i a rowAcc-hoz
-                                        $jelMosogatasok = array();
-
-                                        while ($rowJelentk = $resultJelentk->fetch_assoc())
-                                        {
-                                            $aktmuszidBuff = $conn->escape_string($rowJelentk['muszid']);
-                                            $jelMuszakIDk[] = $aktmuszidBuff;
-                                            $jelMosogatasok[$aktmuszidBuff] = $conn->escape_string($rowJelentk['mosogat']);
-                                        }
-
-                                        // var_dump($jelMuszakIDk);
-
-                                        $vittMuszakIDk = array();
-                                        $vittMosogatasok = array();
-
-                                        foreach ($jelMuszakIDk as $muszidakt)
-                                        {
-                                            if (!array_key_exists($muszidakt, $MuszakLetszamok))
-                                            {
-                                                $buff = Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszidakt, false, $conn);
-                                                if ($buff != false)
-                                                    $MuszakLetszamok[$muszidakt] = $buff->letszam;
-                                            }
-
-
-                                            $stmt = $conn->prepare("SELECT * FROM `fxjelentk` WHERE `muszid` = ? AND `status` = 1 ORDER BY `ID` ASC;");
-                                            if (!$stmt)
-                                                throw new \Exception('SQL hiba: $stmt 5 is \'false\'' . ' :' . $conn->error);
-
-                                            $stmt->bind_param('i', $muszidakt);
-
-                                            if ($stmt->execute())
-                                            {
-                                                $resultKeret = $stmt->get_result();
-                                                if ($resultKeret->num_rows > 0)
-                                                {
-
-                                                    for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && isset($MuszakLetszamok[$muszidakt]) && $i < $MuszakLetszamok[$muszidakt]; ++$i)
-                                                    {
-                                                        //echo $i . ' - ' . $muszidakt . '<br>';
-
-
-                                                        if ($rowAcc['internal_id'] == $rowKeret['jelentkezo'])
-                                                        {
-                                                            $vittMuszakIDk[] = $muszidakt;
-                                                            if ($jelMosogatasok[$muszidakt] == 1)//Ha az aktuálisan vitt műszakban mosogatott
-                                                                $vittMosogatasok[] = $muszidakt;
-                                                            break;
-                                                        }
-
-                                                        // var_dump($rowKeret);
-
-                                                    }
-                                                }
-                                            }
-                                            else
-                                                throw new \Exception('$stmt->execute() 5 nem sikerült' . ' :' . $conn->error);
-                                        }
-
-                                        if (count($vittMuszakIDk) > 0)
-                                        {
-                                            //`idoveg` < NOW() : Csak arra a műszakra kap pontot, ami már lezárult
-                                            $stmt = $conn->prepare("SELECT SUM(`pont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ) AND `ID` IN (" . implode(',', $vittMuszakIDk) . ");");
-                                            if (!$stmt)
-                                                throw new \Exception('SQL hiba: $stmt 3 is \'false\'' . ' :' . $conn->error);
-
-                                            if ($stmt->execute())
-                                            {
-                                                $resultMuszak = $stmt->get_result();
-                                                if ($resultMuszak->num_rows == 1)
-                                                {
-                                                    $rowMuszak = $resultMuszak->fetch_assoc();
-                                                    $pontszam += $rowMuszak['OsszPontszam'];
-                                                }
-                                                if (count($vittMosogatasok) > 0)
-                                                {
-                                                    $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" .\Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
-                                                    if (!$stmt)
-                                                        throw new \Exception('SQL hiba: $stmt 4 is \'false\'' . ' :' . $conn->error);
-
-                                                    if ($stmt->execute())
-                                                    {
-                                                        $resultMuszak = $stmt->get_result();
-                                                        if ($resultMuszak->num_rows == 1)
-                                                        {
-                                                            $rowMuszak = $resultMuszak->fetch_assoc();
-                                                            $pontszam += $rowMuszak['OsszPontszam'];
-                                                        }
-                                                    }
-                                                    else
-                                                        throw new \Exception('$stmt->execute() 4 nem sikerült' . ' :' . $conn->error);
-                                                }
-                                            }
-                                            else
-                                                throw new \Exception('$stmt->execute() 3 nem sikerült' . ' :' . $conn->error);
-                                        }
-                                    }
-                                }
-                                else
-                                    throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
-                                $pontszam = round($pontszam + +\Eszkozok\Eszk::GetAccKompenzaltPontokWithConn($rowAcc['internal_id'], $conn), 1);
-                                ?>
-
-                                <tr>
-                                    <td>
-
-                                        <a style="cursor: pointer" href="<?php echo '../profil/?mprof=' . $rowAcc['internal_id']; ?>"><p><?php echo htmlspecialchars($rowAcc['nev']); ?></p></a>
-                                    </td>
-                                    <td>
-                                        <a class="badge"  href="userpont/?int_id=<?php echo $rowAcc['internal_id']; ?>"><?php echo htmlspecialchars($pontszam) . ' pont'; ?></a>
-                                    </td>
-                                </tr>
-                                <?php
-                            }
-                        }
+                        $Kompenzalasok[$row['internal_id']] = $row['SumPont'];
                     }
-                    else
+
+
+                    $stmtMuszak = $conn->prepare("SELECT fxaccok.nev, fxaccok.internal_id
+                                                ,
+                                                SUM(fxmuszakok.pont) AS MuszakPont,
+                                                SUM(CASE     WHEN ErvenyesJelentkezesek.mosogat = 1     THEN fxmuszakok.mospont    ELSE 0 END) AS MosogatasPont
+                                                FROM fxaccok
+                                                LEFT JOIN
+                                                (
+                                                  SELECT fxjelentk.*
+                                                  FROM   fxjelentk INNER JOIN
+                                                  (
+                                                    SELECT   muszid, letszam, GROUP_CONCAT(jelentkezo ORDER BY jelido ASC) AS grouped_jelentkezo
+                                                    FROM     fxjelentk
+                                                    JOIN fxmuszakok ON fxjelentk.muszid = fxmuszakok.ID
+                                                    WHERE fxjelentk.status = 1
+                                                    GROUP BY muszid
+                                                  ) AS group_max
+                                                  ON fxjelentk.muszid = group_max.muszid AND FIND_IN_SET(jelentkezo, grouped_jelentkezo) <= group_max.letszam
+                                                  WHERE status = 1
+                                                  ORDER BY fxjelentk.muszid, fxjelentk.jelido ASC
+                                                ) AS ErvenyesJelentkezesek
+                                                ON fxaccok.internal_id = ErvenyesJelentkezesek.jelentkezo
+                                                LEFT JOIN fxmuszakok ON ErvenyesJelentkezesek.muszid = fxmuszakok.ID
+                                                AND (fxmuszakok.`idoveg` < NOW()
+                                                AND ( fxmuszakok.`idokezd` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ))
+                                                GROUP BY fxaccok.internal_id
+                                                ORDER BY fxaccok.nev ASC;");
+
+                    if (!$stmtMuszak->execute())
+                        throw new \Exception('$stmt->execute() 1 is false!');
+
+                    $resMuszak = $stmtMuszak->get_result();
+
+                    while ($rowMuszak = $resMuszak->fetch_assoc())
                     {
-                        throw new \Exception('$stmt->execute() 1 nem sikerült' . ' :' . $conn->error);
+                        $muszpont =  round($rowMuszak['MuszakPont'] ?: 0, 1);
+                        $mospont = round($rowMuszak['MosogatasPont']?: 0, 1);
+                        $komppont = round(isset($Kompenzalasok[$rowMuszak['internal_id']]) ? $Kompenzalasok[$rowMuszak['internal_id']] : 0, 1);
+                        $sumpont = round($muszpont + $mospont + $komppont, 1);
+                        ?>
+                        <tr>
+                            <td>
+
+                                <a style="cursor: pointer" href="<?php echo '../profil/?mprof=' . $rowMuszak['internal_id']; ?>"><p><?php echo htmlentities($rowMuszak['nev']); ?></p></a>
+                            </td>
+                            <td>
+                                <a class="badge" href="userpont/?int_id=<?php echo $rowMuszak['internal_id']; ?>"><?php echo htmlentities($sumpont . ' pont = ' . $muszpont . (($mospont >= 0)?' + ':' - ') . abs($mospont) . (($komppont >= 0)?' + ':' - ') . abs($komppont)); ?></a>
+                            </td>
+                        </tr>
+                        <?php
                     }
+
                 }
                 catch (\Exception $e)
                 {
-                    ob_clean();
-                    Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
+                    Eszkozok\Eszk::dieToErrorPage('3018: ' . $e->getMessage());
                 }
                 ?>
             </table>
@@ -226,5 +140,3 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 </body>
 </html>
-
-
