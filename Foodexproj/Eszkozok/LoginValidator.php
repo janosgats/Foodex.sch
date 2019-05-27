@@ -143,16 +143,10 @@ class LoginValidator
             }
 
             if (!isset($_SESSION['profilint_id']))
-            {
-                Eszk::RedirectUnderRoot('');
-                die('Nem vagy bejelentkezve.');
-            }
+                throw new \Exception();
 
             if (!isset($_SESSION['session_token']))
-            {
-                Eszk::RedirectUnderRoot('');
-                die('Nem vagy bejelentkezve.');
-            }
+                throw new \Exception();
 
             if (self::$cached_AdminJog == null || self::$cached_MuszJelJog == null || self::$cached_SessionToken == null)
             {
