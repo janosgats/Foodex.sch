@@ -3,6 +3,7 @@
 namespace Eszkozok;
 
 require_once __DIR__ . '/Eszk.php';
+require_once __DIR__ . '/entitas/Profil.php';
 
 
 class LoginValidator
@@ -15,11 +16,13 @@ class LoginValidator
                 return true;
         }
         catch (\Exception $e)
-        {}
+        {
+        }
 
         Eszk::dieToErrorPage('Nincs admin jogosultságod.');
         die('Nincs admin jogosultságod.');
     }
+
     static public function AdminJog_ThrowsException()
     {
         try
@@ -28,10 +31,12 @@ class LoginValidator
                 return true;
         }
         catch (\Exception $e)
-        {}
+        {
+        }
 
         throw new \Exception('Nincs admin jogosultságod.');
     }
+
     static public function AdminJog_NOEXIT()
     {
         try
@@ -40,7 +45,8 @@ class LoginValidator
                 return true;
         }
         catch (\Exception $e)
-        {}
+        {
+        }
         return false;
     }
 
@@ -52,11 +58,13 @@ class LoginValidator
                 return true;
         }
         catch (\Exception $e)
-        {}
+        {
+        }
 
         Eszk::dieToErrorPage('Nincs jogosultságod műszakra való jelentkezéshez.');
         die('Nincs jogosultságod műszakra való jelentkezéshez.');
     }
+
     static public function MuszJelJog_ThrowsException()
     {
         try
@@ -65,9 +73,11 @@ class LoginValidator
                 return true;
         }
         catch (\Exception $e)
-        {}
+        {
+        }
         throw new \Exception('Nincs jogosultságod műszakra való jelentkezéshez.');
     }
+
     static public function MuszJelJog_NOEXIT()
     {
         try
@@ -76,7 +86,8 @@ class LoginValidator
                 return true;
         }
         catch (\Exception $e)
-        {}
+        {
+        }
         return false;
     }
 
@@ -88,11 +99,13 @@ class LoginValidator
                 return true;
         }
         catch (\Exception $e)
-        {}
+        {
+        }
 
         Eszk::RedirectUnderRoot('');
         die('Nem vagy bejelentkezve.');
     }
+
     /**
      * DO NOT USE THIS unless you know what you do! This function does not force the script to exit. This only returns false, when the login is invalid.
      **/
@@ -104,9 +117,19 @@ class LoginValidator
                 return true;
         }
         catch (\Exception $e)
-        {}
+        {
+        }
         return false;
     }
+
+
+    /**
+     * "ENGINE" section...
+     */
+
+    private static $cached_AdminJog = null;
+    private static $cached_MuszJelJog = null;
+    private static $cached_SessionToken = null;
 
     static private function IsLoginValid($logintype)
     {
@@ -120,29 +143,42 @@ class LoginValidator
             }
 
             if (!isset($_SESSION['profilint_id']))
-                throw new \Exception();
+            {
+                Eszk::RedirectUnderRoot('');
+                die('Nem vagy bejelentkezve.');
+            }
 
             if (!isset($_SESSION['session_token']))
-                throw new \Exception();
+            {
+                Eszk::RedirectUnderRoot('');
+                die('Nem vagy bejelentkezve.');
+            }
 
+            if (self::$cached_AdminJog == null || self::$cached_MuszJelJog == null || self::$cached_SessionToken == null)
+            {
 
-            $conn = Eszk::initMySqliObject();
+                $conn = Eszk::initMySqliObject();
 
-            $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
+                $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
 
-            $intidbuff = $_SESSION['profilint_id'];
-            $stmt->bind_param('s', $intidbuff);
+                $intidbuff = $_SESSION['profilint_id'];
+                $stmt->bind_param('s', $intidbuff);
 
-            if (!$stmt->execute())
-                throw new \Exception();
+                if (!$stmt->execute())
+                    throw new \Exception();
 
-            $result = $stmt->get_result();
-            if ($result->num_rows != 1)
-                throw new \Exception();
+                $result = $stmt->get_result();
+                if ($result->num_rows != 1)
+                    throw new \Exception();
 
-            $row = $result->fetch_array();
+                $row = $result->fetch_array();
 
-            if ($_SESSION['session_token'] == $row['session_token'])
+                self::$cached_AdminJog = $row['adminjog'];
+                self::$cached_MuszJelJog = $row['muszjeljog'];
+                self::$cached_SessionToken = $row['session_token'];
+            }
+
+            if ($_SESSION['session_token'] == self::$cached_SessionToken)
             {
                 switch ($logintype)
                 {
@@ -151,12 +187,12 @@ class LoginValidator
                         break;
 
                     case 'adminjog':
-                        if ($row['adminjog'] == 1)
+                        if (self::$cached_AdminJog == 1)
                             return true;
                         break;
 
                     case 'muszjeljog':
-                        if ($row['muszjeljog'] == 1)
+                        if (self::$cached_MuszJelJog == 1)
                             return true;
                         break;
                 }
