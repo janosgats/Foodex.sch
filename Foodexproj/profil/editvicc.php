@@ -2,6 +2,7 @@
 session_start();
 
 require_once '../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once '../Eszkozok/param.php';
 require_once '../Eszkozok/AJAXhost.php';
 
@@ -9,6 +10,8 @@ require_once '../Eszkozok/AJAXhost.php';
 
 if (IsURLParamSet('megj_int_id'))
 {
+    \Eszkozok\LoginValidator::AccountSignedIn();
+
     if (GetURLParam('megj_int_id') != $_SESSION['profilint_id'])
         QuitHost('99210: ' . 'Ne faszkodj az internal id-vel, nem a tied :/');
 

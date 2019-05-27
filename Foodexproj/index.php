@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-include_once __DIR__ . '/Eszkozok/Eszk.php';
-include_once __DIR__ . '/Eszkozok/GlobalSettings.php';
+require_once __DIR__ . '/Eszkozok/Eszk.php';
+require_once __DIR__ . '/Eszkozok/LoginValidator.php';
+require_once __DIR__ . '/Eszkozok/GlobalSettings.php';
 
-if (\Eszkozok\Eszk::IsLoginValid())
+if (\Eszkozok\LoginValidator::AccountSignedIn_NOEXIT())
 {
     Eszkozok\Eszk::RedirectUnderRoot('profil');
 }
@@ -13,7 +14,7 @@ if (\Eszkozok\Eszk::IsLoginValid())
 //ini_set('date.timezone', 'Europe/Budapest');
 //$d = new DateTime();
 //echo $d->format('Y-m-d H:i:s');
-//include_once 'Eszkozok/MonologHelper.php';
+//require_once 'Eszkozok/MonologHelper.php';
 //$l = new MonologHelper('test1');
 //$l->debug('test message 1');
 //

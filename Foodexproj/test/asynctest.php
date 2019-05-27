@@ -1,6 +1,6 @@
 <?php
 
-include_once('../Eszkozok/Eszk.php');
+require_once('../Eszkozok/Eszk.php');
 
 system('php kesliro.php'." > NUL");
 

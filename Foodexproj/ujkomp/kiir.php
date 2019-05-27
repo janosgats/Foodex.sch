@@ -3,6 +3,7 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once '../Eszkozok/entitas/Muszak.php';
 
 
@@ -12,14 +13,7 @@ try
 {
 
 
-    \Eszkozok\Eszk::ValidateLogin();
-
-    $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-    if ($AktProfil->getAdminJog() != 1)
-        Eszkozok\Eszk::dieToErrorPage('2077: Nincs jogosultságod kompenzálni!');
-
-
+    \Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
 
     $kompid = 'URL PARAM IS NOT SET';

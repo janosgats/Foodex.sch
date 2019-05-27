@@ -1,8 +1,8 @@
 <?php
 set_include_path(getcwd());
 require_once 'vendor/autoload.php';
-include_once 'Eszkozok/Eszk.php';
-include_once 'Eszkozok/AuthSchProvider.php';
+require_once 'Eszkozok/Eszk.php';
+require_once 'Eszkozok/AuthSchProvider.php';
 session_start();
 
 

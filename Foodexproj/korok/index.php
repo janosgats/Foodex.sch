@@ -2,15 +2,11 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/entitas/Kor.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
-\Eszkozok\Eszk::ValidateLogin();
-
-$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-if ($AktProfil->getAdminJog() != 1)
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
 
 
@@ -48,7 +44,7 @@ if ($AktProfil->getAdminJog() != 1)
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil,'korok');
+    NavBar::echonavbar('korok');
     ?>
 
     <div class="panel panel-default">

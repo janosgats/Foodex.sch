@@ -1,11 +1,12 @@
 <?php
 
 require_once '../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once '../Eszkozok/param.php';
-include_once '../3rdparty/reCaptcha/autoload.php';
+require_once '../3rdparty/reCaptcha/autoload.php';
 
-include_once __DIR__ . '/../Eszkozok/SMTPSender.php';
-include_once __DIR__ . '/../foodexpws.php';
+require_once __DIR__ . '/../Eszkozok/SMTPSender.php';
+require_once __DIR__ . '/../foodexpws.php';
 
 function isReCaptchaValid()
 {
@@ -105,7 +106,7 @@ function doJelentkezes()
 {
     try
     {
-        \Eszkozok\Eszk::ValidateLogin();
+        \Eszkozok\LoginValidator::MuszJelJog_DiesToErrorrPage();
 
         $conn = \Eszkozok\Eszk::initMySqliObject();
 

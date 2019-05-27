@@ -2,15 +2,11 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/entitas/Kor.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
-\Eszkozok\Eszk::ValidateLogin();
-
-$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-if ($AktProfil->getAdminJog() != 1)
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
 
 ?>
@@ -45,7 +41,7 @@ if ($AktProfil->getAdminJog() != 1)
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, 'accok');
+    NavBar::echonavbar('accok');
     ?>
 
     <div class="panel panel-default">
@@ -79,6 +75,15 @@ if ($AktProfil->getAdminJog() != 1)
             .replace(/'/g, "&#039;");
     }
 
+    function getAdminJogFromParentNode(node)
+    {
+        return (node.getAttribute("adminjog") == '1') ? 1 : 0;
+    }
+    function getMuszjelJogFromParentNode(node)
+    {
+        return (node.getAttribute("muszjeljog") == '1') ? 1 : 0;
+    }
+
     var accoktable = document.getElementById('accoktable');
     function HandlePHPPageData(ret)
     {
@@ -95,34 +100,62 @@ if ($AktProfil->getAdminJog() != 1)
             var i_toggle_adminjog = jQuery.parseHTML('<i id="i_toggle_adminjog' + row['internal_id'] + '" data-toggle="tooltip" data-container="table" data-placement="right"  title="Admin jog"  class="acc-jogosultsag ' + ((row['adminjog'] == 1) ? 'acc-jogosultsag-admin-true' : 'acc-jogosultsag-admin-false') + ' fas fa-2x fa-user-astronaut"></i>')[0];
             i_toggle_adminjog.onclick = function ()
             {
-                    var r;
+                var is_adminjog = getAdminJogFromParentNode(this.parentElement);
+                var is_muszjeljog = getMuszjelJogFromParentNode(this.parentElement);
 
-                    if (this.classList.contains('acc-jogosultsag-admin-true'))
-
-                    {
-                        r = confirm("Biztosan elveszed " + row['nev'] + " admin jogát?");
-                        if (r == true)
-                            submitSetAdminjog(row['internal_id'], 0)
-                    }
+                var r;
+                if (is_adminjog)
+                {
+                    r = confirm("Biztosan elveszed " + row['nev'] + " admin jogát?");
+                    if (r == true)
+                        submitSetJogosultsagok(row['internal_id'], !is_adminjog, is_muszjeljog)
+                }
                 else
-                    {
-                        r = confirm("Biztosan adminná teszed őt: " + row['nev'] + "?");
-                        if (r == true)
-                            submitSetAdminjog(row['internal_id'], 1)
-                    }
+                {
+                    r = confirm("Biztosan adminná teszed őt: " + row['nev'] + "?");
+                    if (r == true)
+                        submitSetJogosultsagok(row['internal_id'], !is_adminjog, is_muszjeljog)
+                }
+            };
+
+
+            var i_toggle_muszjeljog = jQuery.parseHTML('<i id="i_toggle_muszjeljog' + row['internal_id'] + '" data-toggle="tooltip" data-container="table" data-placement="right"  title="Műszakfelvételi jog"  class="acc-jogosultsag ' + ((row['muszjeljog'] == 1) ? 'acc-jogosultsag-muszjel-true' : 'acc-jogosultsag-muszjel-false') + ' fas fa-2x fa-handshake"></i>')[0];
+            i_toggle_muszjeljog.onclick = function ()
+            {
+                var is_adminjog = getAdminJogFromParentNode(this.parentElement);
+                var is_muszjeljog = getMuszjelJogFromParentNode(this.parentElement);
+                var r;
+                if (is_muszjeljog)
+                {
+                    r = confirm("Biztosan elveszed " + row['nev'] + " műszakfelvételi jogát?");
+                    if (r == true)
+                        submitSetJogosultsagok(row['internal_id'], is_adminjog, !is_muszjeljog)
+                }
+                else
+                {
+                    r = confirm("Biztosan engedélyezed a műszakfelvételt neki: " + row['nev'] + "?");
+                    if (r == true)
+                        submitSetJogosultsagok(row['internal_id'], is_adminjog, !is_muszjeljog)
+                }
             };
 
 
             var td_user_nev = jQuery.parseHTML('<td></td>')[0];
-            var td_toggle_adminjog = jQuery.parseHTML('<td></td>')[0];
+            var td_toggle_jogosultsag = jQuery.parseHTML('<td></td>')[0];
+            td_toggle_jogosultsag.id = "td_toggle_jogosultsag" + row['internal_id'];
+
+            td_toggle_jogosultsag.setAttribute("muszjeljog", row['muszjeljog'].toString());
+            td_toggle_jogosultsag.setAttribute("adminjog", row['adminjog'].toString());
 
             td_user_nev.appendChild(a_user_nev);
-            td_toggle_adminjog.appendChild(i_toggle_adminjog);
+            td_toggle_jogosultsag.appendChild(i_toggle_adminjog);
+            td_toggle_jogosultsag.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
+            td_toggle_jogosultsag.appendChild(i_toggle_muszjeljog);
 
 
             var tr = jQuery.parseHTML('<tr></tr>')[0];
             tr.appendChild(td_user_nev);
-            tr.appendChild(td_toggle_adminjog);
+            tr.appendChild(td_toggle_jogosultsag);
 
             tbody.appendChild(tr);
         });
@@ -163,11 +196,23 @@ if ($AktProfil->getAdminJog() != 1)
             {
                 if (fullres.adminjog == 1)
                 {
+                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("adminjog", '1');
                     $("#i_toggle_adminjog" + fullres.internal_id).addClass('acc-jogosultsag-admin-true').removeClass('acc-jogosultsag-admin-false');
                 }
                 else
                 {
+                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("adminjog", '0');
                     $("#i_toggle_adminjog" + fullres.internal_id).addClass('acc-jogosultsag-admin-false').removeClass('acc-jogosultsag-admin-true');
+                }
+                if (fullres.muszjeljog == 1)
+                {
+                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("muszjeljog", '1');
+                    $("#i_toggle_muszjeljog" + fullres.internal_id).addClass('acc-jogosultsag-muszjel-true').removeClass('acc-jogosultsag-muszjel-false');
+                }
+                else
+                {
+                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("muszjeljog", '0');
+                    $("#i_toggle_muszjeljog" + fullres.internal_id).addClass('acc-jogosultsag-muszjel-false').removeClass('acc-jogosultsag-muszjel-true');
                 }
             }
         }
@@ -184,11 +229,12 @@ if ($AktProfil->getAdminJog() != 1)
                 alert("Error at AJAX call!");
             });
     }
-    function submitSetAdminjog(internal_id, adminjog)
+    function submitSetJogosultsagok(internal_id, adminjog, muszjeljog)
     {
         callPHPPageSetAdminjog({
             int_id: internal_id,
-            adminjog: adminjog
+            adminjog: adminjog ? 1 : 0,
+            muszjeljog: muszjeljog ? 1 : 0
         });
 
     }

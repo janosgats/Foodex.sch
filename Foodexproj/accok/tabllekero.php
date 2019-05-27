@@ -6,8 +6,9 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 
-\Eszkozok\Eszk::ValidateLogin();
+\Eszkozok\LoginValidator::AccountSignedIn();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
@@ -25,10 +26,10 @@ if (isset($_REQUEST['keresett']) && $_REQUEST['keresett'] != '')
 $conn = \Eszkozok\Eszk::initMySqliObject();
 $stmt;
 if ($keresett == '')
-    $stmt = $conn->prepare(" SELECT internal_id, nev, adminjog FROM `fxaccok` ORDER BY nev ASC;");
+    $stmt = $conn->prepare(" SELECT internal_id, nev, adminjog, muszjeljog FROM `fxaccok` ORDER BY nev ASC;");
 else
 {
-    $stmt = $conn->prepare(" SELECT internal_id, nev, adminjog FROM `fxaccok` WHERE `nev` LIKE CONCAT('%', ? , '%') ORDER BY nev ASC;");
+    $stmt = $conn->prepare(" SELECT internal_id, nev, adminjog, muszjeljog FROM `fxaccok` WHERE `nev` LIKE CONCAT('%', ? , '%') ORDER BY nev ASC;");
     $stmt->bind_param('s', $keresett);
 }
 

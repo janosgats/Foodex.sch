@@ -3,15 +3,11 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once '../Eszkozok/param.php';
 require_once '../Eszkozok/navbar.php';
 
-\Eszkozok\Eszk::ValidateLogin();
-
-$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-if ($AktProfil->getAdminJog() != 1)
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
 $Korok = array();
 
@@ -77,7 +73,7 @@ $Korok = array();
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, 'ujmuszak');
+    NavBar::echonavbar( 'ujmuszak');
     ?>
 
     <?php

@@ -3,16 +3,12 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
-include_once '../Eszkozok/entitas/Muszak.php';
-include_once '../Eszkozok/param.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
+require_once '../Eszkozok/entitas/Muszak.php';
+require_once '../Eszkozok/param.php';
 require_once '../Eszkozok/navbar.php';
 
-\Eszkozok\Eszk::ValidateLogin();
-
-$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-if ($AktProfil->getAdminJog() != 1)
-    Eszkozok\Eszk::dieToErrorPage('19965: Nincs jogod a műszak szerkesztéséhez!');
+\Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
 if (IsURLParamSet('muszid') == false)
     Eszkozok\Eszk::dieToErrorPage('19975: muszid URL param is not set!');
@@ -81,7 +77,7 @@ $Korok = array();
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, '')
+    NavBar::echonavbar( '')
     ?>
 
     <div class="jumbotron" style="padding-top:10px">

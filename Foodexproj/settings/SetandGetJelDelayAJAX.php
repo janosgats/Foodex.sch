@@ -2,16 +2,12 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
 
 try
 {
-    \Eszkozok\Eszk::ValidateLogin();
-
-    $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-    if ($AktProfil->getAdminJog() != 1)
-        throw new \Exception('Nincs jogosultságod módosítani a  beállításokat!');
+    \Eszkozok\LoginValidator::AdminJog_ThrowsException();
 
     if (IsURLParamSet('muvelet'))
         $muvelet = GetURLParam('muvelet');//hozzaadas, torles, modositas, lekeres

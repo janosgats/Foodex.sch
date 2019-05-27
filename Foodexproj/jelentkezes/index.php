@@ -2,16 +2,17 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 require_once __DIR__ . '/../Eszkozok/MonologHelper.php';
-include_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
+require_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../3rdparty/securimage/securimage.php';
-include_once 'jelentkez.php';
+require_once 'jelentkez.php';
 
 $logger = new \MonologHelper('jelentkezes/index.php');
 
-\Eszkozok\Eszk::ValidateLogin();
+\Eszkozok\LoginValidator::MuszJelJog_DiesToErrorrPage();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
@@ -19,7 +20,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 doJelentkezes();
 
 
-if ($AktProfil->getAdminJog() == 1)
+if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
 {
     if (IsURLParamSet('muszakokaktival') && GetURLParam('muszakokaktival') == 1)
     {
@@ -86,7 +87,7 @@ if (isset($_POST['securimage_captcha_code']) && $image->check($_POST['securimage
     $IsSecurimageCorrect = true;
 }
 
-if ($AktProfil->getAdminJog() == 1)
+if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
 {
     $IsSecurimageCorrect = true;
     $IsSecurimageBypassed = true;
@@ -153,7 +154,7 @@ catch (\Exception $e)
 <div class="bootstrap-iso" style="background: #151515;">
     <div class="container">
         <?php
-        NavBar::echonavbar($AktProfil, 'jelentkezes');
+        NavBar::echonavbar('jelentkezes');
         ?>
 
         <?php
@@ -169,7 +170,7 @@ catch (\Exception $e)
 
         if ($IsSecurimageCorrect)
         {
-            if ($AktProfil->getAdminJog() == 1)
+            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
             {
                 ?>
                 <form method="POST" action="" id="hiddenmuszakokaktivalpostform" hidden>
@@ -231,7 +232,7 @@ if ($IsSecurimageCorrect)
                 <col span="1" style="width: 4%;">
                 <col span="1" style="width: 56%;">
                 <?php
-                if ($AktProfil->getAdminJog() == 1)
+                if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                 {
                     ?>
 
@@ -254,9 +255,9 @@ if ($IsSecurimageCorrect)
 
 
                 if ($OsszesMuszakMutat)
-                    $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `korok`.`nev` as KorNev, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `korok` ON `korok`.`id` = `fxmuszakok`.`korid` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context` ORDER BY `idokezd` DESC;");
+                    $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `korok`.`nev` AS KorNev, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `korok` ON `korok`.`id` = `fxmuszakok`.`korid` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context` ORDER BY `idokezd` DESC;");
                 else
-                    $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `korok`.`nev` as KorNev, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `korok` ON `korok`.`id` = `fxmuszakok`.`korid` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context`  WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
+                    $stmt = $conn->prepare("SELECT `fxmuszakok`.*, `korok`.`nev` AS KorNev, `logs`.`datetime` AS aktivalas_ideje  FROM `fxmuszakok` LEFT JOIN `korok` ON `korok`.`id` = `fxmuszakok`.`korid` LEFT JOIN `logs` ON `logs`.`message` = 'MUSZAKTIVAL' AND CONCAT('[', `fxmuszakok`.`id`, ']') = `logs`.`context`  WHERE `idokezd` >= CURDATE() ORDER BY `idokezd` DESC;");
 
                 if (!$stmt)
                     throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
@@ -270,7 +271,7 @@ if ($IsSecurimageCorrect)
                     {
                         while ($row = $result->fetch_assoc())
                         {
-                            if ($AktProfil->getAdminJog() != 1 && $row['aktiv'] != 1)
+                            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT() == false && $row['aktiv'] != 1)
                                 continue;
 
                             //////////////////////////////////////////////////////////////
@@ -402,7 +403,7 @@ if ($IsSecurimageCorrect)
                                 </td>
 
                                 <?php
-                                if ($AktProfil->getAdminJog() == 1)
+                                if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                                 {
                                     ?>
                                     <td class="tablaCella oszlopReszletek">
@@ -547,6 +548,7 @@ if (!$IsSecurimageCorrect)
             <p id="modalmospont">Pont mosogatásért: </p>
 
             <p id="modalertekelokornev">Értékelő kör: </p>
+
             <p id="modalmegj">Wukker intelmei: </p>
 
         </div>

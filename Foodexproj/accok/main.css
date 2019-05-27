@@ -141,7 +141,15 @@ table {
 }
 .acc-jogosultsag-admin-false
 {
-   color: blue;
+    color: #3355ff;
+}
+.acc-jogosultsag-muszjel-true
+{
+    color: lawngreen;
+}
+.acc-jogosultsag-muszjel-false
+{
+    color: #3355ff;
 }
 .acc-jogosultsag
 {
@@ -149,5 +157,5 @@ table {
 }
 .acc-jogosultsag:hover
 {
-    color: orangered;
+    color: orange;
 }

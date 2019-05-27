@@ -1,7 +1,7 @@
 <?php
 
 
-include_once 'Eszkozok/Eszk.php';
+require_once 'Eszkozok/Eszk.php';
 
 $conn = Eszkozok\Eszk::initMySqliObject();
 

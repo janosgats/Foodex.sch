@@ -2,11 +2,12 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
-\Eszkozok\Eszk::ValidateLogin();
+\Eszkozok\LoginValidator::AccountSignedIn();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
@@ -63,7 +64,7 @@ else
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, '');
+    NavBar::echonavbar( '');
     ?>
 
     <div class="jumbotron">
@@ -118,7 +119,7 @@ else
         <br><br>
 
         <?php
-        if ($AktProfil->getAdminJog() == 1)
+        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
         {
             ?>
             <a class="btn btn-primary pull-right" name="kompenz" id="kompenz" style="margin-right: 10px"
@@ -249,7 +250,7 @@ else
                     <th>Megjegyzés</th>
 
                     <?php
-                    if ($AktProfil->getAdminJog() == 1)
+                    if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                     {
                         ?>
                         <th></th>
@@ -288,7 +289,7 @@ else
                                     </td>
 
                                     <?php
-                                    if ($AktProfil->getAdminJog() == 1)
+                                    if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                                     {
                                         ?>
                                         <td>

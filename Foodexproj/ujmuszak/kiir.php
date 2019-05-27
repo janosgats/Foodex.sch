@@ -3,6 +3,7 @@ session_start();
 
 set_include_path(getcwd());
 require_once '../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once '../Eszkozok/MonologHelper.php';
 require_once '../Eszkozok/entitas/Muszak.php';
 
@@ -37,12 +38,7 @@ function verifyDate($date, $strict = true)
 try
 {
 
-    \Eszkozok\Eszk::ValidateLogin();
-
-    $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-    if ($AktProfil->getAdminJog() != 1)
-        Eszkozok\Eszk::dieToErrorPage('2077: Nincs jogosultságod új műszakot kiírni!');
+    \Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
 
     $internal_id = $_SESSION['profilint_id'];

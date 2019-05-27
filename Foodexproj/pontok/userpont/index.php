@@ -2,11 +2,12 @@
 session_start();
 
 require_once __DIR__ . '/../../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../../Eszkozok/param.php';
 require_once __DIR__ . '/../../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../../Eszkozok/navbar.php';
 
-\Eszkozok\Eszk::ValidateLogin();
+\Eszkozok\LoginValidator::AccountSignedIn();
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 $MosogatasJelentkezes = 0;//1: Ha az aktuális profil akar műszak után mosogatásra jelentkezni
@@ -176,7 +177,7 @@ if ($mosfoglalt)
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, ($MosogatasJelentkezes)?'mosjelentk':'pontok');
+    NavBar::echonavbar( ($MosogatasJelentkezes)?'mosjelentk':'pontok');
     ?>
 
     <div class="panel panel-default">
@@ -418,7 +419,7 @@ if ($mosfoglalt)
                         <th>Megjegyzés</th>
 
                         <?php
-                        if ($AktProfil->getAdminJog() == 1)
+                        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                         {
                             ?>
                             <th></th>
@@ -457,7 +458,7 @@ if ($mosfoglalt)
                                         </td>
 
                                         <?php
-                                        if ($AktProfil->getAdminJog() == 1)
+                                        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                                         {
                                             ?>
                                             <td>

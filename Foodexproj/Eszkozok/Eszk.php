@@ -4,10 +4,7 @@ namespace Eszkozok
 
     //echo 'include path: ' . get_include_path();
 
-    use GuzzleHttp\Exception\ConnectException;
-    use PHPMailer\PHPMailer\Exception;
     use Profil\Profil;
-    use Symfony\Component\Debug\ExceptionHandler;
 
     require_once __DIR__ . '/entitas/Muszak.php';
     require_once __DIR__ . '/entitas/Kompenz.php';
@@ -26,82 +23,7 @@ namespace Eszkozok
 
     class Eszk
     {
-        /**
-         * Ha a bejelentkezés nem érvényes, kilépteti az embert
-         */
-        static public function ValidateLogin()
-        {
-            if (!GlobalServerInitParams::$RequireAuth)
-            {
-                $_SESSION['profilint_id'] = GlobalServerInitParams::$DefaultIntID;
-                return;
-            }
 
-            try
-            {
-                if (self::IsLoginValid())
-                    return;
-            }
-            catch (\Exception $e)
-            {
-                self::RedirectUnderRoot('');
-            }
-
-            self::RedirectUnderRoot('');
-        }
-
-        static public function IsLoginValid()
-        {
-            try
-            {
-
-                if (!isset($_SESSION['profilint_id']))
-                    throw new \Exception();
-
-                if (!isset($_SESSION['session_token']))
-                    throw new \Exception();
-
-
-                $conn = self::initMySqliObject();
-
-                if (!$conn)
-                    throw new \Exception();
-
-                $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
-                if (!$stmt)
-                    throw new \Exception();
-
-
-                $intidbuff = $_SESSION['profilint_id'];
-                $stmt->bind_param('s', $intidbuff);
-
-                if ($stmt->execute())
-                {
-                    $result = $stmt->get_result();
-                    if ($result->num_rows == 1)
-                    {
-                        $row = $result->fetch_array();
-
-                        if ($_SESSION['session_token'] == $row['session_token'])
-                        {
-                            $conn->close();
-                            return true;
-                        }
-                        else
-                            throw new \Exception();
-
-                    }
-                    else
-                        throw new \Exception();
-                }
-                $conn->close();
-            }
-            catch (\Exception $e)
-            {
-                return false;
-            }
-            return false;
-        }
 
         /**
          * @returns TRUE, ha a $muszid műszak keretlétszámába benne van az $int_id account
@@ -1071,7 +993,7 @@ namespace Eszkozok
 //        var_dump($response);
 
                 }
-                catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e)
+                catch (\Exception $e)
                 {
 
                     // Failed to get the access token or user details.

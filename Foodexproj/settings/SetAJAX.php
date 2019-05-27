@@ -2,6 +2,7 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/AJAXhost.php';
@@ -33,12 +34,8 @@ function verifyDate($date, $strict = true)
 
 try
 {
-    \Eszkozok\Eszk::ValidateLogin();
+    \Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
-    $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-    if ($AktProfil->getAdminJog() != 1)
-        Eszkozok\Eszk::dieToErrorPage('9077: Nincs jogosultságod módosítani a pontozási beállításokat!');
 
     if (IsURLParamSet('beallID'))
         $beallID = GetURLParam('beallID');

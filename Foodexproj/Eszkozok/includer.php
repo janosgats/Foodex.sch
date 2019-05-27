@@ -23,7 +23,7 @@ namespace Eszkozok
 
 
         /**
-         * Minden .php fájlt include_once-ol, ami rekurzívan ez alatt a mappa alatt van.
+         * Minden .php fájlt require_once-ol, ami rekurzívan ez alatt a mappa alatt van.
          * @param $dir Az includolás gyökere.
          */
         public static function includeallfromdir($dir)
@@ -43,7 +43,7 @@ namespace Eszkozok
                     if (preg_match("/^.*\\.(php)$/", $entry))
                     {
                         //echo "FILE: " . $fullpath . '<br>';
-                        include_once $fullpath;
+                        require_once $fullpath;
                     }
                 }
                 else if (is_dir($fullpath))

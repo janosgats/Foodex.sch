@@ -1,6 +1,6 @@
 <?php
 
-include_once('../Eszkozok/SMTPSender.php');
+require_once('../Eszkozok/SMTPSender.php');
 
 require_once('../vendor/autoload.php');
 

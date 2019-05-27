@@ -6,6 +6,7 @@ if (session_status() == PHP_SESSION_NONE)
 }
 
 require_once __DIR__ . '/Eszk.php';
+require_once __DIR__ . '/LoginValidator.php';
 require_once __DIR__ . '/entitas/Profil.php';
 
 class NavBar
@@ -17,13 +18,13 @@ class NavBar
             echo ' class="active" ';
     }
 
-    public static function echonavbar(\Profil\Profil $AktProfil, $ActMenu)
+    public static function echonavbar($ActMenu)
     {
         $rootURL = \Eszkozok\Eszk::GetRootURL();;
 
         ?>
 
-<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+        <!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -37,16 +38,24 @@ class NavBar
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="<?php echo $rootURL; ?>profil"><img alt="Brand" src="<?php echo $rootURL; ?>res/kepek/favicon1.svg"
-                                                                  style="height: 30px"></a>
+                                                                                      style="height: 30px"></a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li<?php self::act('jelentkezes', $ActMenu); ?>><a href="<?php echo $rootURL; ?>jelentkezes">Jelentkezés<span class="sr-only">(current)</span></a></li>
+                        <?php
+                        if (\Eszkozok\LoginValidator::MuszJelJog_NOEXIT())
+                        {
+                            ?>
+
+                            <li<?php self::act('jelentkezes', $ActMenu); ?>><a href="<?php echo $rootURL; ?>jelentkezes">Jelentkezés<span class="sr-only">(current)</span></a></li>
+                            <?php
+                        }
+                        ?>
                         <li<?php self::act('mosjelentk', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
                         <li<?php self::act('pontok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok">Pontok</a></li>
                         <?php
-                        if ($AktProfil->getAdminJog() == 1)
+                        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                         {
                             ?>
                             <li<?php self::act('ujmuszak', $ActMenu); ?>><a href="<?php echo $rootURL; ?>ujmuszak">Új műszak</a></li>

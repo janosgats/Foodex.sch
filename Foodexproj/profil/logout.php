@@ -5,7 +5,7 @@ $internal_id = $_SESSION['profilint_id'];
 unset($_SESSION['profilint_id']);
 
 
-include_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/Eszk.php';
 
 try
 {

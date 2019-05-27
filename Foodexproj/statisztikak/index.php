@@ -2,16 +2,12 @@
 session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
-\Eszkozok\Eszk::ValidateLogin();
-
-$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
-
-if ($AktProfil->getAdminJog() != 1)
-    Eszkozok\Eszk::RedirectUnderRoot('');
+\Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
 $InternalIDk = array();
 $ChartData = array();
@@ -235,7 +231,7 @@ catch (Exception $e)
 <div class="container">
 
     <?php
-    NavBar::echonavbar($AktProfil, 'statisztikak');
+    NavBar::echonavbar( 'statisztikak');
     ?>
 
     <div class="panel panel-default" style="min-width: 1000px">
