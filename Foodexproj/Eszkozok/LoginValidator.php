@@ -142,10 +142,10 @@ class LoginValidator
                 return true;
             }
 
-            if (!isset($_SESSION['profilint_id']))
+            if (!isset($_SESSION['profilint_id']) || $_SESSION['profilint_id'] == '')
                 throw new \Exception();
 
-            if (!isset($_SESSION['session_token']))
+            if (!isset($_SESSION['session_token']) || $_SESSION['profilint_id'] == '' || $_SESSION['profilint_id'] == 'kijelentkezve')
                 throw new \Exception();
 
             if (self::$cached_AdminJog == null || self::$cached_MuszJelJog == null || self::$cached_SessionToken == null)
@@ -171,6 +171,9 @@ class LoginValidator
                 self::$cached_MuszJelJog = $row['muszjeljog'];
                 self::$cached_SessionToken = $row['session_token'];
             }
+
+            if(self::$cached_SessionToken == null || self::$cached_SessionToken == 'kijelentkezve')
+                throw new \Exception();
 
             if ($_SESSION['session_token'] == self::$cached_SessionToken)
             {

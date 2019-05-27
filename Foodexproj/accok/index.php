@@ -97,7 +97,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             var a_user_nev = jQuery.parseHTML('<a href="../profil/?mprof=' + row['internal_id'] + '"><div style="width: 100%">' + escapeHtml(row['nev']) + '</div></a>')[0];
 
 
-            var i_toggle_adminjog = jQuery.parseHTML('<i id="i_toggle_adminjog' + row['internal_id'] + '" data-toggle="tooltip" data-container="table" data-placement="right"  title="Admin jog"  class="acc-jogosultsag ' + ((row['adminjog'] == 1) ? 'acc-jogosultsag-admin-true' : 'acc-jogosultsag-admin-false') + ' fas fa-2x fa-user-astronaut"></i>')[0];
+            var i_toggle_adminjog = jQuery.parseHTML('<i id="i_toggle_adminjog' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Admin jog"  class="acc-jogosultsag ' + ((row['adminjog'] == 1) ? 'acc-jogosultsag-admin-true' : 'acc-jogosultsag-admin-false') + ' fas fa-2x fa-user-astronaut"></i>')[0];
             i_toggle_adminjog.onclick = function ()
             {
                 var is_adminjog = getAdminJogFromParentNode(this.parentElement);
@@ -119,7 +119,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             };
 
 
-            var i_toggle_muszjeljog = jQuery.parseHTML('<i id="i_toggle_muszjeljog' + row['internal_id'] + '" data-toggle="tooltip" data-container="table" data-placement="right"  title="Műszakfelvételi jog"  class="acc-jogosultsag ' + ((row['muszjeljog'] == 1) ? 'acc-jogosultsag-muszjel-true' : 'acc-jogosultsag-muszjel-false') + ' fas fa-2x fa-handshake"></i>')[0];
+            var i_toggle_muszjeljog = jQuery.parseHTML('<i id="i_toggle_muszjeljog' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Műszakfelvételi jog"  class="acc-jogosultsag ' + ((row['muszjeljog'] == 1) ? 'acc-jogosultsag-muszjel-true' : 'acc-jogosultsag-muszjel-false') + ' fas fa-2x fa-handshake"></i>')[0];
             i_toggle_muszjeljog.onclick = function ()
             {
                 var is_adminjog = getAdminJogFromParentNode(this.parentElement);
