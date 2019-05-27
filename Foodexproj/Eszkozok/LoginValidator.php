@@ -91,7 +91,89 @@ class LoginValidator
         return false;
     }
 
-    static public function AccountSignedIn()
+    static public function PontLatJog_DiesToErrorrPage()
+    {
+        try
+        {
+            if (self::IsLoginValid('pontlatjog'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+
+        Eszk::dieToErrorPage('Nincs jogosultságod mások pontszámának megtekintésére.');
+        die('Nincs jogosultságod mások pontszámának megtekintésére.');
+    }
+
+    static public function PontLatJog_ThrowsException()
+    {
+        try
+        {
+            if (self::IsLoginValid('pontlatjog'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+        throw new \Exception('Nincs jogosultságod mások pontszámának megtekintésére.');
+    }
+
+    static public function PontLatJog_NOEXIT()
+    {
+        try
+        {
+            if (self::IsLoginValid('pontlatjog'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+        return false;
+    }
+
+    static public function FxTag_DiesToErrorrPage()
+    {
+        try
+        {
+            if (self::IsLoginValid('fxtag'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+
+        Eszk::dieToErrorPage('Nem vagy Foodex tag.');
+        die('Nem vagy Foodex tag.');
+    }
+
+    static public function FxTag_ThrowsException()
+    {
+        try
+        {
+            if (self::IsLoginValid('fxtag'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+        throw new \Exception('Nem vagy Foodex tag.');
+    }
+
+    static public function FxTag_NOEXIT()
+    {
+        try
+        {
+            if (self::IsLoginValid('fxtag'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+        return false;
+    }
+
+    static public function AccountSignedIn_RedirectsToRoot()
     {
         try
         {
@@ -129,6 +211,8 @@ class LoginValidator
 
     private static $cached_AdminJog = null;
     private static $cached_MuszJelJog = null;
+    private static $cached_PontLatJog = null;
+    private static $cached_FxTag = null;
     private static $cached_SessionToken = null;
 
     static private function IsLoginValid($logintype)
@@ -148,7 +232,7 @@ class LoginValidator
             if (!isset($_SESSION['session_token']) || $_SESSION['profilint_id'] == '' || $_SESSION['profilint_id'] == 'kijelentkezve')
                 throw new \Exception();
 
-            if (self::$cached_AdminJog == null || self::$cached_MuszJelJog == null || self::$cached_SessionToken == null)
+            if (self::$cached_AdminJog == null || self::$cached_MuszJelJog == null || self::$cached_SessionToken == null || self::$cached_PontLatJog == null || self::$cached_FxTag == null)
             {
 
                 $conn = Eszk::initMySqliObject();
@@ -169,6 +253,8 @@ class LoginValidator
 
                 self::$cached_AdminJog = $row['adminjog'];
                 self::$cached_MuszJelJog = $row['muszjeljog'];
+                self::$cached_PontLatJog = $row['pontlatjog'];
+                self::$cached_FxTag = $row['fxtag'];
                 self::$cached_SessionToken = $row['session_token'];
             }
 
@@ -184,12 +270,20 @@ class LoginValidator
                         break;
 
                     case 'adminjog':
-                        if (self::$cached_AdminJog == 1)
+                        if (self::$cached_AdminJog == 1 && self::$cached_FxTag == 1)
                             return true;
                         break;
 
                     case 'muszjeljog':
-                        if (self::$cached_MuszJelJog == 1)
+                        if (self::$cached_MuszJelJog == 1 && self::$cached_FxTag == 1)
+                            return true;
+                        break;
+                    case 'pontlatjog':
+                        if (self::$cached_PontLatJog == 1)
+                            return true;
+                        break;
+                    case 'fxtag':
+                        if (self::$cached_FxTag == 1)
                             return true;
                         break;
                 }
@@ -198,7 +292,6 @@ class LoginValidator
             }
             else
                 throw new \Exception();
-
 
         }
         catch (\Exception $e)

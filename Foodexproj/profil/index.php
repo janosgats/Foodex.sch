@@ -7,7 +7,7 @@ require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
-\Eszkozok\LoginValidator::AccountSignedIn();
+\Eszkozok\LoginValidator::AccountSignedIn_RedirectsToRoot();
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
@@ -31,7 +31,10 @@ else
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137789203-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag()
+        {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'UA-137789203-1');
@@ -53,7 +56,6 @@ else
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 
-
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
 
@@ -64,31 +66,45 @@ else
 <div class="container">
 
     <?php
-    NavBar::echonavbar( '');
+    NavBar::echonavbar('');
     ?>
 
     <div class="jumbotron">
-        <h1 style="display:inline" ><?php echo $MegjProfil->getNev(); ?></h1>
+        <h1 style="display:inline"><?php echo $MegjProfil->getNev(); ?></h1>
         <?php
-        if($MegjProfil->getInternalID() == 'efb8476b-46c2-7aa8-b612-46d3b3a84e4c')//Wuki Internal ID-je
+        if ($MegjProfil->getInternalID() == 'efb8476b-46c2-7aa8-b612-46d3b3a84e4c')//Wuki Internal ID-je
         {
             ?>
             <h3 style="display:inline; color: #777777"> &nbsp; (Tuti a világi spanja a gyereknek.)</h3>
-        <?php
+            <?php
         }
         ?>
 
         <p>Értesítési cím: <b><?php echo $MegjProfil->getEmail(); ?></b></p>
-        <a style="cursor: pointer;" href="<?php echo '../pontok/userpont/?int_id=' . $MegjProfil->getInternalID(); ?>">
-            <p>Pontok: <b><?php try
-                    {
-                        $buff = \Eszkozok\Eszk::GetAccPontok($MegjProfil->getInternalID());
-                        echo $buff;
-                    }
-                    catch (\Exception $e)
-                    {
-                        echo 'N/A';
-                    } ?> pont</b></p></a>
+
+        <?php
+        if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehet pontja
+        {
+            if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT() || ($MegjProfil->getInternalID() == $AktProfil->getInternalID()))
+            {
+                ?>
+
+                <a style="cursor: pointer;" href="<?php echo '../pontok/userpont/?int_id=' . $MegjProfil->getInternalID(); ?>">
+                    <p>Pontok: <b><?php
+                            try
+                            {
+                                $buff = \Eszkozok\Eszk::GetAccPontok($MegjProfil->getInternalID());
+                                echo $buff;
+                            }
+                            catch (\Exception $e)
+                            {
+                                echo 'N/A';
+                            } ?> pont</b></p></a>
+
+                <?php
+            }
+        }
+        ?>
 
         <p style="display: inline">Kedvenc vicc: </p>
 
@@ -236,91 +252,97 @@ else
         }
 
     </script>
+    <?php
+    if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehetnek kompenzációi
+    {
+        ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-
-            Kompenzációk
-        </div>
-        <div class="panel-body">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Pont</th>
-                    <th>Megjegyzés</th>
-
-                    <?php
-                    if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-                    {
-                        ?>
-                        <th></th>
+                Kompenzációk
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Pont</th>
+                        <th>Megjegyzés</th>
 
                         <?php
-                    }
-                    ?>
-                </tr>
-                </thead>
-                <?php
-                try
-                {
-                    $conn = \Eszkozok\Eszk::initMySqliObject();
-                    $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `internal_id` = ? ORDER BY `ido` DESC;");
-                    if (!$stmt)
-                        throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
-
-                    $buffInt = $MegjProfil->getInternalID();
-                    $stmt->bind_param('s', $buffInt);
-
-                    if ($stmt->execute())
-                    {
-                        $resultKomp = $stmt->get_result();
-                        if ($resultKomp->num_rows > 0)
+                        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                         {
-                            while ($rowKomp = $resultKomp->fetch_assoc())
+                            ?>
+                            <th></th>
+
+                            <?php
+                        }
+                        ?>
+                    </tr>
+                    </thead>
+                    <?php
+                    try
+                    {
+                        $conn = \Eszkozok\Eszk::initMySqliObject();
+                        $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `internal_id` = ? ORDER BY `ido` DESC;");
+                        if (!$stmt)
+                            throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                        $buffInt = $MegjProfil->getInternalID();
+                        $stmt->bind_param('s', $buffInt);
+
+                        if ($stmt->execute())
+                        {
+                            $resultKomp = $stmt->get_result();
+                            if ($resultKomp->num_rows > 0)
                             {
-                                ?>
+                                while ($rowKomp = $resultKomp->fetch_assoc())
+                                {
+                                    ?>
 
-                                <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido']))?'':'style="background-color: #EEEEEE;color: grey"';?>>
-                                    <td>
-                                        <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
-                                    </td>
-                                    <td>
-                                        <?php echo htmlspecialchars($rowKomp['megj']); ?>
-                                    </td>
-
-                                    <?php
-                                    if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-                                    {
-                                        ?>
+                                    <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido'])) ? '' : 'style="background-color: #EEEEEE;color: grey"'; ?>>
                                         <td>
-                                            <p>
-                                                <a href="../ujkomp?szerk=1&kompid=<?php echo $rowKomp['ID']; ?>"
-                                                   target="_blank"
-                                                   style="text-decoration: none; color: inherit">
-                                                    <i class="fa fa-cog fa-2x settingsgear"></i>
-                                                </a>
-                                            </p>
+                                            <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo htmlspecialchars($rowKomp['megj']); ?>
                                         </td>
 
                                         <?php
-                                    }
-                                    ?>
+                                        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
+                                        {
+                                            ?>
+                                            <td>
+                                                <p>
+                                                    <a href="../ujkomp?szerk=1&kompid=<?php echo $rowKomp['ID']; ?>"
+                                                       target="_blank"
+                                                       style="text-decoration: none; color: inherit">
+                                                        <i class="fa fa-cog fa-2x settingsgear"></i>
+                                                    </a>
+                                                </p>
+                                            </td>
 
-                                </tr>
-                                <?php
+                                            <?php
+                                        }
+                                        ?>
+
+                                    </tr>
+                                    <?php
+                                }
                             }
                         }
+                        else
+                            throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
                     }
-                    else
-                        throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
-                }
-                catch (\Exception $e)
-                {
-                }
-                ?>
-            </table>
+                    catch (\Exception $e)
+                    {
+                    }
+                    ?>
+                </table>
+            </div>
         </div>
-    </div>
+        <?php
+    }
+    ?>
 </div>
 </body>
 </html>

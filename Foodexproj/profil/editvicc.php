@@ -10,7 +10,7 @@ require_once '../Eszkozok/AJAXhost.php';
 
 if (IsURLParamSet('megj_int_id'))
 {
-    \Eszkozok\LoginValidator::AccountSignedIn();
+    \Eszkozok\LoginValidator::AccountSignedIn_RedirectsToRoot();
 
     if (GetURLParam('megj_int_id') != $_SESSION['profilint_id'])
         QuitHost('99210: ' . 'Ne faszkodj az internal id-vel, nem a tied :/');

@@ -7,13 +7,14 @@ require_once __DIR__ . '/../../Eszkozok/param.php';
 require_once __DIR__ . '/../../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../../Eszkozok/navbar.php';
 
-\Eszkozok\LoginValidator::AccountSignedIn();
-$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
+\Eszkozok\LoginValidator::AccountSignedIn_RedirectsToRoot();
+
 
 $MosogatasJelentkezes = 0;//1: Ha az aktuális profil akar műszak után mosogatásra jelentkezni
 
 if (IsURLParamSet('mosjelentk') && GetURLParam('mosjelentk') == 1)
 {
+    \Eszkozok\LoginValidator::FxTag_DiesToErrorrPage();//Csak nyithatja meg a mosogatás nmézetet, ha Fx tag
     SetURLParam('int_id', $_SESSION['profilint_id']);
 
     $MosogatasJelentkezes = 1;
@@ -27,6 +28,8 @@ elseif (!IsURLParamSet('int_id'))
 $MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'));
 
 
+if($_SESSION['profilint_id'] != $MegjelenitettProfil->getInternalID())
+    \Eszkozok\LoginValidator::PontLatJog_DiesToErrorrPage();//Ha nem a saját profilja, akkor csak akkor láthatja, ha van joga hozzá
 
 $mosfoglalt = false;
 

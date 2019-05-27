@@ -151,11 +151,19 @@ table {
 {
     color: #3355ff;
 }
+.acc-jogosultsag-pontlat-true
+{
+    color: magenta;
+}
+.acc-jogosultsag-pontlat-false
+{
+    color: #3355ff;
+}
 .acc-jogosultsag
 {
     cursor: pointer;
 }
 .acc-jogosultsag:hover
 {
-    color: orange;
+    color: darkorange;
 }

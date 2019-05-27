@@ -6,6 +6,7 @@ namespace Eszkozok
 
     use Profil\Profil;
 
+    require_once __DIR__ . '/entitas/Profil.php';
     require_once __DIR__ . '/entitas/Muszak.php';
     require_once __DIR__ . '/entitas/Kompenz.php';
     require_once __DIR__ . '/entitas/Kor.php';
@@ -461,6 +462,7 @@ namespace Eszkozok
                 self::dieToErrorPage('8512: ' . $e->getMessage());
             }
         }
+
         public static function GetTaroltKorAdat($korid, $statpageerr)
         {
             $conn = self::initMySqliObject();
@@ -522,6 +524,7 @@ namespace Eszkozok
                     self::dieToErrorPage('8492: ' . $e->getMessage());
             }
         }
+
         public static function initMySqliObject()
         {
             $username = "fxtestuser";
@@ -715,9 +718,7 @@ namespace Eszkozok
 
         public static function GetTaroltProfilAdat($internal_id)
         {
-            $ProfilNev = "";
-            $AdminJog = 0;
-            $email = "";
+            $profKi = new Profil();
 
 
             $conn = 0;
@@ -745,12 +746,24 @@ namespace Eszkozok
                     {
                         $row = $result->fetch_assoc();
 
-                        if (isset($row['nev']))
-                            $ProfilNev = $row['nev'];
-                        if (isset($row['adminjog']))
-                            $AdminJog = $row['adminjog'];
-                        if (isset($row['email']))
-                            $email = $row['email'];
+                        if(isset($row['ID']))
+                        $profKi->setID($row['ID']);
+                        if(isset($row['internal_id']))
+                        $profKi->setInternalID($row['internal_id']);
+                        if(isset($row['nev']))
+                        $profKi->setNev($row['nev']);
+                        if(isset($row['fxtag']))
+                        $profKi->setFxTag($row['fxtag']);
+                        if(isset($row['adminjog']))
+                        $profKi->setAdminJog($row['adminjog']);
+                        if(isset($row['muszjeljog']))
+                        $profKi->setMuszJelJog($row['muszjeljog']);
+                        if(isset($row['pontlatjog']))
+                        $profKi->setPontLatJog($row['pontlatjog']);
+                        if(isset($row['email']))
+                        $profKi->setEmail($row['email']);
+                        if(isset($row['sessin_token']))
+                        $profKi->setSessionToken($row['sessin_token']);
 
                     }
                     else
@@ -774,8 +787,7 @@ namespace Eszkozok
                 }
             }
 
-            require_once __DIR__ . '/entitas/Profil.php';
-            return new Profil($internal_id, $ProfilNev, $AdminJog, $email);
+            return $profKi;
         }
 
         public static function initNewAuthSchProvider()
@@ -829,14 +841,8 @@ namespace Eszkozok
         {
             foreach ($kortagsagok as $kor)
             {
-                try
-                {
-                    if ($kor['name'] == 'FoodEx')
-                        return $kor;
-                }
-                catch (Exception $e)
-                {
-                }
+                if ($kor['name'] == 'FoodEx')
+                    return $kor;
             }
 
             return false;
@@ -952,27 +958,10 @@ namespace Eszkozok
                     {
                         $resp = \Eszkozok\AuthSchProvider::getResourceResponse($accessToken);
 
-                        $kortagsagok = $resp['eduPersonEntitlement'];
+                        if (!isset($resp) || $resp == '')
+                            self::dieToErrorPage('53463: Resource response is invalid!');
 
-                        if ((($tagsag = self::testFoodexKortagsag($kortagsagok)) != false))
-                        {
-                            ?>
-                            <h3 style="color: green">FoodEx <?php echo $tagsag['status']; ?> vagy!</h3>
-                            <?php
-                            self::FxTagMuvelet($resp);
-
-                        }
-                        else
-                        {
-
-                            ?>
-                            <h3 style="color: red">Nem vagy FoodEx tag!</h3>
-                            <?php
-
-                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resp['internal_id'], (isset($resp['displayName'])) ? $resp['displayName'] : 'No DisplayName', self::get_client_ip_address()]);
-                            self::RedirectUnderRoot('nemkortag.html');
-                        }
-                        // var_dump($resp);
+                        self::FxLoginMuvelet($resp);
                     }
 
 //        $resourceOwner = $provider->getResourceOwner($accessToken);
@@ -1008,10 +997,26 @@ namespace Eszkozok
         /**
          * @param $resresp AuthSCH resource response
          */
-        static function FxTagMuvelet($resresp)
+        static function FxLoginMuvelet($resresp)
         {
+            $conn = new \mysqli();
             try
             {
+                $logger = new \MonologHelper('Eszk::FxLoginMuvelet()');
+
+
+                $fxtagsag = false;
+                try
+                {
+                    $kortagsagok = $resresp['eduPersonEntitlement'];
+                    $fxtagsag = self::testFoodexKortagsag($kortagsagok);
+                }
+                catch (\Exception $e)
+                {
+                    self::dieToErrorPage('53464: ' . $e->getMessage());
+                }
+
+
                 if (!isset($resresp['internal_id']))
                     throw new \Exception('internal_id is not set in $resresp');
 
@@ -1032,12 +1037,8 @@ namespace Eszkozok
 
                 $conn = self::initMySqliObject();
 
-                if (!$conn)
-                    throw new \Exception('SQL hiba: $conn is \'false\'');
 
                 $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
-                if (!$stmt)
-                    throw new \Exception('SQL hiba: $stmt is \'false\'');
 
                 $stmt->bind_param('s', $internal_id);
 
@@ -1046,78 +1047,79 @@ namespace Eszkozok
                     $result = $stmt->get_result();
 
                     if ($result->num_rows == 0)
-                    {//Még nem regisztrált, új acc
-                        $adminjog = 0;
+                    {//Még NEM regisztrált, új acc
 
-                        $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `adminjog`, `email`, `session_token`) VALUES (?, ?, ?, ?, ?);");
-                        $stmt->bind_param('ssiss', $internal_id, $displayName, $adminjog, $email, $session_token);
-
-
-                        if ($stmt->execute())
+                        if ($fxtagsag)
                         {
+                            $fxtagsag_buff = 1;
+                            $muszjeljog_buff = 1;
+                            $pontlatjog_buff = 1;
 
+                            $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `fxtag`, `muszjeljog`, `pontlatjog`, `email`) VALUES (?, ?, ?,  ?, ?, ?);");
+                            $stmt->bind_param('ssiiis', $internal_id, $displayName, $fxtagsag_buff, $muszjeljog_buff, $pontlatjog_buff, $email);
+
+
+                            if (!$stmt->execute())
+                                throw new \Exception('');
                         }
                         else
-                            throw new \Exception('');
+                        {
+                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resresp['internal_id'], (($resresp['displayName']) ?: 'No DisplayName'), self::get_client_ip_address()]);
+                            self::RedirectUnderRoot('nemkortag.html');
+                        }
 
                     }
                     else
                     {//Már regisztrált acc
 
-                        if (isset($displayName))
-                        {
-
-                            $row = $result->fetch_assoc();
-                            //  var_dump($row);
-                            //   var_dump($row['nev']);
-                            //  var_dump($displayName);
-
-                            if ($displayName != null && $displayName !== $row['nev'])
-                            {//Frissítjük a nevet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
-
-                                $stmt = $conn->prepare("UPDATE `fxaccok` SET `nev` = ? WHERE `fxaccok`.`internal_id` = ?");
-                                $stmt->bind_param('ss', $displayName, $internal_id);
+                        $row = $result->fetch_assoc();
 
 
-                                if ($stmt->execute())
-                                {
+                        if ($displayName != null && $displayName !== $row['nev'])
+                        {//Frissítjük a nevet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
 
-                                }
-                                else
-                                    throw new \Exception('Hiba a displayName frissítése során');
-
-
-                            }
-
-                            if ($email != null && $email !== $row['email'])
-                            {//Frissítjük az e-mail címet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
-
-                                $stmt = $conn->prepare("UPDATE `fxaccok` SET `email` = ? WHERE `fxaccok`.`internal_id` = ?");
-                                $stmt->bind_param('ss', $email, $internal_id);
+                            $stmt = $conn->prepare("UPDATE `fxaccok` SET `nev` = ? WHERE `fxaccok`.`internal_id` = ?");
+                            $stmt->bind_param('ss', $displayName, $internal_id);
 
 
-                                if ($stmt->execute())
-                                {
+                            if (!$stmt->execute())
+                                throw new \Exception('Hiba a displayName frissítése során');
 
-                                }
-                                else
-                                    throw new \Exception('Hiba az email frissítése során');
-
-
-                            }
 
                         }
+
+                        if ($email != null && $email !== $row['email'])
+                        {//Frissítjük az e-mail címet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
+
+                            $stmt = $conn->prepare("UPDATE `fxaccok` SET `email` = ? WHERE `fxaccok`.`internal_id` = ?");
+                            $stmt->bind_param('ss', $email, $internal_id);
+
+
+                            if (!$stmt->execute())
+                                throw new \Exception('Hiba az email frissítése során');
+
+
+                        }
+
+                        if ($fxtagsag != null && $fxtagsag !== $row['fxtag'])
+                        {//Frissítjük az fxtag-ot az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
+
+                            $fxtagsagbuff = ($fxtagsag) ? 1 : 0;
+                            $stmt = $conn->prepare("UPDATE `fxaccok` SET `fxtag` = ? WHERE `fxaccok`.`internal_id` = ?");
+                            $stmt->bind_param('ss', $fxtagsagbuff, $internal_id);
+
+
+                            if (!$stmt->execute())
+                                throw new \Exception('Hiba az fxtagsag frissítése során');
+                        }
+
                     }
 
                     //Session_token frissítése
                     $stmt = $conn->prepare("UPDATE `fxaccok` SET `session_token` = ? WHERE `fxaccok`.`internal_id` = ?");
                     $stmt->bind_param('ss', $session_token, $internal_id);
 
-                    if ($stmt->execute())
-                    {
-
-                    }
-                    else
+                    if (!$stmt->execute())
                         throw new \Exception('Hiba a session_token frissítése során');
                 }
                 else
@@ -1129,16 +1131,15 @@ namespace Eszkozok
                 $_SESSION['profilint_id'] = $internal_id;
                 $_SESSION['session_token'] = $session_token;
 
-                ?>
 
-                <script>
-                    window.location.replace("<?php echo self::GetRootURL() . 'profil' ?>");
-                </script>
-
-                <?php
+                self::RedirectUnderRoot('profil');
 
             }
             catch (\Exception $e)
+            {
+                self::dieToErrorPage("1009: " . $e->getMessage());
+            }
+            finally
             {
                 try
                 {
@@ -1147,15 +1148,6 @@ namespace Eszkozok
                 catch (\Exception $e)
                 {
                 }
-
-                self::dieToErrorPage("1009: " . $e->getMessage());
-            }
-            try
-            {
-                $conn->close();
-            }
-            catch (\Exception $e)
-            {
             }
         }
 

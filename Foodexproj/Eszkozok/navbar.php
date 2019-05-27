@@ -7,7 +7,6 @@ if (session_status() == PHP_SESSION_NONE)
 
 require_once __DIR__ . '/Eszk.php';
 require_once __DIR__ . '/LoginValidator.php';
-require_once __DIR__ . '/entitas/Profil.php';
 
 class NavBar
 {
@@ -20,12 +19,15 @@ class NavBar
 
     public static function echonavbar($ActMenu)
     {
+        \Eszkozok\LoginValidator::AccountSignedIn_RedirectsToRoot();
+
         $rootURL = \Eszkozok\Eszk::GetRootURL();;
 
         ?>
 
         <!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 
+        <link rel="stylesheet" href="<?= \Eszkozok\Eszk::GetRootURL(); ?>css/navbar_set_breakpoint.css">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -47,14 +49,21 @@ class NavBar
                         if (\Eszkozok\LoginValidator::MuszJelJog_NOEXIT())
                         {
                             ?>
-
                             <li<?php self::act('jelentkezes', $ActMenu); ?>><a href="<?php echo $rootURL; ?>jelentkezes">Jelentkezés<span class="sr-only">(current)</span></a></li>
                             <?php
                         }
-                        ?>
-                        <li<?php self::act('mosjelentk', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
-                        <li<?php self::act('pontok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok">Pontok</a></li>
+                        if (\Eszkozok\LoginValidator::FxTag_NOEXIT())
+                        {
+                            ?>
+                            <li<?php self::act('mosjelentk', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok/userpont/?mosjelentk=1">Mosogattam!</a></li>
                         <?php
+                        }
+                        if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT())
+                        {
+                            ?>
+                            <li<?php self::act('pontok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok">Pontok</a></li>
+                            <?php
+                        }
                         if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                         {
                             ?>
@@ -80,4 +89,3 @@ class NavBar
         <?php
     }
 }
-//echonavbar(Eszkozok\Eszk::GetBejelentkezettProfilAdat(), false);

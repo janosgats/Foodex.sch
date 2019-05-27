@@ -5,7 +5,7 @@ require_once __DIR__ . '/../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
-\Eszkozok\LoginValidator::AccountSignedIn();
+\Eszkozok\LoginValidator::PontLatJog_DiesToErrorrPage();
 
 ?>
 
@@ -99,6 +99,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                                                 LEFT JOIN fxmuszakok ON ErvenyesJelentkezesek.muszid = fxmuszakok.ID
                                                 AND (fxmuszakok.`idoveg` < NOW()
                                                 AND ( fxmuszakok.`idokezd` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ))
+                                                WHERE fxaccok.fxtag = 1
                                                 GROUP BY fxaccok.internal_id
                                                 ORDER BY fxaccok.nev ASC;");
 

@@ -8,9 +8,8 @@ session_start();
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 
-\Eszkozok\LoginValidator::AccountSignedIn();
+\Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
-$AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
 ob_start();
 $conn;
