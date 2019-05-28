@@ -229,7 +229,7 @@ class LoginValidator
             if (!isset($_SESSION['profilint_id']) || $_SESSION['profilint_id'] == '')
                 throw new \Exception();
 
-            if (!isset($_SESSION['session_token']) || $_SESSION['profilint_id'] == '' || $_SESSION['profilint_id'] == 'kijelentkezve')
+            if (!isset($_SESSION['session_token']) || $_SESSION['session_token'] == '' || $_SESSION['session_token'] == 'kijelentkezve')
                 throw new \Exception();
 
             if (self::$cached_AdminJog == null || self::$cached_MuszJelJog == null || self::$cached_SessionToken == null || self::$cached_PontLatJog == null || self::$cached_FxTag == null)
