@@ -6,3 +6,16 @@
 .settingsgear:hover {
     color: rgb(51, 122, 200);
 }
+
+.ErtekelesTableheader
+{
+    text-align: center
+}
+.ErtekelesColumnErtekelo
+{
+    text-align: center
+}
+.ErtekelesColumnMuszak
+{
+    text-align: center
+}

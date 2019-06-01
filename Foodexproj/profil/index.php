@@ -179,7 +179,7 @@ else
 
         var ViccText = '<?php
             if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
-                echo htmlspecialchars($ProfInf->KedvencVicc);
+                echo htmlentities($ProfInf->KedvencVicc);
             ?>';
 
         function SubmitKedvencVicc()
@@ -301,10 +301,10 @@ else
 
                                     <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido'])) ? '' : 'style="background-color: #EEEEEE;color: grey"'; ?>>
                                         <td>
-                                            <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
+                                            <?php echo htmlentities($rowKomp['pont']) . ' pont'; ?>
                                         </td>
                                         <td>
-                                            <?php echo htmlspecialchars($rowKomp['megj']); ?>
+                                            <?php echo htmlentities($rowKomp['megj']); ?>
                                         </td>
 
                                         <?php
@@ -324,6 +324,106 @@ else
                                             <?php
                                         }
                                         ?>
+
+                                    </tr>
+                                    <?php
+                                }
+                            }
+                        }
+                        else
+                            throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
+                    }
+                    catch (\Exception $e)
+                    {
+                    }
+                    ?>
+                </table>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
+    <?php
+    if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehetnek kompenzációi
+    {
+        ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+                Értékelések
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="ErtekelesTableheader" style="min-width: 140px;">Műszak</th>
+                        <th class="ErtekelesTableheader" style="min-width: 170px;">Értékelő</th>
+                        <th class="ErtekelesTableheader">Értékelés</th>
+
+                    </tr>
+                    </thead>
+                    <?php
+                    try
+                    {
+                        $conn = \Eszkozok\Eszk::initMySqliObject();
+
+                        $stmt = $conn->prepare("SELECT
+                        fxmuszakok.musznev AS MuszNev,
+                        fxmuszakok.idokezd AS MuszIdoKezd,
+                        fxmuszakok.id AS MuszId,
+                        ertekelesek.*,
+                        fxaccok.nev AS ErtekeloNev
+                        FROM `ertekelesek`
+                        JOIN `fxmuszakok` ON ertekelesek.muszid = fxmuszakok.id
+                        JOIN fxaccok ON fxaccok.internal_id = ertekelesek.ertekelo
+                        WHERE `ertekelt` = ? ORDER BY `ertekelesek`.`id` DESC;");
+
+                        $buffInt = $MegjProfil->getInternalID();
+                        $stmt->bind_param('s', $buffInt);
+
+
+                        if ($stmt->execute())
+                        {
+                            $resultErt = $stmt->get_result();
+                            if ($resultErt->num_rows > 0)
+                            {
+                                while ($rowErt = $resultErt->fetch_assoc())
+                                {
+                                    ?>
+
+                                    <tr>
+                                        <td class="ErtekelesColumnMuszak">
+                                            <p><?php echo htmlentities($rowErt['MuszNev'] ?: 'N/A') . ' (' . htmlentities($rowErt['MuszId'] ?: 'N/A') . ')'; ?></p>
+
+                                            <?php
+
+                                            if ($rowErt['MuszIdoKezd'])
+                                            {
+                                                $MuszKezdDate = new DateTime($rowErt['MuszIdoKezd']);
+                                                ?>
+                                                <p><?php echo htmlentities($MuszKezdDate->format('Y-m-d')); ?></p>
+                                                <p><?php echo htmlentities($MuszKezdDate->format('H:i')); ?></p>
+                                                <?php
+                                            }
+                                            ?>
+                                        </td>
+                                        <td class="ErtekelesColumnErtekelo">
+                                            <?php echo htmlentities($rowErt['ErtekeloNev']); ?>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <p><b>Pontosság:&nbsp;&nbsp;&nbsp;</b> <?php echo htmlentities($rowErt['e_pontossag'] ?: 'Na'); ?> <b>/</b>10</p>
+
+                                                <p><b>Pénzkezelés: </b> <?php echo htmlentities($rowErt['e_penzkezeles'] ?: 'Na'); ?> <b>/</b>10</p>
+
+                                                <p><b>Szakértelem: </b> <?php echo htmlentities($rowErt['e_szakertelem'] ?: 'Na'); ?> <b>/</b>10</p>
+
+                                                <p><b>Dughatóság: </b> <?php echo htmlentities($rowErt['e_dughatosag'] ?: 'Na'); ?> <b>/</b>10</p>
+
+                                                <p><b>Szöveges értékelés:</b> <?php echo htmlentities($rowErt['e_szoveg'] ?: 'N/A'); ?></p>
+                                            </div>
+                                        </td>
+
 
                                     </tr>
                                     <?php

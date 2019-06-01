@@ -150,11 +150,11 @@ try
         if (!$conn)
             throw new \Exception('SQL hiba: $conn is \'false\'');
 
-        $stmt = $conn->prepare("UPDATE `fxmuszakok` SET `musznev` = ?, `korid` = ?, `idokezd` = ?, `idoveg` = ?, `letszam` = ?, `pont` = ?, `mospont` = ? , `megj` = ? WHERE `fxmuszakok`.`ID` = ?;");
+        $stmt = $conn->prepare("UPDATE `fxmuszakok` SET `kiirta` = ?, `musznev` = ?, `korid` = ?, `idokezd` = ?, `idoveg` = ?, `letszam` = ?, `pont` = ?, `mospont` = ? , `megj` = ? WHERE `fxmuszakok`.`ID` = ?;");
         if (!$stmt)
             throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-        $stmt->bind_param('sisssidds', $AktMuszak->musznev, $AktMuszak->korID, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
+        $stmt->bind_param('ssisssidds', $_SESSION['profilint_id'], $AktMuszak->musznev, $AktMuszak->korID, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
     }
 
     if ($stmt->execute())
