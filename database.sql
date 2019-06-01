@@ -25,7 +25,7 @@ CREATE TABLE `ertekelesek` (
 DROP TABLE IF EXISTS `fxaccok`;
 CREATE TABLE `fxaccok` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `internal_id` varchar(120) CHARACTER SET latin2 COLLATE latin2_hungarian_ci DEFAULT NULL COMMENT 'AuthSch internal_id',
+  `internal_id` varchar(120) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL COMMENT 'AuthSch internal_id',
   `nev` text CHARACTER SET latin2 COLLATE latin2_hungarian_ci COMMENT 'AuthSch DisplayName',
   `fxtag` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Fx kortag PEK szerint',
   `adminjog` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Admin',
@@ -34,8 +34,7 @@ CREATE TABLE `fxaccok` (
   `email` text CHARACTER SET latin2 COLLATE latin2_hungarian_ci,
   `session_token` varchar(124) CHARACTER SET latin2 COLLATE latin2_hungarian_ci DEFAULT NULL COMMENT 'Bejelentkezett session token',
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `ID` (`ID`),
-  UNIQUE KEY `internal_id` (`internal_id`)
+  KEY `internal_id` (`internal_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 
@@ -50,9 +49,7 @@ CREATE TABLE `fxjelentk` (
   `mosogat` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1: mosogatott, 0: nem mosogatott',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`),
-  UNIQUE KEY `ID_2` (`ID`),
-  KEY `muszid` (`muszid`),
-  CONSTRAINT `fxjelentk_ibfk_1` FOREIGN KEY (`muszid`) REFERENCES `fxmuszakok` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE
+  UNIQUE KEY `ID_2` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -61,7 +58,7 @@ CREATE TABLE `fxmuszakok` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `kiirta` varchar(120) CHARACTER SET latin2 COLLATE latin2_hungarian_ci DEFAULT NULL COMMENT 'A muszak kiirojanak internal_id-je',
   `musznev` varchar(250) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL,
-  `korID` int(11) DEFAULT NULL,
+  `korID` bigint(20) DEFAULT NULL,
   `aktiv` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0: inaktiv, 1: aktiv',
   `idokezd` datetime DEFAULT NULL,
   `idoveg` datetime DEFAULT NULL,
@@ -94,9 +91,20 @@ CREATE TABLE `kompenz` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+DROP TABLE IF EXISTS `korertekelok`;
+CREATE TABLE `korertekelok` (
+  `ertekelo` varchar(120) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL,
+  `korid` bigint(20) NOT NULL,
+  UNIQUE KEY `ertekelo_korid` (`ertekelo`,`korid`),
+  KEY `korid` (`korid`),
+  CONSTRAINT `korertekelok_ibfk_1` FOREIGN KEY (`korid`) REFERENCES `korok` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `korertekelok_ibfk_2` FOREIGN KEY (`ertekelo`) REFERENCES `fxaccok` (`internal_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 DROP TABLE IF EXISTS `korok`;
 CREATE TABLE `korok` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `nev` varchar(220) COLLATE latin2_hungarian_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
@@ -133,4 +141,4 @@ CREATE TABLE `profilinfo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
 
 
--- 2019-06-01 03:26:29
+-- 2019-06-01 10:25:13

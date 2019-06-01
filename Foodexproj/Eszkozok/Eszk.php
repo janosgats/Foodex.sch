@@ -660,7 +660,7 @@ namespace Eszkozok
             $internal_id = $_SESSION['profilint_id'];
 
 
-            return self::GetTaroltProfilAdat($internal_id);
+            return self::GetTaroltProfilAdat($internal_id, true);
         }
 
         public static function GetTaroltProfilInfo($internal_id)
@@ -721,7 +721,7 @@ namespace Eszkozok
             return $ProfInf;
         }
 
-        public static function GetTaroltProfilAdat($internal_id)
+        public static function GetTaroltProfilAdat($internal_id, $dieto_errorpage = false)
         {
             $profKi = new Profil();
 
@@ -779,7 +779,10 @@ namespace Eszkozok
             }
             catch (\Exception $e)
             {
-                self::dieToErrorPage('1220: ' . $e->getMessage());
+                if ($dieto_errorpage)
+                    self::dieToErrorPage('1220: ' . $e->getMessage());
+                else
+                    return null;
             }
             finally
             {
@@ -1156,7 +1159,7 @@ namespace Eszkozok
             }
         }
 
-        public static function dieToErrorPage($errcode)
+        public static function dieToErrorPage($errcode, $retryurl = null)
         {
             try
             {
@@ -1166,7 +1169,12 @@ namespace Eszkozok
             catch (\Exception $e)
             {
             }
-            self::RedirectUnderRoot('statuspages/error.php?code=' . urlencode($errcode));
+            $celparam = '';
+            if ($retryurl != null)
+            {
+                $celparam = '&retryurl=' . urlencode($retryurl);
+            }
+            self::RedirectUnderRoot('statuspages/error.php?code=' . urlencode($errcode) . $celparam);
         }
 
         public static function RedirectUnderRoot($relurl)

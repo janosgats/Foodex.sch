@@ -8,6 +8,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 
 \Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
+ob_start();
 
 ?>
 
@@ -63,8 +64,115 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
         </div>
     </div>
 
-</div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="font-size: larger" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <?php
+                        try
+                        {
+                            $conn = \Eszkozok\Eszk::initMySqliObject();
+                            $stmt = $conn->prepare("SELECT id, nev FROM korok ORDER BY nev;");
 
+                            if (!$stmt->execute())
+                                throw new \Exception('$stmt->execute() is false! Próbáld frissíteni az oldalt!');
+
+                            $res = $stmt->get_result();
+                            if ($res->num_rows > 0)
+                            {
+                                while ($row = $res->fetch_assoc())
+                                {
+
+                                    ?>
+                                    <div class="checkbox" style="font-size: large">
+                                        <label><input class="modal_kor_checkbox" type="checkbox" value="<?= $row['id']; ?>"><?= $row['nev']; ?></label>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            else
+                            {
+                                ?>
+                                <p>Úgy tűnik, még egy kört sem vettél fel. <a href="<?= \Eszkozok\Eszk::GetRootURL() . 'korok'; ?>">Kattints ide, hogy ezt bepótold!</a></p>
+
+                                <?php
+                            }
+                        }
+                        catch (\Exception $e)
+                        {
+                            \Eszkozok\Eszk::dieToErrorPage('45634: ' . $e->getMessage(), 'accok');
+                        }
+                        ?>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Mégsem</button>
+                    <button type="button" onclick="PrepareSubmitKorertekelesJogok()" class="btn btn-success">Mentés</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        var AktualisanSzerkesztett_KorertekelesekAccanak_InternalIDje = '';
+
+
+        function PrepareSubmitKorertekelesJogok()
+        {
+            try
+            {
+                let korertjogok = {};
+                $(".modal_kor_checkbox").each(function ()
+                {
+                    korertjogok[$(this).attr('value').toString()] = $(this).is(":checked") ? 1 : 0;
+                });
+
+                submitSetKorErtekelesJogok(AktualisanSzerkesztett_KorertekelesekAccanak_InternalIDje, JSON.stringify(korertjogok));
+            }
+            catch (e)
+            {
+                alert('Hiba történt a küldés előtt. Próbáld meg újra!');
+            }
+        }
+
+        function ShowKorErtekelSzerkModal(domclicker)
+        {
+            var modal = $('#exampleModal');
+            var datacontainer = domclicker.parentElement.parentElement;
+
+            AktualisanSzerkesztett_KorertekelesekAccanak_InternalIDje = datacontainer.getAttribute('data-acc_internalid');
+
+            var ertekelkorok = JSON.parse(datacontainer.getAttribute('data-grouped_korertekelesek'));
+
+
+            $(".modal_kor_checkbox").each(function ()
+            {
+                $(this).prop('checked', false);
+
+                if (ertekelkorok != null)
+                {
+                    if ((ertekelkorok).includes($(this).attr('value')))
+                        $(this).prop('checked', true);
+                }
+            });
+
+
+            modal.find('.modal-title').html('Állítsd be, hogy <b>' + escapeHtml(datacontainer.getAttribute('data-acc_nev')) + '</b> mely körök nevében értékelhet!');
+            modal.modal('show');
+        }
+    </script>
+
+
+</div>
 <script>
 
 
@@ -78,22 +186,89 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             .replace(/'/g, "&#039;");
     }
 
-    function getAdminJogFromParentNode(node)
+
+    function HandleAJAXkorertekelesekPHPPageData(ret)
     {
-        return (node.getAttribute("adminjog") == '1') ? 1 : 0;
+        try
+        {
+            console.log(ret);
+            var fullres = JSON.parse(ret);
+
+            if (fullres.status == 'siker2345')
+            {
+                $('#exampleModal').modal('toggle');
+
+                var LegalabbEgyKornelErtekelesiJogaVan = false;
+                var korertekelesekArrayFromObject = [];
+                $.each(fullres.korertekelesek, function (index, value)
+                {
+                    if (value == 1)
+                    {
+                        LegalabbEgyKornelErtekelesiJogaVan = true;
+
+                        korertekelesekArrayFromObject.push(index);
+                    }
+                });
+
+                $("#td_toggle_jogosultsag" + fullres.internal_id).attr("data-grouped_korertekelesek", JSON.stringify(korertekelesekArrayFromObject));
+
+                if (LegalabbEgyKornelErtekelesiJogaVan)
+                {
+                    $("#i_open_ertekelesjog_editor" + fullres.internal_id).addClass('acc-jogosultsag-korertekelesek-true').removeClass('acc-jogosultsag-korertekelesek-false');
+                }
+                else
+                {
+                    $("#i_open_ertekelesjog_editor" + fullres.internal_id).addClass('acc-jogosultsag-korertekelesek-false').removeClass('acc-jogosultsag-korertekelesek-true');
+                }
+            }
+            else
+            {
+                if (ret.error != null)
+                    throw {message: fullres.error};
+            }
+        }
+        catch (e)
+        {
+            alert('Hiba történt a értékelési jogok beállítása során. Próbáld meg újra! (' + e.message + ')');
+        }
     }
-    function getMuszjelJogFromParentNode(node)
+
+
+    function callPHPPageSetKorErtekelesJogok(postdata)
     {
-        return (node.getAttribute("muszjeljog") == '1') ? 1 : 0;
+        $.post('AJAXkorertekelesek.php', postdata, HandleAJAXkorertekelesekPHPPageData).fail(
+            function ()
+            {
+                alert("Error at AJAX call!");
+            });
     }
-    function getPontLatJogFromParentNode(node)
+
+    function submitSetKorErtekelesJogok(internal_id, ertekelesjogokJSON)
     {
-        return (node.getAttribute("pontlatjog") == '1') ? 1 : 0;
+        callPHPPageSetKorErtekelesJogok({
+            int_id: internal_id,
+            ertekelesjogokJSON: ertekelesjogokJSON
+        });
+    }
+
+
+    function getAdminJogFromNode(node)
+    {
+        return (node.parentElement.parentElement.getAttribute("adminjog") == '1') ? 1 : 0;
+    }
+    function getMuszjelJogFromNode(node)
+    {
+        return (node.parentElement.parentElement.getAttribute("muszjeljog") == '1') ? 1 : 0;
+    }
+    function getPontLatJogFromNode(node)
+    {
+        return (node.parentElement.parentElement.getAttribute("pontlatjog") == '1') ? 1 : 0;
     }
 
     var accoktable = document.getElementById('accoktable');
     function HandlePHPPageData(ret)
     {
+//        console.log(ret);
         var fullres = JSON.parse(ret);
 
         var thead = jQuery.parseHTML('<thead><tr><th>Név</th><th>Fx tag</th><th>Jogosultságok</th></tr></thead>')[0];
@@ -101,6 +276,13 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 
         fullres.forEach(function (row)
         {
+            if (row.grouped_korertekelesek != null)
+            {
+                row.grouped_korertekelesek = row.grouped_korertekelesek.split(',');
+            }
+
+//            console.log(row);
+
             var a_user_nev = jQuery.parseHTML('<a href="../profil/?mprof=' + row['internal_id'] + '"><div style="width: 100%">' + escapeHtml(row['nev']) + '</div></a>')[0];
 
             var i_fx_tag;
@@ -110,17 +292,17 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             else
                 i_fx_tag = jQuery.parseHTML('<i class="fas fa-2x fa-times" style="color: yellow"></i>')[0];
 
-            i_fx_tag.setAttribute('data-toggle','tooltip');
-            i_fx_tag.setAttribute('data-container','body');
-            i_fx_tag.setAttribute('data-placement','right');
-            i_fx_tag.setAttribute('title','PéK szerinti Foodex tagság');
+            i_fx_tag.setAttribute('data-toggle', 'tooltip');
+            i_fx_tag.setAttribute('data-container', 'body');
+            i_fx_tag.setAttribute('data-placement', 'right');
+            i_fx_tag.setAttribute('title', 'PéK szerinti Foodex tagság');
 
             var i_toggle_adminjog = jQuery.parseHTML('<i id="i_toggle_adminjog' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Admin jog"  class="acc-jogosultsag ' + ((row['adminjog'] == 1) ? 'acc-jogosultsag-admin-true' : 'acc-jogosultsag-admin-false') + ' fas fa-2x fa-user-astronaut"></i>')[0];
             i_toggle_adminjog.onclick = function ()
             {
-                var is_adminjog = getAdminJogFromParentNode(this.parentElement);
-                var is_muszjeljog = getMuszjelJogFromParentNode(this.parentElement);
-                var is_pontlatjog = getPontLatJogFromParentNode(this.parentElement);
+                var is_adminjog = getAdminJogFromNode(this);
+                var is_muszjeljog = getMuszjelJogFromNode(this);
+                var is_pontlatjog = getPontLatJogFromNode(this);
 
                 var r;
                 if (is_adminjog)
@@ -141,9 +323,9 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             var i_toggle_muszjeljog = jQuery.parseHTML('<i id="i_toggle_muszjeljog' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Műszakfelvételi jog"  class="acc-jogosultsag ' + ((row['muszjeljog'] == 1) ? 'acc-jogosultsag-muszjel-true' : 'acc-jogosultsag-muszjel-false') + ' fas fa-2x fa-handshake"></i>')[0];
             i_toggle_muszjeljog.onclick = function ()
             {
-                var is_adminjog = getAdminJogFromParentNode(this.parentElement);
-                var is_muszjeljog = getMuszjelJogFromParentNode(this.parentElement);
-                var is_pontlatjog = getPontLatJogFromParentNode(this.parentElement);
+                var is_adminjog = getAdminJogFromNode(this);
+                var is_muszjeljog = getMuszjelJogFromNode(this);
+                var is_pontlatjog = getPontLatJogFromNode(this);
                 var r;
                 if (is_muszjeljog)
                 {
@@ -158,12 +340,12 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                         submitSetJogosultsagok(row['internal_id'], is_adminjog, !is_muszjeljog, is_pontlatjog)
                 }
             };
-            var i_toggle_pontlatjog = jQuery.parseHTML('<i id="i_toggle_pontlatjog' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Láthatja mások pontszámát"  class="acc-jogosultsag ' + ((row['pontlatjog'] == 1) ? 'acc-jogosultsag-pontlat-true' : 'acc-jogosultsag-pontlat-false') + ' far fa-2x fa-dot-circle"></i>')[0];
+            var i_toggle_pontlatjog = jQuery.parseHTML('<i id="i_toggle_pontlatjog' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Láthatja mások pontszámát"  class="acc-jogosultsag ' + ((row['pontlatjog'] == 1) ? 'acc-jogosultsag-pontlat-true' : 'acc-jogosultsag-pontlat-false') + ' fas fa-2x fa-low-vision"></i>')[0];
             i_toggle_pontlatjog.onclick = function ()
             {
-                var is_adminjog = getAdminJogFromParentNode(this.parentElement);
-                var is_muszjeljog = getMuszjelJogFromParentNode(this.parentElement);
-                var is_pontlatjog = getPontLatJogFromParentNode(this.parentElement);
+                var is_adminjog = getAdminJogFromNode(this);
+                var is_muszjeljog = getMuszjelJogFromNode(this);
+                var is_pontlatjog = getPontLatJogFromNode(this);
                 var r;
                 if (is_pontlatjog)
                 {
@@ -179,6 +361,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                 }
             };
 
+            var i_open_ertekelesjog_editor = jQuery.parseHTML('<i id="i_open_ertekelesjog_editor' + row['internal_id'] + '" onclick="ShowKorErtekelSzerkModal(this);" data-toggle="tooltip" data-container="body" data-placement="right"  title="Értékelési jogok szerkesztése"  class="acc-jogosultsag ' + ((row['grouped_korertekelesek'] != null) ? 'acc-jogosultsag-korertekelesek-true' : 'acc-jogosultsag-korertekelesek-false') + ' fas fa-2x fa-star-half-alt"></i>')[0];
 
             var td_user_nev = jQuery.parseHTML('<td></td>')[0];
             var td_fx_tag = jQuery.parseHTML('<td></td>')[0];
@@ -193,13 +376,28 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             td_toggle_jogosultsag.setAttribute("muszjeljog", row['muszjeljog'].toString());
             td_toggle_jogosultsag.setAttribute("adminjog", row['adminjog'].toString());
             td_toggle_jogosultsag.setAttribute("pontlatjog", row['pontlatjog'].toString());
+            td_toggle_jogosultsag.setAttribute("data-grouped_korertekelesek", JSON.stringify(row.grouped_korertekelesek));
+            td_toggle_jogosultsag.setAttribute("data-acc_nev", escapeHtml(row['nev'].toString()));
+            td_toggle_jogosultsag.setAttribute("data-acc_internalid", escapeHtml(row['internal_id'].toString()));
 
-            td_toggle_jogosultsag.appendChild(i_toggle_adminjog);
-            td_toggle_jogosultsag.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
-            td_toggle_jogosultsag.appendChild(i_toggle_muszjeljog);
-            td_toggle_jogosultsag.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
-            td_toggle_jogosultsag.appendChild(i_toggle_pontlatjog);
+            var div1 = jQuery.parseHTML('<div></div>')[0];
+            var div2 = jQuery.parseHTML('<div></div>')[0];
+            div1.style.display = 'inline-block';
+            div2.style.display = 'inline-block';
+            div1.style.marginBottom = '10px';
 
+            div1.appendChild(i_toggle_adminjog);
+            div1.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
+            div1.appendChild(i_toggle_muszjeljog);
+            div1.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
+
+            div2.appendChild(i_toggle_pontlatjog);
+            div2.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
+            div2.appendChild(i_open_ertekelesjog_editor);
+            div2.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
+
+            td_toggle_jogosultsag.appendChild(div1);
+            td_toggle_jogosultsag.appendChild(div2);
 
             var tr = jQuery.parseHTML('<tr></tr>')[0];
             tr.appendChild(td_user_nev);
@@ -273,6 +471,16 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                     $("#td_toggle_jogosultsag" + fullres.internal_id).attr("pontlatjog", '0');
                     $("#i_toggle_pontlatjog" + fullres.internal_id).addClass('acc-jogosultsag-pontlat-false').removeClass('acc-jogosultsag-pontlat-true');
                 }
+//                if (fullres.vanertekelokore == 1)
+//                {
+//                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("pontlatjog", '1');
+//                    $("#i_toggle_pontlatjog" + fullres.internal_id).addClass('acc-jogosultsag-pontlat-true').removeClass('acc-jogosultsag-pontlat-false');
+//                }
+//                else
+//                {
+//                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("pontlatjog", '0');
+//                    $("#i_toggle_pontlatjog" + fullres.internal_id).addClass('acc-jogosultsag-pontlat-false').removeClass('acc-jogosultsag-pontlat-true');
+//                }
             }
         }
         catch (e)
@@ -280,7 +488,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             alert('Hiba: ' + e.message)
         }
     }
-    function callPHPPageSetAdminjog(postdata)
+    function callPHPPageSetJogosultsagok(postdata)
     {
         $.post('AJAXjogosultsagok.php', postdata, HandleAJAXjogosultsagokPHPPageData).fail(
             function ()
@@ -290,13 +498,12 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
     }
     function submitSetJogosultsagok(internal_id, adminjog, muszjeljog, pontlatjog)
     {
-        callPHPPageSetAdminjog({
+        callPHPPageSetJogosultsagok({
             int_id: internal_id,
             adminjog: adminjog ? 1 : 0,
             muszjeljog: muszjeljog ? 1 : 0,
             pontlatjog: pontlatjog ? 1 : 0
         });
-
     }
 
     function uresKereses()

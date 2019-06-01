@@ -19,12 +19,10 @@ try
     $kompid = 'URL PARAM IS NOT SET';
 
 
-
     $Muvelet = '';
 
     if (IsURLParamSet('muv'))
         $Muvelet = GetURLParam('muv');
-
 
 
     if ($Muvelet == 'edit' || $Muvelet == 'delete')
@@ -50,7 +48,7 @@ try
             if (IsURLParamSet('megj'))
                 $megj = GetURLParam('megj');
 
-            $KompProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($int_id);//Ha nincs ilyen internal_id, akkor ez kilépteti az error oldalra
+            $KompProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($int_id, true);//Ha nincs ilyen internal_id, akkor ez kilépteti az error oldalra
 
             if (!is_numeric($pont))
                 throw new \Exception('A közösségi pontszám nem egy szám.');

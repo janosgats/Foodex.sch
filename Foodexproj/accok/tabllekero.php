@@ -24,10 +24,10 @@ if (isset($_REQUEST['keresett']) && $_REQUEST['keresett'] != '')
 $conn = \Eszkozok\Eszk::initMySqliObject();
 $stmt;
 if ($keresett == '')
-    $stmt = $conn->prepare(" SELECT internal_id, nev, fxtag, adminjog, muszjeljog, pontlatjog FROM `fxaccok` ORDER BY nev ASC;");
+    $stmt = $conn->prepare(" SELECT internal_id, nev, fxtag, adminjog, muszjeljog, pontlatjog, korertekelesek.grouped_korok as grouped_korertekelesek FROM `fxaccok` LEFT JOIN (SELECT ertekelo, GROUP_CONCAT(korid ORDER BY korid ASC) AS grouped_korok FROM korertekelok GROUP BY ertekelo) as korertekelesek ON korertekelesek.ertekelo = fxaccok.internal_id ORDER BY nev ASC;");
 else
 {
-    $stmt = $conn->prepare(" SELECT internal_id, nev, fxtag, adminjog, muszjeljog, pontlatjog FROM `fxaccok` WHERE `nev` LIKE CONCAT('%', ? , '%') ORDER BY nev ASC;");
+    $stmt = $conn->prepare(" SELECT internal_id, nev, fxtag, adminjog, muszjeljog, pontlatjog, korertekelesek.grouped_korok as grouped_korertekelesek  FROM `fxaccok` LEFT JOIN (SELECT ertekelo, GROUP_CONCAT(korid ORDER BY korid ASC) AS grouped_korok FROM korertekelok GROUP BY ertekelo) as korertekelesek ON korertekelesek.ertekelo = fxaccok.internal_id WHERE `nev` LIKE CONCAT('%', ? , '%') ORDER BY nev ASC;");
     $stmt->bind_param('s', $keresett);
 }
 

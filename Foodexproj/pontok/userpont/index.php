@@ -25,10 +25,10 @@ elseif (!IsURLParamSet('int_id'))
 }
 
 
-$MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'));
+$MegjelenitettProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'), true);
 
 
-if($_SESSION['profilint_id'] != $MegjelenitettProfil->getInternalID())
+if ($_SESSION['profilint_id'] != $MegjelenitettProfil->getInternalID())
     \Eszkozok\LoginValidator::PontLatJog_DiesToErrorrPage();//Ha nem a saját profilja, akkor csak akkor láthatja, ha van joga hozzá
 
 $mosfoglalt = false;
@@ -142,7 +142,10 @@ if ($MosogatasJelentkezes)
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137789203-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag()
+        {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'UA-137789203-1');
@@ -180,7 +183,7 @@ if ($mosfoglalt)
 <div class="container">
 
     <?php
-    NavBar::echonavbar( ($MosogatasJelentkezes)?'mosjelentk':'pontok');
+    NavBar::echonavbar(($MosogatasJelentkezes) ? 'mosjelentk' : 'pontok');
     ?>
 
     <div class="panel panel-default">
@@ -326,12 +329,12 @@ if ($mosfoglalt)
 
 
                                             if (!array_key_exists($rowMuszak['kiirta'], $MuszakKiirokNevei))
-                                                $MuszakKiirokNevei[$rowMuszak['kiirta']] = Eszkozok\Eszk::GetTaroltProfilAdat($rowMuszak['kiirta'])->getNev();
+                                                $MuszakKiirokNevei[$rowMuszak['kiirta']] = Eszkozok\Eszk::GetTaroltProfilAdat($rowMuszak['kiirta'], true)->getNev();
 
 
                                             ?>
 
-                                            <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowMuszak['idokezd']))?'':'style="background-color: #EEEEEE;color: grey"';?>>
+                                            <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowMuszak['idokezd'])) ? '' : 'style="background-color: #EEEEEE;color: grey"'; ?>>
                                                 <td>
                                                     <?php echo htmlspecialchars($rowMuszak['musznev']) . '  <span>(' . htmlspecialchars($rowMuszak['ID']) . ')</span>'; ?>
                                                 </td>
@@ -407,7 +410,7 @@ if ($mosfoglalt)
     <?php
     if (!$MosogatasJelentkezes)
     {
-    ?>
+        ?>
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -452,7 +455,7 @@ if ($mosfoglalt)
                                 {
                                     ?>
 
-                                    <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido']))?'':'style="background-color: #EEEEEE;color: grey"';?>>
+                                    <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido'])) ? '' : 'style="background-color: #EEEEEE;color: grey"'; ?>>
                                         <td>
                                             <?php echo htmlspecialchars($rowKomp['pont']) . ' pont'; ?>
                                         </td>
@@ -493,7 +496,7 @@ if ($mosfoglalt)
                 </table>
             </div>
         </div>
-    <?php
+        <?php
     }
     ?>
 

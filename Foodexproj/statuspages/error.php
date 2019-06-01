@@ -280,6 +280,7 @@
     <?php
 
     require_once __DIR__ . '/../Eszkozok/param.php';
+    require_once __DIR__ . '/../Eszkozok/Eszk.php';
 
     ?>
 
@@ -296,7 +297,7 @@
     </div>
 
     <div class="buttons-container">
-        <a class="border-button" href="../index.php">Nekifutok újra</a>
+        <a class="border-button" href=" <?php if(IsURLParamSet('retryurl')){echo \Eszkozok\Eszk::GetRootURL() . GetURLParam('retryurl');} else {echo '../index.php';} ?>">Nekifutok újra</a>
         <a class="border-button" href="mailto:gatsjanos@gmail.com" target="_blank">Jelentem a problémát</a>
     </div>
 

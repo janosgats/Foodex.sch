@@ -24,7 +24,7 @@ if (IsURLParamSet('szerk') && GetURLParam('szerk') == 1)
 
         $SzerkesztendoKomp = \Eszkozok\Eszk::GetTaroltKompenzAdat($kompid, true);
 
-        $KompProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($SzerkesztendoKomp->int_id);
+        $KompProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($SzerkesztendoKomp->int_id, true);
         $KompSzerkesztes = true;
     }
     else
@@ -35,7 +35,7 @@ if (!$KompSzerkesztes)
 {
     if (IsURLParamSet('int_id'))
     {
-        $KompProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'));
+        $KompProfil = \Eszkozok\Eszk::GetTaroltProfilAdat(GetURLParam('int_id'), true);
     }
     else
         Eszkozok\Eszk::RedirectUnderRoot('');

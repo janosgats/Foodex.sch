@@ -316,7 +316,7 @@ if ($IsSecurimageCorrect)
                             //////////////////////////////////////////////////////////////
 
                             //var_dump($row);
-                            $kiiroProfil = Eszkozok\Eszk::GetTaroltProfilAdat($row['kiirta']);
+                            $kiiroProfil = Eszkozok\Eszk::GetTaroltProfilAdat($row['kiirta'], true);
 
                             //////////////////////////////////////////////////////////////
 

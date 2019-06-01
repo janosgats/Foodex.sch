@@ -89,13 +89,17 @@ div.example {
     font-weight: bold;
     /*text-shadow: 1px 1px orangered;*/
 }
-.oszlopNev p {
-    display: inline-block;
+
+.oszlopReszletek {
+
 }
 
-.tablaElsosor {
-    font-weight: bold;
-    /*text-shadow: 1px 1px orangered;*/
+.oszlopReszletek p {
+    cursor: pointer;
+}
+
+.oszlopReszletek p:hover {
+    color: yellow;
 }
 
 .oszlopPont {
@@ -106,26 +110,15 @@ div.example {
 
 }
 
-.oszlopKiirta {
+.oszlopVarolista {
 
 }
 
-.oszlopKiirta p {
+.oszlopVarolista p {
     display: inline;
     margin: 0;
 }
 
-.oszlopMosogatas {
-
-}
-
-.oszlopMosogatas p {
-    cursor: pointer;
-}
-
-.oszlopMosogatas p:hover {
-    color: yellow;
-}
 .varolistaElso {
     color: gold;
 }
@@ -133,46 +126,4 @@ div.example {
 table {
     border-collapse: collapse;
     border-spacing: 0;
-}
-
-.acc-jogosultsag-admin-true
-{
-    color: red;
-}
-.acc-jogosultsag-admin-false
-{
-    color: #3355ff;
-}
-.acc-jogosultsag-muszjel-true
-{
-    color: lawngreen;
-}
-.acc-jogosultsag-muszjel-false
-{
-    color: #3355ff;
-}
-.acc-jogosultsag-pontlat-true
-{
-    color: magenta;
-}
-.acc-jogosultsag-pontlat-false
-{
-    color: #3355ff;
-}
-.acc-jogosultsag-korertekelesek-true
-{
-    color: #FFEE44;
-}
-.acc-jogosultsag-korertekelesek-false
-{
-    color: #3355ff;
-}
-
-.acc-jogosultsag
-{
-    cursor: pointer;
-}
-.acc-jogosultsag:hover
-{
-    color: darkorange;
 }

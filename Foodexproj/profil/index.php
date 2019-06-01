@@ -14,7 +14,7 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 if (IsURLParamSet('mprof'))
 {
     $mprof_int_id = GetURLParam('mprof');
-    $MegjProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($mprof_int_id);
+    $MegjProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($mprof_int_id, true);
 }
 else
 {
@@ -335,6 +335,7 @@ else
                     }
                     catch (\Exception $e)
                     {
+                        \Eszkozok\Eszk::dieToErrorPage('45848: ' . $e->getMessage(), 'profil');
                     }
                     ?>
                 </table>
@@ -358,7 +359,7 @@ else
                     <tr>
                         <th class="ErtekelesTableheader" style="min-width: 140px;">Műszak</th>
                         <th class="ErtekelesTableheader" style="min-width: 170px;">Értékelő</th>
-                        <th class="ErtekelesTableheader">Értékelés</th>
+                        <th class="ErtekelesTableheader" style="min-width: 150px;">Értékelés</th>
 
                     </tr>
                     </thead>
@@ -412,13 +413,41 @@ else
                                         </td>
                                         <td>
                                             <div>
-                                                <p><b>Pontosság:&nbsp;&nbsp;&nbsp;</b> <?php echo htmlentities($rowErt['e_pontossag'] ?: 'Na'); ?> <b>/</b>10</p>
-
-                                                <p><b>Pénzkezelés: </b> <?php echo htmlentities($rowErt['e_penzkezeles'] ?: 'Na'); ?> <b>/</b>10</p>
-
-                                                <p><b>Szakértelem: </b> <?php echo htmlentities($rowErt['e_szakertelem'] ?: 'Na'); ?> <b>/</b>10</p>
-
-                                                <p><b>Dughatóság: </b> <?php echo htmlentities($rowErt['e_dughatosag'] ?: 'Na'); ?> <b>/</b>10</p>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p><b>Pontosság:&nbsp;&nbsp;&nbsp;</b></p>
+                                                        </td>
+                                                        <td class="ErtekelesTartalomPontokOszlop">
+                                                            <p> <?php echo htmlentities($rowErt['e_pontossag'] ?: 'Na'); ?> <b>/</b>10</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <p><b>Pénzkezelés:</p>
+                                                        </td>
+                                                        <td class="ErtekelesTartalomPontokOszlop">
+                                                            <p></b> <?php echo htmlentities($rowErt['e_penzkezeles'] ?: 'Na'); ?> <b>/</b>10</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <p><b>Szakértelem: </b></p>
+                                                        </td>
+                                                        <td class="ErtekelesTartalomPontokOszlop">
+                                                            <p><?php echo htmlentities($rowErt['e_szakertelem'] ?: 'Na'); ?> <b>/</b>10</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <p><b>Dugnám:&nbsp;&nbsp;&nbsp;&nbsp; </b></p>
+                                                        </td>
+                                                        <td class="ErtekelesTartalomPontokOszlop">
+                                                            <p> <?php echo htmlentities($rowErt['e_dughatosag'] ?: 'Na'); ?> <b>/</b>10</p>
+                                                        </td>
+                                                    </tr>
+                                                    </tr>
+                                                </table>
 
                                                 <p><b>Szöveges értékelés:</b> <?php echo htmlentities($rowErt['e_szoveg'] ?: 'N/A'); ?></p>
                                             </div>
@@ -435,6 +464,7 @@ else
                     }
                     catch (\Exception $e)
                     {
+                        \Eszkozok\Eszk::dieToErrorPage('45842: ' . $e->getMessage(), 'profil');
                     }
                     ?>
                 </table>
