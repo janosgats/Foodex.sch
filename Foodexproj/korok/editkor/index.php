@@ -284,7 +284,7 @@ $MezokFeltoltendoek = $HibasBemenet || $KorSzerkesztes;
                            {
                                echo htmlspecialchars($SzerkesztendoKor->nev);
 
-                           } ?>" class="form-control">
+                           } ?>" class="form-control" autofocus>
                 </div>
 
 

@@ -51,7 +51,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
         <div class="panel-heading">
 
             <label for="exampleInputEmail1">Keresés:</label>
-            <input onkeyup="keresesFgv(this);" type="text" class="form-control" id="kereses" aria-describedby="emailHelp" placeholder="Csicska vödör">
+            <input onkeyup="keresesFgv(this);" type="text" class="form-control" id="kereses" aria-describedby="emailHelp" placeholder="Csicska vödör"  autofocus>
             <small id="emailHelp" class="form-text text-muted">Kezdd gépelni a kör nevét!</small>
 
         </div>

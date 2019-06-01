@@ -311,8 +311,6 @@ if ($mosfoglalt)
                                     {
                                         while ($rowMuszak = $resultMuszak->fetch_assoc())
                                         {
-                                            //var_dump($rowMuszak);
-
 
                                             $idokezd = DateTime::createFromFormat("Y-m-d H:i:s", $rowMuszak['idokezd']);
 

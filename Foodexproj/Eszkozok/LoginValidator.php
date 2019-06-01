@@ -173,6 +173,48 @@ class LoginValidator
         return false;
     }
 
+
+    static public function Ertekelo_DiesToErrorrPage()
+    {
+        try
+        {
+            if (self::IsLoginValid('ertekelo'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+
+        Eszk::dieToErrorPage('Nincs jogod az értékeléshez.');
+        die('Nincs jogod az értékeléshez.');
+    }
+
+    static public function Ertekelo_ThrowsException()
+    {
+        try
+        {
+            if (self::IsLoginValid('ertekelo'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+        throw new \Exception('Nincs jogod az értékeléshez.');
+    }
+
+    static public function Ertekelo_NOEXIT()
+    {
+        try
+        {
+            if (self::IsLoginValid('ertekelo'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+        return false;
+    }
+
     static public function AccountSignedIn_RedirectsToRoot()
     {
         try
@@ -209,17 +251,54 @@ class LoginValidator
      * "ENGINE" section...
      */
 
+    public static function GetErtekeloKorokIdk()
+    {
+        if (self::$cached_ErtekeloKorok == null)
+        {
+            $stmt = self::GetConn()->prepare("SELECT * FROM korertekelok WHERE ertekelo = ? ORDER BY korid ASC");
+
+            $intidbuff = $_SESSION['profilint_id'];
+            $stmt->bind_param('s', $intidbuff);
+
+
+            if (!$stmt->execute())
+                throw new \Exception('$stmt->execute() if false in GetErtekeloKorok() function!');
+
+            $result = $stmt->get_result();
+
+            self::$cached_ErtekeloKorok = [];
+            while ($row = $result->fetch_assoc())
+            {
+                self::$cached_ErtekeloKorok[] = $row['korid'];
+            }
+        }
+        return self::$cached_ErtekeloKorok;
+    }
+
+    private static function GetConn()
+    {
+        if (self::$conn == null)
+            self::$conn = Eszk::initMySqliObject();
+
+        return self::$conn;
+    }
+
+
     private static $cached_AdminJog = null;
     private static $cached_MuszJelJog = null;
     private static $cached_PontLatJog = null;
     private static $cached_FxTag = null;
     private static $cached_SessionToken = null;
 
+    private static $cached_ErtekeloKorok = null;
+
+    private static $conn = null;
+
     static private function IsLoginValid($logintype)
     {
-        $conn = new \mysqli();
         try
         {
+
             if (!GlobalServerInitParams::$RequireAuth)
             {
                 $_SESSION['profilint_id'] = GlobalServerInitParams::$DefaultIntID;
@@ -235,9 +314,7 @@ class LoginValidator
             if (self::$cached_AdminJog == null || self::$cached_MuszJelJog == null || self::$cached_SessionToken == null || self::$cached_PontLatJog == null || self::$cached_FxTag == null)
             {
 
-                $conn = Eszk::initMySqliObject();
-
-                $stmt = $conn->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
+                $stmt = self::GetConn()->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
 
                 $intidbuff = $_SESSION['profilint_id'];
                 $stmt->bind_param('s', $intidbuff);
@@ -258,7 +335,7 @@ class LoginValidator
                 self::$cached_SessionToken = $row['session_token'];
             }
 
-            if(self::$cached_SessionToken == null || self::$cached_SessionToken == 'kijelentkezve')
+            if (self::$cached_SessionToken == null || self::$cached_SessionToken == 'kijelentkezve')
                 throw new \Exception();
 
             if ($_SESSION['session_token'] == self::$cached_SessionToken)
@@ -286,6 +363,10 @@ class LoginValidator
                         if (self::$cached_FxTag == 1)
                             return true;
                         break;
+                    case 'ertekelo':
+                        if (is_array(self::GetErtekeloKorokIdk()) && count(self::GetErtekeloKorokIdk()) > 0)
+                            return true;
+                        break;
                 }
 
                 return false;
@@ -298,16 +379,5 @@ class LoginValidator
         {
             return false;
         }
-        finally
-        {
-            try
-            {
-                $conn->close();
-            }
-            catch (\Exception $ex)
-            {
-            }
-        }
-        return false;
     }
 }

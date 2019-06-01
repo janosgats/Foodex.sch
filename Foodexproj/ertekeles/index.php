@@ -5,7 +5,7 @@ require_once __DIR__ . '/../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
-\Eszkozok\LoginValidator::PontLatJog_DiesToErrorrPage();
+\Eszkozok\LoginValidator::Ertekelo_DiesToErrorrPage();
 
 ?>
 
@@ -53,7 +53,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
     ?>
 
     <div class="panel panel-default">
-        <div class="panel-heading">Ponttáblázat</div>
+        <div class="panel-heading" style="text-align: center"><b>Általad értékelhető műszakok Foodexesei</b></div>
         <div class="panel-body">
             <table class="table table-hover">
                 <?php
@@ -61,67 +61,47 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                 {
                     $conn = \Eszkozok\Eszk::initMySqliObject();
 
+                    $ErtekelhetoKorIDk = \Eszkozok\LoginValidator::GetErtekeloKorokIdk();
 
-                    $stmtKomp = $conn->prepare("SELECT internal_id, SUM(pont) AS SumPont FROM kompenz WHERE ( `ido` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ) GROUP BY internal_id;");
 
-                    if (!$stmtKomp->execute())
+                    $stmt = $conn->prepare("SELECT * FROM fxmuszakok WHERE korid IN (" . implode(',', $ErtekelhetoKorIDk) . ") ORDER BY fxmuszakok.idokezd DESC;");
+
+                    if (!$stmt->execute())
                         throw new \Exception('$stmt->execute() 1 is false!');
 
-                    $resKomp = $stmtKomp->get_result();
-                    $Kompenzalasok = [];
-                    while ($row = $resKomp->fetch_assoc())
+                    $res = $stmt->get_result();
+
+                    while ($row = $res->fetch_assoc())
                     {
-                        $Kompenzalasok[$row['internal_id']] = $row['SumPont'];
-                    }
-
-
-                    $stmtMuszak = $conn->prepare("SELECT fxaccok.nev, fxaccok.internal_id
-                                                ,
-                                                SUM(fxmuszakok.pont) AS MuszakPont,
-                                                SUM(CASE     WHEN ErvenyesJelentkezesek.mosogat = 1     THEN fxmuszakok.mospont    ELSE 0 END) AS MosogatasPont
-                                                FROM fxaccok
-                                                LEFT JOIN
-                                                (
-                                                  SELECT fxjelentk.*
-                                                  FROM   fxjelentk INNER JOIN
-                                                  (
-                                                    SELECT   muszid, letszam, GROUP_CONCAT(jelentkezo ORDER BY jelido ASC) AS grouped_jelentkezo
-                                                    FROM     fxjelentk
-                                                    JOIN fxmuszakok ON fxjelentk.muszid = fxmuszakok.ID
-                                                    WHERE fxjelentk.status = 1
-                                                    GROUP BY muszid
-                                                  ) AS group_max
-                                                  ON fxjelentk.muszid = group_max.muszid AND FIND_IN_SET(jelentkezo, grouped_jelentkezo) <= group_max.letszam
-                                                  WHERE status = 1
-                                                  ORDER BY fxjelentk.muszid, fxjelentk.jelido ASC
-                                                ) AS ErvenyesJelentkezesek
-                                                ON fxaccok.internal_id = ErvenyesJelentkezesek.jelentkezo
-                                                LEFT JOIN fxmuszakok ON ErvenyesJelentkezesek.muszid = fxmuszakok.ID
-                                                AND (fxmuszakok.`idoveg` < NOW()
-                                                AND ( fxmuszakok.`idokezd` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ))
-                                                WHERE fxaccok.fxtag = 1
-                                                GROUP BY fxaccok.internal_id
-                                                ORDER BY fxaccok.nev ASC;");
-
-                    if (!$stmtMuszak->execute())
-                        throw new \Exception('$stmt->execute() 1 is false!');
-
-                    $resMuszak = $stmtMuszak->get_result();
-
-                    while ($rowMuszak = $resMuszak->fetch_assoc())
-                    {
-                        $muszpont =  round($rowMuszak['MuszakPont'] ?: 0, 1);
-                        $mospont = round($rowMuszak['MosogatasPont']?: 0, 1);
-                        $komppont = round(isset($Kompenzalasok[$rowMuszak['internal_id']]) ? $Kompenzalasok[$rowMuszak['internal_id']] : 0, 1);
-                        $sumpont = round($muszpont + $mospont + $komppont, 1);
                         ?>
                         <tr>
                             <td>
+                                <div style="width: 100%">
+                                    <div style="width: 100%; text-align: center">
+                                        <h3 style="margin: 0"><?= $row['musznev']; ?></h3>
 
-                                <a style="cursor: pointer" href="<?php echo '../profil/?mprof=' . $rowMuszak['internal_id']; ?>"><p><?php echo htmlentities($rowMuszak['nev']); ?></p></a>
-                            </td>
-                            <td>
-                                <a class="badge" href="../pontok/userpont?int_id=<?php echo $rowMuszak['internal_id']; ?>"><?php echo htmlentities($sumpont . ' pont = ' . $muszpont . (($mospont >= 0)?' + ':' - ') . abs($mospont) . (($komppont >= 0)?' + ':' - ') . abs($komppont)); ?></a>
+                                        <p><?= $row['idokezd']; ?></p>
+                                    </div>
+                                    <div style="width: 100%; text-align: center;">
+                                        <div style="display: inline-block; padding: 20px; vertical-align:top;">
+                                            <div style="float: top; margin-top: 0; margin-bottom: auto">
+                                            <img src="../res/kepek/default_profile_picture.jpg" width="160px"/>
+                                            <p style="max-width: 220px;">Példa Béla Gyurika dg sdfg sdg sfdg dfsgfsdg</p>
+                                            </div>
+                                            <button type="button" class="btn btn-success">Értékelem</button>
+                                        </div>
+                                        <div style="display: inline-block; padding: 20px; vertical-align:top; ">
+                                            <img src="../res/kepek/default_profile_picture.jpg" width="160px"/>
+                                            <p style="max-width: 220px;">Példa Béla Gyurika Gecihosszúnév Méghosszabb</p>
+                                            <button type="button" class="btn btn-success">Értékelem</button>
+                                        </div>
+                                        <div style="display: inline-block; padding: 20px;  vertical-align:top;">
+                                            <img src="../res/kepek/default_profile_picture.jpg" width="160px"/>
+                                            <p style="max-width: 220px;">Példa Béla Gyurika fdg sfdg fd fsdg fs sdgfgdgads</p>
+                                            <button type="button" class="btn btn-success">Értékelem</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         <?php
@@ -130,7 +110,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                 }
                 catch (\Exception $e)
                 {
-                    Eszkozok\Eszk::dieToErrorPage('3018: ' . $e->getMessage());
+                    Eszkozok\Eszk::dieToErrorPage('34018: ' . $e->getMessage());
                 }
                 ?>
             </table>

@@ -52,7 +52,7 @@ ob_start();
         <div class="panel-heading">
 
             <label for="exampleInputEmail1">Keresés:</label>
-            <input onkeyup="keresesFgv(this);" type="text" class="form-control" id="kereses" aria-describedby="emailHelp" placeholder="Pl. Végh Béla">
+            <input onkeyup="keresesFgv(this);" type="text" class="form-control" id="kereses" aria-describedby="emailHelp" placeholder="Pl. Végh Béla" autofocus>
             <small id="emailHelp" class="form-text text-muted">Kezdd gépelni a tag nevét!</small>
 
         </div>
@@ -66,7 +66,7 @@ ob_start();
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered  modal-sm" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" style="font-size: larger" id="exampleModalLongTitle">Modal title</h5>
