@@ -566,6 +566,8 @@ namespace Eszkozok
 
         public static function Export_Database($tables = false, $backup_name = false)
         {
+            $content = '';
+
             $mysqli = self::initMySqliObject();
 
             $name = $mysqli->query('SELECT DATABASE()');
@@ -585,14 +587,17 @@ namespace Eszkozok
             {
                 $target_tables = array_intersect($target_tables, $tables);
             }
+
             foreach ($target_tables as $table)
             {
+                $content .= "\n\nDROP TABLE IF EXISTS " . $table . ";\n";
+
                 $result = $mysqli->query('SELECT * FROM ' . $table);
                 $fields_amount = $result->field_count;
                 $rows_num = $mysqli->affected_rows;
                 $res = $mysqli->query('SHOW CREATE TABLE ' . $table);
                 $TableMLine = $res->fetch_row();
-                $content = (!isset($content) ? '' : $content) . "\n\n" . $TableMLine[1] . ";\n\n";
+                $content .= "\n" . $TableMLine[1] . ";\n\n";
 
                 for ($i = 0, $st_counter = 0; $i < $fields_amount; $i++, $st_counter = 0)
                 {
@@ -746,24 +751,24 @@ namespace Eszkozok
                     {
                         $row = $result->fetch_assoc();
 
-                        if(isset($row['ID']))
-                        $profKi->setID($row['ID']);
-                        if(isset($row['internal_id']))
-                        $profKi->setInternalID($row['internal_id']);
-                        if(isset($row['nev']))
-                        $profKi->setNev($row['nev']);
-                        if(isset($row['fxtag']))
-                        $profKi->setFxTag($row['fxtag']);
-                        if(isset($row['adminjog']))
-                        $profKi->setAdminJog($row['adminjog']);
-                        if(isset($row['muszjeljog']))
-                        $profKi->setMuszJelJog($row['muszjeljog']);
-                        if(isset($row['pontlatjog']))
-                        $profKi->setPontLatJog($row['pontlatjog']);
-                        if(isset($row['email']))
-                        $profKi->setEmail($row['email']);
-                        if(isset($row['sessin_token']))
-                        $profKi->setSessionToken($row['sessin_token']);
+                        if (isset($row['ID']))
+                            $profKi->setID($row['ID']);
+                        if (isset($row['internal_id']))
+                            $profKi->setInternalID($row['internal_id']);
+                        if (isset($row['nev']))
+                            $profKi->setNev($row['nev']);
+                        if (isset($row['fxtag']))
+                            $profKi->setFxTag($row['fxtag']);
+                        if (isset($row['adminjog']))
+                            $profKi->setAdminJog($row['adminjog']);
+                        if (isset($row['muszjeljog']))
+                            $profKi->setMuszJelJog($row['muszjeljog']);
+                        if (isset($row['pontlatjog']))
+                            $profKi->setPontLatJog($row['pontlatjog']);
+                        if (isset($row['email']))
+                            $profKi->setEmail($row['email']);
+                        if (isset($row['sessin_token']))
+                            $profKi->setSessionToken($row['sessin_token']);
 
                     }
                     else
