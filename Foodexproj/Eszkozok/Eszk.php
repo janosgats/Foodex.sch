@@ -605,14 +605,14 @@ namespace Eszkozok
                         $content .= "\n(";
                         for ($j = 0; $j < $fields_amount; $j++)
                         {
-                            $row[$j] = str_replace("\n", "\\n", addslashes($row[$j]));
                             if (isset($row[$j]))
                             {
+                                $row[$j] = str_replace("\n", "\\n", addslashes($row[$j]));
                                 $content .= '"' . $row[$j] . '"';
                             }
                             else
                             {
-                                $content .= '""';
+                                $content .= 'NULL';
                             }
                             if ($j < ($fields_amount - 1))
                             {

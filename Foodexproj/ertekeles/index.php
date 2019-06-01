@@ -49,7 +49,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 <div class="container">
 
     <?php
-    NavBar::echonavbar('pontok');
+    NavBar::echonavbar('ertekeles');
     ?>
 
     <div class="panel panel-default">
@@ -121,7 +121,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                                 <a style="cursor: pointer" href="<?php echo '../profil/?mprof=' . $rowMuszak['internal_id']; ?>"><p><?php echo htmlentities($rowMuszak['nev']); ?></p></a>
                             </td>
                             <td>
-                                <a class="badge" href="userpont/?int_id=<?php echo $rowMuszak['internal_id']; ?>"><?php echo htmlentities($sumpont . ' pont = ' . $muszpont . (($mospont >= 0)?' + ':' - ') . abs($mospont) . (($komppont >= 0)?' + ':' - ') . abs($komppont)); ?></a>
+                                <a class="badge" href="../pontok/userpont?int_id=<?php echo $rowMuszak['internal_id']; ?>"><?php echo htmlentities($sumpont . ' pont = ' . $muszpont . (($mospont >= 0)?' + ':' - ') . abs($mospont) . (($komppont >= 0)?' + ':' - ') . abs($komppont)); ?></a>
                             </td>
                         </tr>
                         <?php

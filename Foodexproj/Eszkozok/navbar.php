@@ -64,6 +64,7 @@ class NavBar
                             <li<?php self::act('pontok', $ActMenu); ?>><a href="<?php echo $rootURL; ?>pontok">Pontok</a></li>
                             <?php
                         }
+
                         if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                         {
                             ?>
