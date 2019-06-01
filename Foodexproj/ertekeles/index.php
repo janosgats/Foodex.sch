@@ -27,7 +27,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
     </script>
 
     <meta charset="UTF-8">
-    <title>Fx - Pontok</title>
+    <title>Fx - Értékelés</title>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
@@ -37,6 +37,8 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="modalimage.css">
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -63,11 +65,38 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 
                     $ErtekelhetoKorIDk = \Eszkozok\LoginValidator::GetErtekeloKorokIdk();
 
+                    $KikVittekAMuszakokat = [];
+                    $stmt = $conn->prepare("SELECT fxaccok.nev, fxaccok.internal_id, fxjelentk.muszid
+                                            FROM   fxjelentk INNER JOIN
+                                            (
+                                            SELECT fxmuszakok.korid, muszid, letszam, GROUP_CONCAT(jelentkezo ORDER BY jelido ASC) AS grouped_jelentkezo
+                                            FROM     fxjelentk
+                                            JOIN fxmuszakok ON fxjelentk.muszid = fxmuszakok.ID
+                                            WHERE fxjelentk.status = 1
+                                            GROUP BY muszid
+                                            ) AS group_max
+                                            ON fxjelentk.muszid = group_max.muszid AND FIND_IN_SET(jelentkezo, grouped_jelentkezo) <= group_max.letszam
+                                            JOIN fxaccok ON fxjelentk.jelentkezo = fxaccok.internal_id
+                                            WHERE status = 1
+                                            AND group_max.korid IN (" . implode(',', $ErtekelhetoKorIDk) . ")
+                                            ORDER BY fxjelentk.muszid, fxjelentk.jelido ASC;");
+
+
+                    if (!$stmt->execute())
+                        throw new \Exception('$stmt->execute() 1 is false!');
+                    $res = $stmt->get_result();
+
+                    while ($row = $res->fetch_assoc())
+                    {
+                        $KikVittekAMuszakokat[] = $row;
+                    }
+
+                    $Count_KikVittekAMuszakokat = count($KikVittekAMuszakokat);
 
                     $stmt = $conn->prepare("SELECT * FROM fxmuszakok WHERE korid IN (" . implode(',', $ErtekelhetoKorIDk) . ") ORDER BY fxmuszakok.idokezd DESC;");
 
                     if (!$stmt->execute())
-                        throw new \Exception('$stmt->execute() 1 is false!');
+                        throw new \Exception('$stmt->execute() 2 is false!');
 
                     $res = $stmt->get_result();
 
@@ -83,23 +112,27 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                                         <p><?= $row['idokezd']; ?></p>
                                     </div>
                                     <div style="width: 100%; text-align: center;">
-                                        <div style="display: inline-block; padding: 20px; vertical-align:top;">
-                                            <div style="float: top; margin-top: 0; margin-bottom: auto">
-                                            <img src="../res/kepek/default_profile_picture.jpg" width="160px"/>
-                                            <p style="max-width: 220px;">Példa Béla Gyurika dg sdfg sdg sfdg dfsgfsdg</p>
-                                            </div>
-                                            <button type="button" class="btn btn-success">Értékelem</button>
-                                        </div>
-                                        <div style="display: inline-block; padding: 20px; vertical-align:top; ">
-                                            <img src="../res/kepek/default_profile_picture.jpg" width="160px"/>
-                                            <p style="max-width: 220px;">Példa Béla Gyurika Gecihosszúnév Méghosszabb</p>
-                                            <button type="button" class="btn btn-success">Értékelem</button>
-                                        </div>
-                                        <div style="display: inline-block; padding: 20px;  vertical-align:top;">
-                                            <img src="../res/kepek/default_profile_picture.jpg" width="160px"/>
-                                            <p style="max-width: 220px;">Példa Béla Gyurika fdg sfdg fd fsdg fs sdgfgdgads</p>
-                                            <button type="button" class="btn btn-success">Értékelem</button>
-                                        </div>
+
+                                        <?php
+                                        for ($i = 0; $i < $Count_KikVittekAMuszakokat; ++$i)
+                                        {
+                                            if ($KikVittekAMuszakokat[$i]['muszid'] == $row['ID'])
+                                            {
+                                                ?>
+                                                <div style="display: inline-block; padding: 20px; vertical-align:top;">
+                                                    <div style="float: top; margin-top: 0; margin-bottom: auto">
+                                                        <img class="imageForModal" onclick="ImageOnClickShowModal(this);" alt="<?= $KikVittekAMuszakokat[$i]['nev']; ?>" src="../res/kepek/default_profile_picture.jpg" width="160px"/>
+
+                                                        <p style="max-width: 220px;"><?= $KikVittekAMuszakokat[$i]['nev']; ?></p>
+                                                    </div>
+                                                    <a href="ertszerk/?muszid=<?= urlencode($row['ID']); ?>&ertekelt_int_id=<?= urlencode($KikVittekAMuszakokat[$i]['internal_id']); ?>">
+                                                        <button type="button" class="btn btn-success">Értékelem</button>
+                                                    </a>
+                                                </div>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </td>
@@ -116,7 +149,42 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
             </table>
         </div>
     </div>
+
+
 </div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal" onclick="this.style.display = 'none';">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01" style="height: 80%;width: auto">
+
+    <div id="caption"></div>
+</div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    function ImageOnClickShowModal(imgelement)
+    {
+        modal.style.display = "block";
+        modalImg.src = imgelement.src;
+        captionText.innerHTML = imgelement.alt;
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function ()
+    {
+        modal.style.display = "none";
+    }
+</script>
 
 </body>
 </html>
