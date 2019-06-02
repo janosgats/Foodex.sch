@@ -87,16 +87,16 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                                                   (
                                                     SELECT   muszid, letszam, GROUP_CONCAT(jelentkezo ORDER BY jelido ASC) AS grouped_jelentkezo
                                                     FROM     fxjelentk
-                                                    JOIN fxmuszakok ON fxjelentk.muszid = fxmuszakok.ID
+                                                    JOIN fxmuszakok ON fxjelentk.Muszid = fxmuszakok.ID
                                                     WHERE fxjelentk.status = 1
-                                                    GROUP BY muszid
+                                                    GROUP BY Muszid
                                                   ) AS group_max
-                                                  ON fxjelentk.muszid = group_max.muszid AND FIND_IN_SET(jelentkezo, grouped_jelentkezo) <= group_max.letszam
+                                                  ON fxjelentk.Muszid = group_max.Muszid AND FIND_IN_SET(jelentkezo, grouped_jelentkezo) <= group_max.letszam
                                                   WHERE status = 1
                                                   ORDER BY fxjelentk.muszid, fxjelentk.jelido ASC
                                                 ) AS ErvenyesJelentkezesek
                                                 ON fxaccok.internal_id = ErvenyesJelentkezesek.jelentkezo
-                                                LEFT JOIN fxmuszakok ON ErvenyesJelentkezesek.muszid = fxmuszakok.ID
+                                                LEFT JOIN fxmuszakok ON ErvenyesJelentkezesek.Muszid = fxmuszakok.ID
                                                 AND (fxmuszakok.`idoveg` < NOW()
                                                 AND ( fxmuszakok.`idokezd` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ))
                                                 WHERE fxaccok.fxtag = 1

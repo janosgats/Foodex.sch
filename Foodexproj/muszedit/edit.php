@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 
 set_include_path(getcwd());

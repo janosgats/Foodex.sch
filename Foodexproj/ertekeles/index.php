@@ -66,10 +66,10 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                     $ErtekelhetoKorIDk = \Eszkozok\LoginValidator::GetErtekeloKorokIdk();
 
                     $KikVittekAMuszakokat = [];
-                    $stmt = $conn->prepare("SELECT fxaccok.nev, fxaccok.internal_id, fxjelentk.muszid
+                    $stmt = $conn->prepare("SELECT fxaccok.nev, fxaccok.internal_id, fxjelentk.muszid, ertekelesek.id as ert_id
                                             FROM   fxjelentk INNER JOIN
                                             (
-                                            SELECT fxmuszakok.korid, muszid, letszam, GROUP_CONCAT(jelentkezo ORDER BY jelido ASC) AS grouped_jelentkezo
+                                            SELECT fxmuszakok.korid, muszid, idoveg, letszam, GROUP_CONCAT(jelentkezo ORDER BY jelido ASC) AS grouped_jelentkezo
                                             FROM     fxjelentk
                                             JOIN fxmuszakok ON fxjelentk.muszid = fxmuszakok.ID
                                             WHERE fxjelentk.status = 1
@@ -77,7 +77,9 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                                             ) AS group_max
                                             ON fxjelentk.muszid = group_max.muszid AND FIND_IN_SET(jelentkezo, grouped_jelentkezo) <= group_max.letszam
                                             JOIN fxaccok ON fxjelentk.jelentkezo = fxaccok.internal_id
+                                            LEFT JOIN ertekelesek ON ertekelesek.ertekelt = fxjelentk.jelentkezo AND ertekelesek.muszid = group_max.muszid AND ertekelesek.ertekelo = '" . $conn->escape_string($_SESSION['profilint_id']) . "'
                                             WHERE status = 1
+                                            AND group_max.idoveg < NOW()
                                             AND group_max.korid IN (" . implode(',', $ErtekelhetoKorIDk) . ")
                                             ORDER BY fxjelentk.muszid, fxjelentk.jelido ASC;");
 
@@ -93,7 +95,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 
                     $Count_KikVittekAMuszakokat = count($KikVittekAMuszakokat);
 
-                    $stmt = $conn->prepare("SELECT * FROM fxmuszakok WHERE korid IN (" . implode(',', $ErtekelhetoKorIDk) . ") ORDER BY fxmuszakok.idokezd DESC;");
+                    $stmt = $conn->prepare("SELECT * FROM fxmuszakok WHERE korid IN (" . implode(',', $ErtekelhetoKorIDk) . ") AND idoveg < NOW() ORDER BY fxmuszakok.idokezd DESC;");
 
                     if (!$stmt->execute())
                         throw new \Exception('$stmt->execute() 2 is false!');
@@ -123,10 +125,26 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                                                     <div style="float: top; margin-top: 0; margin-bottom: auto">
                                                         <img class="imageForModal" onclick="ImageOnClickShowModal(this);" alt="<?= $KikVittekAMuszakokat[$i]['nev']; ?>" src="../res/kepek/default_profile_picture.jpg" width="160px"/>
 
-                                                        <p style="max-width: 220px;"><?= $KikVittekAMuszakokat[$i]['nev']; ?></p>
+                                                        <a style="cursor: pointer;" href="../profil/?mprof=<?php echo $KikVittekAMuszakokat[$i]['internal_id']; ?>"><p style="max-width: 220px;"><?= $KikVittekAMuszakokat[$i]['nev']; ?></p>
+                                                        </a>
                                                     </div>
-                                                    <a href="ertszerk/?muszid=<?= urlencode($row['ID']); ?>&ertekelt_int_id=<?= urlencode($KikVittekAMuszakokat[$i]['internal_id']); ?>">
-                                                        <button type="button" class="btn btn-success">Értékelem</button>
+
+                                                    <a href="editert/?muszid=<?= urlencode($row['ID']); ?>&ertekelt_int_id=<?= urlencode($KikVittekAMuszakokat[$i]['internal_id']); ?>">
+                                                        <?php
+
+                                                        if($KikVittekAMuszakokat[$i]['ert_id'] == null)
+                                                        {
+                                                            ?>
+                                                            <button type="button" class="btn btn-success">Értékelem</button>
+                                                            <?php
+                                                        }
+                                                        else
+                                                        {
+                                                            ?>
+                                                            <button type="button" class="btn btn-info">Módosítom</button>
+                                                            <?php
+                                                        }
+                                                        ?>
                                                     </a>
                                                 </div>
                                                 <?php

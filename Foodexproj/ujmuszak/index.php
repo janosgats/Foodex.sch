@@ -21,7 +21,7 @@ $Korok = array();
     if ($stmt->execute())
     {
         $res = $stmt->get_result();
-        while($row = $res->fetch_assoc())
+        while ($row = $res->fetch_assoc())
             $Korok[] = $row;
     }
     else
@@ -73,7 +73,7 @@ $Korok = array();
 <div class="container">
 
     <?php
-    NavBar::echonavbar( 'ujmuszak');
+    NavBar::echonavbar('ujmuszak');
     ?>
 
     <?php
@@ -151,17 +151,17 @@ $Korok = array();
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="korid">Értékelő kör</label>
                     <select id="korid" name="korid" class="form-control">
-                        <option <?php if (!$MuszakMasolas ||  $MasoltMuszak->korID == null) echo ' selected="selected" '; ?> value="NINCS">Nincs</option>
+                        <option <?php if (!$MuszakMasolas || $MasoltMuszak->korID == null) echo ' selected="selected" '; ?> value="NINCS">Nincs</option>
 
 
                         <?php
-                        foreach($Korok as $kor)
+                        foreach ($Korok as $kor)
                         {
                             ?>
 
-                            <option <?php if ($MuszakMasolas && $MasoltMuszak->korID == $kor['id']) echo ' selected="selected" '; ?> value="<?= $kor['id'];?>"><?= htmlentities($kor['nev']); ?></option>
+                            <option <?php if ($MuszakMasolas && $MasoltMuszak->korID == $kor['id']) echo ' selected="selected" '; ?> value="<?= $kor['id']; ?>"><?= htmlentities($kor['nev']); ?></option>
 
-                        <?php
+                            <?php
                         }
                         ?>
                     </select>
@@ -215,6 +215,12 @@ $Korok = array();
 
     function submitMuszak()
     {
+        if (document.getElementById("korid").value == "NINCS" || document.getElementById("korid").value == "")
+        {
+            if (!confirm("Nem rendeltél értékelő kört a műszakhoz. Biztosan elmented így?"))
+                return;
+        }
+
         callPHPPage({
             musznev: document.getElementById("musznev").value,
             idokezd: document.getElementById("idokezd").value,

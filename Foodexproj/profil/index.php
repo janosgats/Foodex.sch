@@ -45,7 +45,8 @@ else
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--    <meta name="viewport" content="width=device-width, initial-scale=100">-->
+    <meta name="viewport" content="width=device-width">
 
 
     <link rel="stylesheet" href="main.css">
@@ -55,21 +56,26 @@ else
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+    <link rel='stylesheet' href='../vendor/kartik-v/bootstrap-star-rating/css/star-rating.css'>
+    <link rel='stylesheet' href='../vendor/kartik-v/bootstrap-star-rating/themes/krajee-fas/theme.css'>
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+    <script src="../vendor/kartik-v/bootstrap-star-rating/js/star-rating.js"></script>
+    <script src="../js/star-rating/locale-hu.js"></script>
+
 
 </head>
 
 <body style="background-color: #de520d">
 
-<div class="container">
+<div class="container" style="min-width: 520px">
 
     <?php
     NavBar::echonavbar('');
     ?>
 
-    <div class="jumbotron">
+    <div class="jumbotron" >
         <h1 style="display:inline"><?php echo $MegjProfil->getNev(); ?></h1>
         <?php
         if ($MegjProfil->getInternalID() == 'efb8476b-46c2-7aa8-b612-46d3b3a84e4c')//Wuki Internal ID-je
@@ -138,14 +144,14 @@ else
         if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
         {
             ?>
-            <a class="btn btn-primary pull-right" name="kompenz" id="kompenz" style="margin-right: 10px"
+            <a class="btn btn-primary pull-right" name="kompenz" id="kompenz" style="margin-right: 10px;"
                href="../ujkomp?<?php echo 'int_id=' . urlencode($MegjProfil->getInternalID()); ?>" type="button">Kompenzálás
             </a>
 
             <?php
         }
         ?>
-
+<br>
     </div>
 
     <script>
@@ -255,93 +261,96 @@ else
     <?php
     if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehetnek kompenzációi
     {
-        ?>
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT())
+        {
+            ?>
+            <div class="panel panel-default">
+                <div class="panel-heading">
 
-                Kompenzációk
-            </div>
-            <div class="panel-body">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Pont</th>
-                        <th>Megjegyzés</th>
-
-                        <?php
-                        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-                        {
-                            ?>
-                            <th></th>
+                    Kompenzációk
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Pont</th>
+                            <th>Megjegyzés</th>
 
                             <?php
-                        }
-                        ?>
-                    </tr>
-                    </thead>
-                    <?php
-                    try
-                    {
-                        $conn = \Eszkozok\Eszk::initMySqliObject();
-                        $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `internal_id` = ? ORDER BY `ido` DESC;");
-                        if (!$stmt)
-                            throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
-
-                        $buffInt = $MegjProfil->getInternalID();
-                        $stmt->bind_param('s', $buffInt);
-
-                        if ($stmt->execute())
-                        {
-                            $resultKomp = $stmt->get_result();
-                            if ($resultKomp->num_rows > 0)
+                            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                             {
-                                while ($rowKomp = $resultKomp->fetch_assoc())
+                                ?>
+                                <th></th>
+
+                                <?php
+                            }
+                            ?>
+                        </tr>
+                        </thead>
+                        <?php
+                        try
+                        {
+                            $conn = \Eszkozok\Eszk::initMySqliObject();
+                            $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `internal_id` = ? ORDER BY `ido` DESC;");
+                            if (!$stmt)
+                                throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+                            $buffInt = $MegjProfil->getInternalID();
+                            $stmt->bind_param('s', $buffInt);
+
+                            if ($stmt->execute())
+                            {
+                                $resultKomp = $stmt->get_result();
+                                if ($resultKomp->num_rows > 0)
                                 {
-                                    ?>
+                                    while ($rowKomp = $resultKomp->fetch_assoc())
+                                    {
+                                        ?>
 
-                                    <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido'])) ? '' : 'style="background-color: #EEEEEE;color: grey"'; ?>>
-                                        <td>
-                                            <?php echo htmlentities($rowKomp['pont']) . ' pont'; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo htmlentities($rowKomp['megj']); ?>
-                                        </td>
-
-                                        <?php
-                                        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-                                        {
-                                            ?>
+                                        <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido'])) ? '' : 'style="background-color: #EEEEEE;color: grey"'; ?>>
                                             <td>
-                                                <p>
-                                                    <a href="../ujkomp?szerk=1&kompid=<?php echo $rowKomp['ID']; ?>"
-                                                       target="_blank"
-                                                       style="text-decoration: none; color: inherit">
-                                                        <i class="fa fa-cog fa-2x settingsgear"></i>
-                                                    </a>
-                                                </p>
+                                                <?php echo htmlentities($rowKomp['pont']) . ' pont'; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo htmlentities($rowKomp['megj']); ?>
                                             </td>
 
                                             <?php
-                                        }
-                                        ?>
+                                            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
+                                            {
+                                                ?>
+                                                <td>
+                                                    <p>
+                                                        <a href="../ujkomp?szerk=1&kompid=<?php echo $rowKomp['ID']; ?>"
+                                                           target="_blank"
+                                                           style="text-decoration: none; color: inherit">
+                                                            <i class="fa fa-cog fa-2x settingsgear"></i>
+                                                        </a>
+                                                    </p>
+                                                </td>
 
-                                    </tr>
-                                    <?php
+                                                <?php
+                                            }
+                                            ?>
+
+                                        </tr>
+                                        <?php
+                                    }
                                 }
                             }
+                            else
+                                throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
                         }
-                        else
-                            throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
-                    }
-                    catch (\Exception $e)
-                    {
-                        \Eszkozok\Eszk::dieToErrorPage('45848: ' . $e->getMessage(), 'profil');
-                    }
-                    ?>
-                </table>
+                        catch (\Exception $e)
+                        {
+                            \Eszkozok\Eszk::dieToErrorPage('45848: ' . $e->getMessage(), 'profil');
+                        }
+                        ?>
+                    </table>
+                </div>
             </div>
-        </div>
-        <?php
+            <?php
+        }
     }
     ?>
     <?php
@@ -357,9 +366,9 @@ else
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th class="ErtekelesTableheader" style="min-width: 140px;">Műszak</th>
-                        <th class="ErtekelesTableheader" style="min-width: 170px;">Értékelő</th>
-                        <th class="ErtekelesTableheader" style="min-width: 150px;">Értékelés</th>
+                        <th class="ErtekelesTableheader" >Műszak</th>
+                        <th class="ErtekelesTableheader">Értékelő</th>
+                        <th class="ErtekelesTableheader" style="min-width: 200px;">Értékelés</th>
 
                     </tr>
                     </thead>
@@ -375,7 +384,7 @@ else
                         ertekelesek.*,
                         fxaccok.nev AS ErtekeloNev
                         FROM `ertekelesek`
-                        JOIN `fxmuszakok` ON ertekelesek.muszid = fxmuszakok.id
+                        JOIN `fxmuszakok` ON ertekelesek.Muszid = fxmuszakok.id
                         JOIN fxaccok ON fxaccok.internal_id = ertekelesek.ertekelo
                         WHERE `ertekelt` = ? ORDER BY `ertekelesek`.`id` DESC;");
 
@@ -394,7 +403,7 @@ else
 
                                     <tr>
                                         <td class="ErtekelesColumnMuszak">
-                                            <p><?php echo htmlentities($rowErt['MuszNev'] ?: 'N/A') . ' (' . htmlentities($rowErt['MuszId'] ?: 'N/A') . ')'; ?></p>
+                                            <p><?php echo htmlentities($rowErt['MuszNev'] ?: 'N/A') . ' (' . htmlentities($rowErt['muszid'] ?: 'N/A') . ')'; ?></p>
 
                                             <?php
 
@@ -412,44 +421,49 @@ else
                                             <?php echo htmlentities($rowErt['ErtekeloNev']); ?>
                                         </td>
                                         <td>
-                                            <div>
-                                                <table>
-                                                    <tr>
-                                                        <td>
-                                                            <p><b>Pontosság:&nbsp;&nbsp;&nbsp;</b></p>
-                                                        </td>
-                                                        <td class="ErtekelesTartalomPontokOszlop">
-                                                            <p> <?php echo htmlentities($rowErt['e_pontossag'] ?: 'Na'); ?> <b>/</b>10</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <p><b>Pénzkezelés:</p>
-                                                        </td>
-                                                        <td class="ErtekelesTartalomPontokOszlop">
-                                                            <p></b> <?php echo htmlentities($rowErt['e_penzkezeles'] ?: 'Na'); ?> <b>/</b>10</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <p><b>Szakértelem: </b></p>
-                                                        </td>
-                                                        <td class="ErtekelesTartalomPontokOszlop">
-                                                            <p><?php echo htmlentities($rowErt['e_szakertelem'] ?: 'Na'); ?> <b>/</b>10</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <p><b>Dugnám:&nbsp;&nbsp;&nbsp;&nbsp; </b></p>
-                                                        </td>
-                                                        <td class="ErtekelesTartalomPontokOszlop">
-                                                            <p> <?php echo htmlentities($rowErt['e_dughatosag'] ?: 'Na'); ?> <b>/</b>10</p>
-                                                        </td>
-                                                    </tr>
-                                                    </tr>
-                                                </table>
-
-                                                <p><b>Szöveges értékelés:</b> <?php echo htmlentities($rowErt['e_szoveg'] ?: 'N/A'); ?></p>
+                                            <div style="width: 100%;">
+                                                <div style="display: table; margin: 0 auto;">
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <p><b>Pontosság:&nbsp;&nbsp;&nbsp;</b></p>
+                                                            </td>
+                                                            <td class="ErtekelesTartalomPontokOszlop">
+                                                                <input class="rating-loading" value="<?php echo htmlentities($rowErt['e_pontossag'] ?: ''); ?>"
+                                                                       data-min="0" data-max="5" data-step="0.5" data-size="sm" data-language="hu" data-theme="krajee-fas">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <p><b>Pénzkezelés:</p>
+                                                            </td>
+                                                            <td class="ErtekelesTartalomPontokOszlop">
+                                                                <input class="rating-loading" value="<?php echo htmlentities($rowErt['e_penzkezeles'] ?: ''); ?>"
+                                                                       data-min="0" data-max="5" data-step="0.5" data-size="sm" data-language="hu" data-theme="krajee-fas">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <p><b>Szakértelem: </b></p>
+                                                            </td>
+                                                            <td class="ErtekelesTartalomPontokOszlop">
+                                                                <input class="rating-loading" value="<?php echo htmlentities($rowErt['e_szakertelem'] ?: ''); ?>"
+                                                                       data-min="0" data-max="5" data-step="0.5" data-size="sm" data-language="hu" data-theme="krajee-fas">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <p><b>Dugnám:&nbsp;&nbsp;&nbsp;&nbsp; </b></p>
+                                                            </td>
+                                                            <td class="ErtekelesTartalomPontokOszlop">
+                                                                <input class="rating-loading" value="<?php echo htmlentities($rowErt['e_dughatosag'] ?: ''); ?>"
+                                                                       data-min="0" data-max="5" data-step="0.5" data-size="sm" data-language="hu" data-theme="krajee-fas">
+                                                            </td>
+                                                        </tr>
+                                                        </tr>
+                                                    </table>
+                                                    <span><b>Szöveges értékelés:</b> <?php echo htmlentities($rowErt['e_szoveg'] ?: 'N/A'); ?></span>
+                                                </div>
                                             </div>
                                         </td>
 
@@ -474,5 +488,13 @@ else
     }
     ?>
 </div>
+
+<script>
+    $(document).on('ready', function ()
+    {
+        $('.rating-loading').rating({displayOnly: true});
+    });
+</script>
+
 </body>
 </html>

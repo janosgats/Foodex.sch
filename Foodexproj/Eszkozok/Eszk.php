@@ -27,7 +27,7 @@ namespace Eszkozok
 
 
         /**
-         * @returns TRUE, ha a $muszid műszak keretlétszámába benne van az $int_id account
+         * @returns TRUE, ha a $Muszid műszak keretlétszámába benne van az $int_id account
          */
         static public function BenneVanEAKeretben($muszid, $int_id)
         {
@@ -47,7 +47,7 @@ namespace Eszkozok
         }
 
         /**
-         * @returns TRUE, ha a $muszid műszak keretlétszámába benne van az $int_id account
+         * @returns TRUE, ha a $Muszid műszak keretlétszámába benne van az $int_id account
          */
         static public function BenneVanEAKeretbenWithConn($muszid, $int_id, $conn)
         {
@@ -262,6 +262,8 @@ namespace Eszkozok
             {
                 if ($statpageerr)
                     self::dieToErrorPage('8591: ' . $e->getMessage());
+                else
+                    return null;
             }
         }
 
@@ -1303,7 +1305,7 @@ namespace Eszkozok
             try
             {
 
-                $MuszakLetszamok = array();//Cacheli az muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
+                $MuszakLetszamok = array();//Cacheli az Muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
 
                 $pontszam = 0;
 

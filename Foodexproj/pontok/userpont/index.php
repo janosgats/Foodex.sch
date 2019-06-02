@@ -65,7 +65,7 @@ if ($MosogatasJelentkezes)
 
                             if (GetURLParam('muv') == 'ujmosjel')
                             {
-                                $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE muszid = ? AND `status` = 1 AND `mosogat` = 1;");
+                                $stmt = $conn->prepare("SELECT `ID` FROM `fxjelentk` WHERE Muszid = ? AND `status` = 1 AND `mosogat` = 1;");
 
                                 $stmt->bind_param('i', $mosmuszid);
 
@@ -227,7 +227,7 @@ if ($mosfoglalt)
                         throw new \Exception('SQL hiba: $conn is \'false\'');
 
 
-                    $MuszakLetszamok = array();//Cacheli az muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
+                    $MuszakLetszamok = array();//Cacheli az Muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
                     $MuszakKiirokNevei = array();//Cacheli az internal_id - Név párokat a kiírók közül, hogy ne kelljen minden műszaknál új lekérdezés a névért
 
 

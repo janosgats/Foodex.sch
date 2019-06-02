@@ -36,7 +36,7 @@ require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width">
 
     <link rel="stylesheet" href="main.css">
 
@@ -105,7 +105,7 @@ require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
 </div>
 
 
-<div class="container">
+<div class="container" style="min-width: 420px">
 
     <?php
     NavBar::echonavbar('settings');

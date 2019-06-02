@@ -115,8 +115,8 @@ GROUP BY fxjelentk.jelentkezo");
 JOIN logs
 ON logs.context = CONCAT('[',  MinJel.muszid, ']' ) AND logs.message='MUSZAKTIVAL'
 LEFT JOIN fxmuszakok
-ON MinJel.muszid = fxmuszakok.id
-ORDER BY muszid ASC;");
+ON MinJel.Muszid = fxmuszakok.id
+ORDER BY Muszid ASC;");
 
     if ($stmt->execute())
     {
@@ -199,7 +199,7 @@ catch (Exception $e)
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width">
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -228,7 +228,7 @@ catch (Exception $e)
 
 <body style="background-color: #de520d">
 
-<div class="container">
+<div class="container"  style="min-width: 1100px">
 
     <?php
     NavBar::echonavbar( 'statisztikak');

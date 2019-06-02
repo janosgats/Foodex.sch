@@ -11,11 +11,11 @@ require_once '../Eszkozok/navbar.php';
 \Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
 
 if (IsURLParamSet('muszid') == false)
-    Eszkozok\Eszk::dieToErrorPage('19975: muszid URL param is not set!');
+    Eszkozok\Eszk::dieToErrorPage('19975: Muszid URL param is not set!');
 $muszidbuff = GetURLParam('muszid');
 
 if ($muszidbuff == '')
-    Eszkozok\Eszk::dieToErrorPage('19985: muszid URL param is empty!');
+    Eszkozok\Eszk::dieToErrorPage('19985: Muszid URL param is empty!');
 
 
 $SzerkMuszak = Eszkozok\Eszk::GetTaroltMuszakAdat($muszidbuff, true);
@@ -166,14 +166,14 @@ $Korok = array();
             </div>
 
             <div class="row" style="padding-right: 7%">
-                <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="submitMuszak()" type="button">
+                <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="submitMuszak()" type="button" style="margin-left: 10px; margin-bottom: 10px">
                     Mentés
                 </button>
-                <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-right: 10px"
+                <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-left: 10px; margin-bottom: 10px"
                         onclick="deleteMuszak()" type="button">Műszak törlése
                 </button>
-                <a class="btn btn-success pull-right" name="masolas" id="masolas" style="margin-right: 10px"
-                   href="../ujmuszak?<?php echo 'muszmasol=1&muszid=' . urlencode($SzerkMuszak->ID); ?>" type="button">Műszak másolása
+                <a class="btn btn-success pull-right" name="masolas" id="masolas" style="margin-bottom: 10px"
+                   href="../ujmuszak?<?php echo 'muszmasol=1&Muszid=' . urlencode($SzerkMuszak->ID); ?>" type="button">Műszak másolása
                 </a>
             </div>
         </form>
@@ -238,6 +238,12 @@ $Korok = array();
 
     function submitMuszak()
     {
+        if (document.getElementById("korid").value == "NINCS" || document.getElementById("korid").value == "")
+        {
+            if (!confirm("Nem rendeltél értékelő kört a műszakhoz. Biztosan elmented így?"))
+                return;
+        }
+
         callPHPPageEdit({
             musznev: document.getElementById("musznev").value,
             idokezd: document.getElementById("idokezd").value,
@@ -247,7 +253,7 @@ $Korok = array();
             mospont: document.getElementById("mospont").value,
             korid: document.getElementById("korid").value,
             megj: document.getElementById("megj").value,
-            muszid: <?php echo $SzerkMuszak->ID; ?>
+            muszid: <?php echo htmlentities($SzerkMuszak->ID); ?>
         });
     }
     function deleteMuszak()
@@ -256,7 +262,7 @@ $Korok = array();
         {
             callPHPPageTorol({
                 musztorles: 1,
-                muszid: <?php echo $SzerkMuszak->ID; ?>
+                muszid: <?php echo htmlentities($SzerkMuszak->ID); ?>
             });
         }
 
