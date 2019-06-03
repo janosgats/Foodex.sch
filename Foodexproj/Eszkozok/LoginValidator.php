@@ -230,6 +230,19 @@ class LoginValidator
         die('Nem vagy bejelentkezve.');
     }
 
+    static public function AccountSignedIn_ThrowsException()
+    {
+        try
+        {
+            if (self::IsLoginValid('account_signed_in'))
+                return true;
+        }
+        catch (\Exception $e)
+        {
+        }
+        throw new \Exception('Nem vagy bejelentkezve.');
+    }
+
     /**
      * DO NOT USE THIS unless you know what you do! This function does not force the script to exit. This only returns false, when the login is invalid.
      **/

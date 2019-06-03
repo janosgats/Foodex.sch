@@ -10,15 +10,32 @@ require_once __DIR__ . '/../../Eszkozok/entitas/Ertekeles.php';
 
 $conn = new \mysqli();
 
-function mentes_sec_checks(\mysqli $conn, $muszid, $ertekelt)
+function mentes_sec_checks(\mysqli $conn, $muvelet, $muszid, $ertekelt)
 {
-    ///////////CHECK: Van-e joga ehhez a műszakhoz?/////////////////
-    if (($muszak = \Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszid, false, $conn)) == null)
-        throw new \Exception('Hiba a műszak fetchelése során!');
+    if ($muvelet == 'letrehozas')
+    {
+        ///////////CHECK: Van-e joga ehhez a műszakhoz?/////////////////
+        if (($muszak = \Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($muszid, false, $conn)) == null)
+            throw new \Exception('Hiba a műszak fetchelése során!');
 
-    if (!in_array($muszak->korID, \Eszkozok\LoginValidator::GetErtekeloKorokIdk()))
-        return false;
+        if (!in_array($muszak->korID, \Eszkozok\LoginValidator::GetErtekeloKorokIdk()))
+            return false;
+    }
+    else
+    {
+        ///////////CHECK: Ő írta-e ezt az értékelést?/////////////////
 
+        $stmt = $conn->prepare("SELECT ertekelo FROM ertekelesek WHERE ertekelesek.muszid = ?  AND ertekelesek.ertekelt = ? AND ertekelesek.ertekelo = ?;");
+        $stmt->bind_param('iss', $muszid, $ertekelt, $_SESSION['profilint_id']);
+
+        if (!$stmt->execute())
+            throw new \Exception('$stmt->execute() c0 is false!');
+
+        $res = $stmt->get_result();
+
+        if ($res->num_rows != 1)
+            throw new Exception('Nem te írtad ezt az értékelést.');
+    }
 
     ///////////CHECK: Ez a foodexes vitte-e a műszakot és az már véget ért-e?/////////////////
 
@@ -42,33 +59,32 @@ function mentes_sec_checks(\mysqli $conn, $muszid, $ertekelt)
     $res = $stmt->get_result();
 
     if ($res->num_rows != 1)
-        return false;
+        throw new \Exception('Ezt a műszakot nem ez a foodexes vitte!');
 
     return true;
 }
 
 
-function torles_sec_checks(\mysqli $conn, $ert_id)
+function AktualisProfilIrtaEztAzErtekelest_sec_checks(\mysqli $conn, $ert_id)
 {
-    ///////////CHECK: Van-e joga ehhez a műszakhoz?/////////////////
+    ///////////CHECK: Ő írta-e ezt az értékelést?/////////////////
 
-    $stmt = $conn->prepare("SELECT fxmuszakok.korid FROM ertekelesek
-                            JOIN  fxmuszakok ON ertekelesek.muszid = fxmuszakok.id
-                            WHERE ertekelesek.id = ?;");
+    $stmt = $conn->prepare("SELECT ertekelo FROM ertekelesek WHERE id = ?;");
     $stmt->bind_param('i', $ert_id);
 
     if (!$stmt->execute())
-        throw new \Exception('$stmt->execute() c1 is false!');
+        throw new \Exception('$stmt->execute() c2 is false!');
 
     $res = $stmt->get_result();
 
     if ($res->num_rows != 1)
-        return false;
+        throw new Exception('Nem te írtad ezt az értékelést.');
 
-    if (!in_array($res->fetch_assoc()['korid'], \Eszkozok\LoginValidator::GetErtekeloKorokIdk()))
-        return false;
 
-    return true;
+    if ($res->fetch_assoc()['ertekelo'] == $_SESSION['profilint_id'])
+        return true;
+
+    throw new Exception('Nem te írtad ezt az értékelést.');
 }
 
 try
@@ -86,7 +102,8 @@ try
 
     switch ($Muvelet)
     {
-        case 'mentes':
+        case 'letrehozas':
+        case 'modositas':
         {
             $MentendoErtekeles = new \Eszkozok\Ertekeles();
 
@@ -103,7 +120,7 @@ try
             if ($MentendoErtekeles->muszid == null || $MentendoErtekeles->ertekelt == null)
                 throw new \Exception('Hiányzó paraméterek. Nincs megadva műszak, vagy értékelt profil!');
 
-            if (!mentes_sec_checks($conn, $MentendoErtekeles->muszid, $MentendoErtekeles->ertekelt))
+            if (!mentes_sec_checks($conn, $Muvelet, $MentendoErtekeles->muszid, $MentendoErtekeles->ertekelt))
                 throw new \Exception('Valami nem stimmel az értékeléssel.');
 
 
@@ -126,31 +143,22 @@ try
                 throw new \Exception('Értékelésedben semmit sem értékeltél. Így nincs értelme menteni.');
 
 
-            $stmt = $conn->prepare("SELECT id FROM ertekelesek WHERE muszid = ? AND ertekelt = ? AND ertekelo = ?");
-            $stmt->bind_param('iss', $MentendoErtekeles->muszid, $MentendoErtekeles->ertekelt, $MentendoErtekeles->ertekelo);
-
-            if (!$stmt->execute())
-                throw new \Exception('$stmt->execute() is false: m1');
-
-            $res = $stmt->get_result();
-
-            if ($res->num_rows == 1)
+            if ($Muvelet == 'modositas')
             {
-                $ertID = $res->fetch_assoc()['id'];
 
-                $stmt->prepare("UPDATE ertekelesek SET e_szoveg = ?,e_pontossag = ?,e_penzkezeles = ?,e_szakertelem = ?,e_dughatosag = ? WHERE id = ?;");
-                $stmt->bind_param('sddddi', $MentendoErtekeles->e_szoveg, $MentendoErtekeles->e_pontossag, $MentendoErtekeles->e_penzkezeles,
-                    $MentendoErtekeles->e_szakertelem, $MentendoErtekeles->e_dughatosag, $ertID);
+                $stmt = $conn->prepare("UPDATE ertekelesek SET e_szoveg = ?,e_pontossag = ?,e_penzkezeles = ?,e_szakertelem = ?,e_dughatosag = ? WHERE  muszid = ? AND ertekelt = ? AND ertekelo = ?;");
+                $stmt->bind_param('sddddiss', $MentendoErtekeles->e_szoveg, $MentendoErtekeles->e_pontossag, $MentendoErtekeles->e_penzkezeles,
+                    $MentendoErtekeles->e_szakertelem, $MentendoErtekeles->e_dughatosag, $MentendoErtekeles->muszid, $MentendoErtekeles->ertekelt, $MentendoErtekeles->ertekelo);
 
                 if (!$stmt->execute())
                     throw new \Exception('$stmt->execute() is false: m2 ' . $stmt->error);
 
 
-                $logger->info('Értékelés módosítva', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), $ertID]);
+                $logger->info('Értékelés módosítva', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), $conn->insert_id]);
             }
-            else if ($res->num_rows == 0)
+            else if ($Muvelet == 'letrehozas')
             {
-                $stmt->prepare("INSERT INTO ertekelesek SET ertekelo = ?,ertekelt = ?,muszid = ?,e_szoveg = ?,e_pontossag = ?,e_penzkezeles = ?,e_szakertelem = ?,e_dughatosag = ?;");
+                $stmt = $conn->prepare("INSERT INTO ertekelesek SET ertekelo = ?,ertekelt = ?,muszid = ?,e_szoveg = ?,e_pontossag = ?,e_penzkezeles = ?,e_szakertelem = ?,e_dughatosag = ?;");
                 $stmt->bind_param('ssisdddd', $MentendoErtekeles->ertekelo, $MentendoErtekeles->ertekelt, $MentendoErtekeles->muszid, $MentendoErtekeles->e_szoveg, $MentendoErtekeles->e_pontossag,
                     $MentendoErtekeles->e_penzkezeles, $MentendoErtekeles->e_szakertelem, $MentendoErtekeles->e_dughatosag);
 
@@ -159,8 +167,8 @@ try
 
                 $logger->info('Új Értékelés mentve', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), $conn->insert_id]);
             }
-            else if ($res->num_rows > 1)
-                throw new \Exception('DB integrity fail: $res->num_rows > 1');
+            else
+                throw new \Exception('Művelethiba (else)');
 
 
         }
@@ -175,7 +183,7 @@ try
             if ($torlendoID == null)
                 throw new \Exception('Hiányzó paraméter. Nincs megadva az értékelés ID!');
 
-            if (!torles_sec_checks($conn, $torlendoID))
+            if (!AktualisProfilIrtaEztAzErtekelest_sec_checks($conn, $torlendoID))
                 throw new \Exception('Valami nem stimmel az értékeléssel.');
 
             $stmt = $conn->prepare("DELETE FROM ertekelesek WHERE id = ?;");

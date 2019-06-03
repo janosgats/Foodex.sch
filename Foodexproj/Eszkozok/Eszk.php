@@ -544,6 +544,7 @@ namespace Eszkozok
             else if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
             {
                 $servername = "gjani.sch.bme.hu:3306";
+                $servername = "localhost:3306";
             }
             else if (strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false || strpos($_SERVER["HTTP_HOST"], 'localhost') !== false)
             {

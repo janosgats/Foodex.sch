@@ -238,43 +238,6 @@ $MezokFeltoltendoek = $HibasBemenet || $KorSzerkesztes;
             }
             ?>
 
-            <!--            <div class="row">-->
-            <!--                <div class="form-group col-md-6 col-sm-12">-->
-            <!---->
-            <!--                    <label for="pont">Pont (Akár negatív)</label>-->
-            <!---->
-            <!--                    <input id="pont" type="text" value="--><?php //if ($GyorshSzerkesztes)
-            //                    {
-            //                        echo 69;
-            //                    }
-            //                    else
-            //                    {
-            //                        echo '0';
-            //                    } ?><!--" name="pont">-->
-            <!--                    <script>-->
-            <!--                        $("input[name='pont']").TouchSpin({-->
-            <!--                            min: -999999,-->
-            <!--                            max: 999999,-->
-            <!--                            step: 0.1,-->
-            <!--                            decimals: 2,-->
-            <!--                            boostat: 0.2,-->
-            <!--                            maxboostedstep: 0.5,-->
-            <!--                            postfix: 'pont'-->
-            <!--                        });-->
-            <!--                    </script>-->
-            <!--                </div>-->
-            <!---->
-            <!--                <div class="form-group col-md-6 col-sm-12">-->
-            <!--                    <label for="megj">Megjegyzés</label>-->
-            <!--                    <input id="megj" name="megj" type="text" placeholder="pl. Nem jelent meg a műszakon."-->
-            <!--                           value="--><?php //if ($GyorshSzerkesztes)
-            //                           {
-            //                               echo '$SzerkesztendoGyorsh->megj';
-            //                           } ?><!--" class="form-control">-->
-            <!--                </div>-->
-            <!---->
-            <!--            </div>-->
-
             <div class="row">
 
                 <div class="form-group col-md-12 col-sm-12">

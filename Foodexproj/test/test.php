@@ -1,5 +1,4 @@
 <?php
 
-include __DIR__ . '/../Eszkozok/GlobalSettings.php';
-
-echo password_hash($_REQUEST['pw'], PASSWORD_BCRYPT);
+//ini_set('post_max_size', '25M');
+//ini_set('upload_max_filesize', '25M');

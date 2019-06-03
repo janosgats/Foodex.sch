@@ -7,20 +7,36 @@
     color: rgb(51, 122, 200);
 }
 
-.ErtekelesTableheader
-{
-    text-align: center
-}
-.ErtekelesColumnErtekelo
-{
-    text-align: center
-}
-.ErtekelesColumnMuszak
-{
+.ErtekelesTableheader {
     text-align: center
 }
 
-.ErtekelesTartalomPontokOszlop
-{
+.ErtekelesColumnErtekelo {
+    text-align: center
+}
+
+.ErtekelesColumnMuszak {
+    text-align: center
+}
+
+.ErtekelesTartalomPontokOszlop {
     /*padding-left: 8px;*/
+}
+
+.ProfilkepCsereSpan {
+    z-index: 1;
+    position: absolute;
+    font-size: x-large;
+    cursor: pointer;
+    width: 160px;
+    padding-left: 10px;
+    margin-top: 5px;
+    background-color: #FFFFFF50;
+}
+.ProfilkepCsereSpan:hover {
+
+    background-color: #FFFFFFB0;
+}
+.Profilkep {
+    width: 160px;
 }

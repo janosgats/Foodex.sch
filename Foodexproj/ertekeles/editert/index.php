@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-set_include_path(getcwd());
+
 require_once __DIR__ . '/../../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../../Eszkozok/entitas/Ertekeles.php';
@@ -35,7 +35,7 @@ try
     /////////ÉRTÉKELÉS FETCHELÉSE////////////
 
     $stmt = $conn->prepare("SELECT * FROM ertekelesek WHERE muszid = ? AND ertekelt = ? AND ertekelo = ?");
-    $stmt->bind_param('iss', $Ertekeltmuszid, $Ertekelt_int_id, $Ertekelo_int_id);
+    $stmt->bind_param('iss', $ErtekeltMuszid, $Ertekelt_int_id, $Ertekelo_int_id);
 
     if (!$stmt->execute())
         throw new \Exception('$stmt->execute() is false: 1');
@@ -55,8 +55,8 @@ try
     if (($ErtekeltProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($Ertekelt_int_id)) == null)
         throw new \Exception('Az értékelt profil nem található');
 
-    if (($ErtekeltMuszak = \Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($Ertekeltmuszid, false, $conn)) == null)
-        throw new \Exception('Az értékelt profil nem található');
+    if (($ErtekeltMuszak = \Eszkozok\Eszk::GetTaroltMuszakAdatWithConn($ErtekeltMuszid, false, $conn)) == null)
+        throw new \Exception('Az értékelt műszak nem található');
 
 }
 catch (\Exception $e)
@@ -85,7 +85,7 @@ catch (\Exception $e)
     </script>
 
     <meta charset="UTF-8">
-    <title>Fx - Műszak szerkesztése</title>
+    <title>Fx - Értékelés szerkesztése</title>
 
     <link rel="icon" href="../../res/kepek/favicon1_64p.png">
 
@@ -249,7 +249,7 @@ catch (\Exception $e)
     function submitErtekeles()
     {
         callPHPPageEdit({
-            muvelet: 'mentes',
+            muvelet: '<?= ($SzerkesztettErtekeles == null)? 'letrehozas':'modositas'; ?>',
             muszid: '<?php echo htmlentities($ErtekeltMuszid); ?>',
             ertekelt_int_id: '<?php echo htmlentities($Ertekelt_int_id); ?>',
             e_pontossag: document.getElementById("e_pontossag").value,

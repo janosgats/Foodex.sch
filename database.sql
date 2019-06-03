@@ -6,18 +6,17 @@ SET time_zone = '+00:00';
 DROP TABLE IF EXISTS `ertekelesek`;
 CREATE TABLE `ertekelesek` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ertekelo` varchar(120) COLLATE latin2_hungarian_ci DEFAULT NULL,
-  `ertekelt` varchar(120) COLLATE latin2_hungarian_ci DEFAULT NULL,
+  `ertekelo` varchar(120) COLLATE latin2_hungarian_ci NOT NULL,
+  `ertekelt` varchar(120) COLLATE latin2_hungarian_ci NOT NULL,
   `muszid` bigint(20) DEFAULT NULL,
   `e_szoveg` text COLLATE latin2_hungarian_ci,
-  `e_pontossag` tinyint(4) DEFAULT NULL,
-  `e_penzkezeles` tinyint(4) DEFAULT NULL,
-  `e_szakertelem` tinyint(4) DEFAULT NULL,
-  `e_dughatosag` tinyint(4) DEFAULT NULL,
+  `e_pontossag` float DEFAULT NULL,
+  `e_penzkezeles` float DEFAULT NULL,
+  `e_szakertelem` float DEFAULT NULL,
+  `e_dughatosag` float DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `ertekelo_ertekelt_muszid` (`ertekelo`,`ertekelt`,`muszid`),
   KEY `muszid` (`muszid`),
-  KEY `ertekelo` (`ertekelo`),
-  KEY `ertekelt` (`ertekelt`),
   CONSTRAINT `ertekelesek_ibfk_1` FOREIGN KEY (`muszid`) REFERENCES `fxmuszakok` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
 
@@ -141,4 +140,4 @@ CREATE TABLE `profilinfo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
 
 
--- 2019-06-01 10:25:13
+-- 2019-06-02 13:11:49

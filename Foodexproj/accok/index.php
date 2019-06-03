@@ -191,7 +191,7 @@ ob_start();
     {
         try
         {
-            console.log(ret);
+//            console.log(ret);
             var fullres = JSON.parse(ret);
 
             if (fullres.status == 'siker2345')

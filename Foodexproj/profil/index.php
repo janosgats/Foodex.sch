@@ -6,6 +6,7 @@ require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 require_once __DIR__ . '/../Eszkozok/param.php';
 require_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
+require_once __DIR__ . '/../Eszkozok/PicturesHelper.php';
 
 \Eszkozok\LoginValidator::AccountSignedIn_RedirectsToRoot();
 
@@ -45,19 +46,21 @@ else
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
-<!--    <meta name="viewport" content="width=device-width, initial-scale=100">-->
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=100">-->
     <meta name="viewport" content="width=device-width">
 
 
     <link rel="stylesheet" href="main.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <link rel='stylesheet' href='../vendor/kartik-v/bootstrap-star-rating/css/star-rating.css'>
     <link rel='stylesheet' href='../vendor/kartik-v/bootstrap-star-rating/themes/krajee-fas/theme.css'>
+
+    <link rel="stylesheet" href="../css/modalimage.css">
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
@@ -75,54 +78,124 @@ else
     NavBar::echonavbar('');
     ?>
 
-    <div class="jumbotron" >
-        <h1 style="display:inline"><?php echo $MegjProfil->getNev(); ?></h1>
-        <?php
-        if ($MegjProfil->getInternalID() == 'efb8476b-46c2-7aa8-b612-46d3b3a84e4c')//Wuki Internal ID-je
-        {
-            ?>
-            <h3 style="display:inline; color: #777777"> &nbsp; (Tuti a világi spanja a gyereknek.)</h3>
-            <?php
-        }
-        ?>
+    <div class="jumbotron">
 
-        <p>Értesítési cím: <b><?php echo $MegjProfil->getEmail(); ?></b></p>
-
-        <?php
-        if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehet pontja
-        {
-            if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT() || ($MegjProfil->getInternalID() == $AktProfil->getInternalID()))
-            {
-                ?>
-
-                <a style="cursor: pointer;" href="<?php echo '../pontok/userpont/?int_id=' . $MegjProfil->getInternalID(); ?>">
-                    <p>Pontok: <b><?php
-                            try
-                            {
-                                $buff = \Eszkozok\Eszk::GetAccPontok($MegjProfil->getInternalID());
-                                echo $buff;
-                            }
-                            catch (\Exception $e)
-                            {
-                                echo 'N/A';
-                            } ?> pont</b></p></a>
-
+        <div style="display: inline-block;vertical-align:top; margin-right: 10px; margin-bottom: 5px">
+            <div style="float: top; margin-top: 0; margin-bottom: auto">
                 <?php
-            }
-        }
-        ?>
+                if ($AktProfil->getInternalID() == $MegjProfil->getInternalID())
+                {
+                    ?>
+                    <form action="AJAXprofilkepfeltolt.php" id="uj_profilkep_form" style="display: none">
+                        <input type="file" name="uj_profilkep" id="uj_profilkep_input" accept=".jpg,.jpeg,.gif,.png" style="display:none" hidden="hidden">
+                    </form>
+                    <a class="ProfilkepCsereSpan" style="text-decoration: none;" id="uj_profilkep_gomb"><i class="fas fa-camera">
+                        </i> Képcsere </a>
+                    <script>
+                        $('#uj_profilkep_form').on('submit', (function (e)
+                        {
+                            e.preventDefault();
+                            var formData = new FormData(this);
+
+                            $.ajax({
+                                type: 'POST',
+                                url: $(this).attr('action'),
+                                data: formData,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                success: function (ret)
+                                {
+                                    try
+                                    {
+                                        var fullres = JSON.parse(ret);
+
+                                        if (fullres.status == 'siker1234')
+                                        {
+                                            $('#profilkep_img').attr('src', fullres.newpicurl + '?cachebreaker=' + new Date().getTime());
+                                        }
+                                        else
+                                        {
+                                            if (fullres.error != null)
+                                                throw {message: fullres.error};
+                                        }
+                                    }
+                                    catch (e)
+                                    {
+                                        alert('Hiba történt. Próbáld meg újra! (' + e.message + ')');
+                                    }
+                                },
+                                error: function (ret)
+                                {
+                                    alert("Hiba történt a feltöltés közben.");
+                                }
+                            });
+                        }));
+
+                        $("#uj_profilkep_gomb").on("click", function ()
+                        {
+                            $("#uj_profilkep_input").trigger("click");
+                        });
+
+                        $("#uj_profilkep_input").change(function ()
+                        {
+                            $("#uj_profilkep_input").submit();
+                        });
+                    </script>
+
+                    <?php
+                }
+                ?>
+                <img class="imageForModal Profilkep" id="profilkep_img" onclick="ImageOnClickShowModal(this);" alt="<?= htmlentities($MegjProfil->getNev()); ?>"
+                     src="<?= \Eszkozok\PicturesHelper::getProfilePicURLForInternalID($MegjProfil->getInternalID()); ?>"/>
+            </div>
+        </div>
+        <div style="display: inline-block;vertical-align:top;">
+            <div style="float: top; margin-top: 0; margin-bottom: auto">
+                <h1 style="display:inline"><?php echo htmlentities($MegjProfil->getNev()); ?></h1>
+                <br>
+
+                <p>Értesítési cím: <b><?php echo $MegjProfil->getEmail(); ?></b></p>
+                <?php
+                if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehet pontja
+                {
+                    if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT() || ($MegjProfil->getInternalID() == $AktProfil->getInternalID()))
+                    {
+                        ?>
+
+                        <a style="cursor: pointer;" href="<?php echo '../pontok/userpont/?int_id=' . $MegjProfil->getInternalID(); ?>">
+                            <p>Pontok: <b><?php
+                                    try
+                                    {
+                                        $buff = \Eszkozok\Eszk::GetAccPontok($MegjProfil->getInternalID());
+                                        echo $buff;
+                                    }
+                                    catch (\Exception $e)
+                                    {
+                                        echo 'N/A';
+                                    } ?> pont</b></p></a>
+
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
 
         <p style="display: inline">Kedvenc vicc: </p>
 
-        <p style="display: inline" id="kedv_vicc_szoveg"><?php
-            $ProfInf = \Eszkozok\Eszk::GetTaroltProfilInfo($MegjProfil->getInternalID());
+        <p style="display: inline" id="kedv_vicc_szoveg"><b><?php
+                $ProfInf = \Eszkozok\Eszk::GetTaroltProfilInfo($MegjProfil->getInternalID());
 
-            if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
-                echo htmlspecialchars($ProfInf->KedvencVicc);
-            else
-                echo 'Semmi jó :(';
+                if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
+                    echo htmlspecialchars($ProfInf->KedvencVicc);
+                else
+                    echo 'Semmi jó :(';
 
-            ?>  </p>
+                ?> </b></p>
 
 
         <?php
@@ -151,7 +224,7 @@ else
             <?php
         }
         ?>
-<br>
+        <br>
     </div>
 
     <script>
@@ -366,7 +439,7 @@ else
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th class="ErtekelesTableheader" >Műszak</th>
+                        <th class="ErtekelesTableheader">Műszak</th>
                         <th class="ErtekelesTableheader">Értékelő</th>
                         <th class="ErtekelesTableheader" style="min-width: 200px;">Értékelés</th>
 
@@ -494,6 +567,40 @@ else
     {
         $('.rating-loading').rating({displayOnly: true});
     });
+</script>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal" onclick="this.style.display = 'none';">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01" style="height: 80%;width: auto">
+
+    <div id="caption"></div>
+</div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    function ImageOnClickShowModal(imgelement)
+    {
+        modal.style.display = "block";
+        modalImg.src = imgelement.src;
+        captionText.innerHTML = imgelement.alt;
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function ()
+    {
+        modal.style.display = "none";
+    }
 </script>
 
 </body>
