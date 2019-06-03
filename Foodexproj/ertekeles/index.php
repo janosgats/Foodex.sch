@@ -66,7 +66,7 @@ if (isset($_REQUEST['osszert']) && $_REQUEST['osszert'] == 1)
             <a href="?osszert=0" style="text-decoration: none">
                 <button type="button" class="btn btn-<?= (!$OsszesEddigiErtekelesMegjelenit) ? 'default' : 'success '; ?>" <?= (!$OsszesEddigiErtekelesMegjelenit) ? ' disabled="disabled" ' : ''; ?>
                         style="<?= (!$OsszesEddigiErtekelesMegjelenit) ? ' border-color:black; ' : ''; ?>margin: 5px;white-space: normal;">
-                    Általad jelentleg értékelhető műszakok
+                    Általad jelenleg értékelhető műszakok
                 </button>
             </a>
             <a href="?osszert=1" style="text-decoration: none">
@@ -166,7 +166,7 @@ if (isset($_REQUEST['osszert']) && $_REQUEST['osszert'] == 1)
                                                         </a>
                                                     </div>
 
-                                                    <a href="editert/?muszid=<?= urlencode($row['ID']); ?>&ertekelt_int_id=<?= urlencode($KikVittekAMuszakokat[$i]['internal_id']); ?>">
+                                                    <a href="editert/?vissza_param_osszert=0&muszid=<?= urlencode($row['ID']); ?>&ertekelt_int_id=<?= urlencode($KikVittekAMuszakokat[$i]['internal_id']); ?>">
                                                         <?php
 
                                                         if ($KikVittekAMuszakokat[$i]['ert_id'] == null)
@@ -250,7 +250,7 @@ if (isset($_REQUEST['osszert']) && $_REQUEST['osszert'] == 1)
                             </a>
                         </div>
 
-                        <a href="editert/?muszid=<?= urlencode($row['muszid']); ?>&ertekelt_int_id=<?= urlencode($row['internal_id']); ?>">
+                        <a href="editert/?vissza_param_osszert=1&muszid=<?= urlencode($row['muszid']); ?>&ertekelt_int_id=<?= urlencode($row['internal_id']); ?>">
                             <button type="button" class="btn btn-info">Módosítom</button>
                         </a>
                     </div>

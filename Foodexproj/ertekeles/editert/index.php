@@ -186,7 +186,7 @@ catch (\Exception $e)
                 }
                 ?>
 
-                <a href="../">
+                <a href="../<?= '?osszert=' . $_REQUEST['vissza_param_osszert'] ?>">
                     <button class="btn btn-info pull-right" name="megsem" id="megsem" style="margin-right: 10px" type="button">Mégsem</button>
                 </a>
 
@@ -211,7 +211,7 @@ catch (\Exception $e)
     {
         if (ret == "siker1234")
         {
-            window.location.replace('<?= \Eszkozok\Eszk::GetRootURL() . 'ertekeles';?>');
+            window.location.replace('<?= \Eszkozok\Eszk::GetRootURL() . 'ertekeles/?osszert=' . $_REQUEST['vissza_param_osszert'];?>');
         }
         else
             alert('Hiba: ' + ret);
@@ -231,7 +231,7 @@ catch (\Exception $e)
     {
         if (ret == "siker1234")
         {
-            window.location.replace('<?= \Eszkozok\Eszk::GetRootURL() . 'ertekeles';?>');
+            window.location.replace('<?= \Eszkozok\Eszk::GetRootURL() . 'ertekeles/?osszert=' . $_REQUEST['vissza_param_osszert'];?>');
         }
         else
             alert('Hiba: ' + ret);
