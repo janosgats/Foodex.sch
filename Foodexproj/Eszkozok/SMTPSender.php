@@ -1,8 +1,9 @@
 <?php
 
-require_once('../vendor/autoload.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../Eszkozok/Eszk.php';
 
-require_once('../Eszkozok/Eszk.php');
+require_once __DIR__ . '/../foodexpws.php';
 
 class SMTPSender
 {
@@ -23,8 +24,8 @@ class SMTPSender
                 $mail->isSMTP();                                      // Set mailer to use SMTP
                 $mail->Host = 'ssl://smtp.gmail.com';  // Specify main and backup SMTP servers
                 $mail->SMTPAuth = true;                               // Enable SMTP authentication
-                $mail->Username =  '***REMOVED***';                // SMTP username
-                $mail->Password =  '***REMOVED***';                          // SMTP password
+                $mail->Username = \Eszkozok\FoodexPWs::$SMTPSenderUser;                 // SMTP username
+                $mail->Password = \Eszkozok\FoodexPWs::$SMTPSenderPassword;                           // SMTP password
                 $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
                 $mail->Port = 465;                                    // TCP port to connect to                                  // TCP port to connect to
 
@@ -54,7 +55,7 @@ class SMTPSender
                 if (\Eszkozok\Eszk::startsWidthMaganhangzo($musznev))
                     $nevelo = 'az';
 
-                $mail->Subject = "=?UTF-8?B?" . base64_encode('Bekerültél '  . $nevelo . ' ' .  $musznev . ' keretbe!') . "?=";
+                $mail->Subject = "=?UTF-8?B?" . base64_encode('Bekerültél ' . $nevelo . ' ' . $musznev . ' keretbe!') . "?=";
 
 
                 $mail->Body = 'Hi boi!<br><br>Valaki lejelentkezett, így bekerültél ' . $nevelo . ' ' . $musznev . ' Foodexesek közé.<br><br><a href="http://foodex.sch.bme.hu/jelentkezes">Pillants rá!</a>';
