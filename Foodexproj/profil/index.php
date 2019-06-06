@@ -258,7 +258,7 @@ else
 
         var ViccText = '<?php
             if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
-                echo htmlentities($ProfInf->KedvencVicc);
+                echo htmlspecialchars($ProfInf->KedvencVicc);
             ?>';
 
         function SubmitKedvencVicc()
