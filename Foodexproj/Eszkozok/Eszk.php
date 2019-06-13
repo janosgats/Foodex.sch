@@ -1062,12 +1062,13 @@ namespace Eszkozok
 
                         if ($fxtagsag)
                         {
+                            $belephet_buff = 1;
                             $fxtagsag_buff = 1;
                             $muszjeljog_buff = 1;
                             $pontlatjog_buff = 1;
 
-                            $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`, `fxtag`, `muszjeljog`, `pontlatjog`, `email`) VALUES (?, ?, ?,  ?, ?, ?);");
-                            $stmt->bind_param('ssiiis', $internal_id, $displayName, $fxtagsag_buff, $muszjeljog_buff, $pontlatjog_buff, $email);
+                            $stmt = $conn->prepare("INSERT INTO `fxaccok` (`internal_id`, `nev`,`belephet`, `fxtag`, `muszjeljog`, `pontlatjog`, `email`) VALUES (?, ?, ?, ?,  ?, ?, ?);");
+                            $stmt->bind_param('ssiiiis', $internal_id, $displayName, $belephet_buff, $fxtagsag_buff, $muszjeljog_buff, $pontlatjog_buff, $email);
 
 
                             if (!$stmt->execute())
@@ -1075,8 +1076,12 @@ namespace Eszkozok
                         }
                         else
                         {
-                            $logger->notice('Login attempt failed: nem kortag, nemkortag.html', [$resresp['internal_id'], (($resresp['displayName']) ?: 'No DisplayName'), self::get_client_ip_address()]);
-                            self::RedirectUnderRoot('nemkortag.html');
+                            $_SESSION['BelepesjogKero-internal_id'] = $internal_id;
+                            $_SESSION['BelepesjogKero-nev'] = $displayName;
+                            $_SESSION['BelepesjogKero-email'] = $email;
+
+                            $logger->notice('Login attempt failed: nem kortag, nemkortag.php', [$resresp['internal_id'], (($resresp['displayName']) ?: 'No DisplayName'), self::get_client_ip_address()]);
+                            self::RedirectUnderRoot('nemkortag.php?reason=nemkortag');
                         }
 
                     }
@@ -1084,6 +1089,13 @@ namespace Eszkozok
                     {//Már regisztrált acc
 
                         $row = $result->fetch_assoc();
+
+                        if ($row['belephet'] != 1)
+                        {
+                            $logger->notice('Login attempt failed: belephet != 1 , nemkortag.php', [$resresp['internal_id'], (($resresp['displayName']) ?: 'No DisplayName'), self::get_client_ip_address()]);
+                            self::RedirectUnderRoot('nemkortag.php?reason=nembelephet');
+                            return;
+                        }
 
 
                         if ($displayName != null && $displayName !== $row['nev'])

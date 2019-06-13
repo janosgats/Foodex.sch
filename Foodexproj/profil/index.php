@@ -187,7 +187,7 @@ else
 
         <p style="display: inline">Kedvenc vicc: </p>
 
-        <p style="display: inline" id="kedv_vicc_szoveg"><b><?php
+        <p style="display: inline;font-weight: bold" id="kedv_vicc_szoveg"><?php
                 $ProfInf = \Eszkozok\Eszk::GetTaroltProfilInfo($MegjProfil->getInternalID());
 
                 if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
@@ -195,7 +195,7 @@ else
                 else
                     echo 'Semmi jó :(';
 
-                ?> </b></p>
+                ?> </p>
 
 
         <?php
@@ -427,7 +427,7 @@ else
     }
     ?>
     <?php
-    if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehetnek kompenzációi
+    if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehetnek értékelései
     {
         ?>
         <div class="panel panel-default">
@@ -441,7 +441,7 @@ else
                     <tr>
                         <th class="ErtekelesTableheader">Műszak</th>
                         <th class="ErtekelesTableheader">Értékelő</th>
-                        <th class="ErtekelesTableheader" style="min-width: 200px;">Értékelés</th>
+                        <th class="" style="min-width: 200px;">Értékelés</th>
 
                     </tr>
                     </thead>
@@ -495,7 +495,7 @@ else
                                         </td>
                                         <td>
                                             <div style="width: 100%;">
-                                                <div style="display: table; margin: 0 auto;">
+                                                <div style="display: table; ">
                                                     <table>
                                                         <tr>
                                                             <td>

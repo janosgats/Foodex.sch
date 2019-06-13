@@ -35,6 +35,7 @@ if (\Eszkozok\LoginValidator::AccountSignedIn_NOEXIT())
     </script>
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Foodexet a népnek!</title>
 
     <link rel="stylesheet" href="index.css">

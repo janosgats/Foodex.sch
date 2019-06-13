@@ -11,13 +11,17 @@ try
 {
     \Eszkozok\LoginValidator::AdminJog_ThrowsException();
 
-    if (!isset($_REQUEST['int_id']) || !isset($_REQUEST['adminjog']) || !isset($_REQUEST['muszjeljog']) || !isset($_REQUEST['pontlatjog']) || $_REQUEST['int_id'] == '' || $_REQUEST['adminjog'] == '' || $_REQUEST['muszjeljog'] == '' || $_REQUEST['pontlatjog'] == '')
+    if (!isset($_REQUEST['int_id']) || !isset($_REQUEST['belephet']) || !isset($_REQUEST['adminjog']) || !isset($_REQUEST['muszjeljog']) || !isset($_REQUEST['pontlatjog']) || $_REQUEST['int_id'] == '' || $_REQUEST['adminjog'] == '' || $_REQUEST['muszjeljog'] == '' || $_REQUEST['pontlatjog'] == '')
         throw new \Exception('Hiányzó paraméterek!');
 
     $internal_id_of_Acc = $_REQUEST['int_id'];
+    $belephettoset = $_REQUEST['belephet'];
     $adminjogtoset = $_REQUEST['adminjog'];
     $muszjeljogtoset = $_REQUEST['muszjeljog'];
     $pontlatjogtoset = $_REQUEST['pontlatjog'];
+
+    if (!($belephettoset === '0' || $belephettoset === '1'))
+        throw new \Exception('Hibás paraméter: belephet!');
 
     if (!($adminjogtoset === '0' || $adminjogtoset === '1'))
         throw new \Exception('Hibás paraméter: adminjog!');
@@ -33,9 +37,9 @@ try
 
     $conn = \Eszkozok\Eszk::initMySqliObject();
 
-    $stmt = $conn->prepare("UPDATE `fxaccok` SET `adminjog` = ?, `muszjeljog` = ?, `pontlatjog` = ? WHERE `internal_id` = ?;");
+    $stmt = $conn->prepare("UPDATE `fxaccok` SET `belephet` = ?, `adminjog` = ?, `muszjeljog` = ?, `pontlatjog` = ? WHERE `internal_id` = ?;");
 
-    $stmt->bind_param('iiis', $adminjogtoset, $muszjeljogtoset, $pontlatjogtoset, $internal_id_of_Acc);
+    $stmt->bind_param('iiiis', $belephettoset, $adminjogtoset, $muszjeljogtoset, $pontlatjogtoset, $internal_id_of_Acc);
 
     if (!$stmt->execute())
         throw new \Exception('!$stmt->execute() is false!');
@@ -46,6 +50,7 @@ try
     $ki = [];
     $ki['status'] = 'siker3456';
     $ki['internal_id'] = $internal_id_of_Acc;
+    $ki['belephet'] = $belephettoset;
     $ki['adminjog'] = $adminjogtoset;
     $ki['muszjeljog'] = $muszjeljogtoset;
     $ki['pontlatjog'] = $pontlatjogtoset;

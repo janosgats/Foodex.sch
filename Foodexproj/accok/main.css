@@ -167,6 +167,14 @@ table {
 {
     color: #3355ff;
 }
+.acc-jogosultsag-belephet-true
+{
+    color: rgb(0, 175, 0);
+}
+.acc-jogosultsag-belephet-false
+{
+    color: #3355ff;
+}
 
 .acc-jogosultsag
 {

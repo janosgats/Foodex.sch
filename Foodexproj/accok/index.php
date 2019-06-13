@@ -252,6 +252,10 @@ ob_start();
     }
 
 
+    function getBelephetFromNode(node)
+    {
+        return (node.parentElement.parentElement.getAttribute("belephet") == '1') ? 1 : 0;
+    }
     function getAdminJogFromNode(node)
     {
         return (node.parentElement.parentElement.getAttribute("adminjog") == '1') ? 1 : 0;
@@ -290,12 +294,35 @@ ob_start();
             if (row['fxtag'] == 1)
                 i_fx_tag = jQuery.parseHTML('<i class="fas fa-2x fa-check" style="color: limegreen"></i>')[0];
             else
-                i_fx_tag = jQuery.parseHTML('<i class="fas fa-2x fa-times" style="color: yellow"></i>')[0];
+                i_fx_tag = jQuery.parseHTML('<i class="fas fa-2x fa-times" style="color: red"></i>')[0];
 
             i_fx_tag.setAttribute('data-toggle', 'tooltip');
             i_fx_tag.setAttribute('data-container', 'body');
             i_fx_tag.setAttribute('data-placement', 'right');
             i_fx_tag.setAttribute('title', 'PéK szerinti Foodex tagság');
+
+            var i_toggle_belephet = jQuery.parseHTML('<i id="i_toggle_belephet' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Beléphet az oldalra"  class="acc-jogosultsag ' + ((row['belephet'] == 1) ? 'acc-jogosultsag-belephet-true' : 'acc-jogosultsag-belephet-false') + ' fas fa-2x fa-power-off"></i>')[0];
+            i_toggle_belephet.onclick = function ()
+            {
+                var is_adminjog = getAdminJogFromNode(this);
+                var is_muszjeljog = getMuszjelJogFromNode(this);
+                var is_pontlatjog = getPontLatJogFromNode(this);
+                var is_belephet = getBelephetFromNode(this);
+
+                var r;
+                if (is_belephet)
+                {
+                    r = confirm("Biztosan elveszed " + row['nev'] + " belépési jogát?");
+                    if (r == true)
+                        submitSetJogosultsagok(row['internal_id'], !is_belephet, is_adminjog, is_muszjeljog, is_pontlatjog)
+                }
+                else
+                {
+                    r = confirm("Biztosan engedélyezed neki az oldalra való belépést: " + row['nev'] + "?");
+                    if (r == true)
+                        submitSetJogosultsagok(row['internal_id'], !is_belephet, is_adminjog, is_muszjeljog, is_pontlatjog)
+                }
+            };
 
             var i_toggle_adminjog = jQuery.parseHTML('<i id="i_toggle_adminjog' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Admin jog"  class="acc-jogosultsag ' + ((row['adminjog'] == 1) ? 'acc-jogosultsag-admin-true' : 'acc-jogosultsag-admin-false') + ' fas fa-2x fa-user-astronaut"></i>')[0];
             i_toggle_adminjog.onclick = function ()
@@ -303,19 +330,20 @@ ob_start();
                 var is_adminjog = getAdminJogFromNode(this);
                 var is_muszjeljog = getMuszjelJogFromNode(this);
                 var is_pontlatjog = getPontLatJogFromNode(this);
+                var is_belephet = getBelephetFromNode(this);
 
                 var r;
                 if (is_adminjog)
                 {
                     r = confirm("Biztosan elveszed " + row['nev'] + " admin jogát?");
                     if (r == true)
-                        submitSetJogosultsagok(row['internal_id'], !is_adminjog, is_muszjeljog, is_pontlatjog)
+                        submitSetJogosultsagok(row['internal_id'], is_belephet, !is_adminjog, is_muszjeljog, is_pontlatjog)
                 }
                 else
                 {
                     r = confirm("Biztosan adminná teszed őt: " + row['nev'] + "?");
                     if (r == true)
-                        submitSetJogosultsagok(row['internal_id'], !is_adminjog, is_muszjeljog, is_pontlatjog)
+                        submitSetJogosultsagok(row['internal_id'], is_belephet, !is_adminjog, is_muszjeljog, is_pontlatjog)
                 }
             };
 
@@ -326,18 +354,20 @@ ob_start();
                 var is_adminjog = getAdminJogFromNode(this);
                 var is_muszjeljog = getMuszjelJogFromNode(this);
                 var is_pontlatjog = getPontLatJogFromNode(this);
+                var is_belephet = getBelephetFromNode(this);
+
                 var r;
                 if (is_muszjeljog)
                 {
                     r = confirm("Biztosan elveszed " + row['nev'] + " műszakfelvételi jogát?");
                     if (r == true)
-                        submitSetJogosultsagok(row['internal_id'], is_adminjog, !is_muszjeljog, is_pontlatjog)
+                        submitSetJogosultsagok(row['internal_id'], is_belephet, is_adminjog, !is_muszjeljog, is_pontlatjog)
                 }
                 else
                 {
                     r = confirm("Biztosan engedélyezed a műszakfelvételt neki: " + row['nev'] + "?");
                     if (r == true)
-                        submitSetJogosultsagok(row['internal_id'], is_adminjog, !is_muszjeljog, is_pontlatjog)
+                        submitSetJogosultsagok(row['internal_id'], is_belephet, is_adminjog, !is_muszjeljog, is_pontlatjog)
                 }
             };
             var i_toggle_pontlatjog = jQuery.parseHTML('<i id="i_toggle_pontlatjog' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Láthatja mások pontszámát"  class="acc-jogosultsag ' + ((row['pontlatjog'] == 1) ? 'acc-jogosultsag-pontlat-true' : 'acc-jogosultsag-pontlat-false') + ' fas fa-2x fa-low-vision"></i>')[0];
@@ -346,18 +376,20 @@ ob_start();
                 var is_adminjog = getAdminJogFromNode(this);
                 var is_muszjeljog = getMuszjelJogFromNode(this);
                 var is_pontlatjog = getPontLatJogFromNode(this);
+                var is_belephet = getBelephetFromNode(this);
+
                 var r;
                 if (is_pontlatjog)
                 {
                     r = confirm("Biztosan elveszed " + row['nev'] + " jogát mások pontszámának megtekintésére?");
                     if (r == true)
-                        submitSetJogosultsagok(row['internal_id'], is_adminjog, is_muszjeljog, !is_pontlatjog)
+                        submitSetJogosultsagok(row['internal_id'], is_belephet, is_adminjog, is_muszjeljog, !is_pontlatjog)
                 }
                 else
                 {
                     r = confirm("Biztosan engedélyezed mások pontszámának megtekintését neki: " + row['nev'] + "?");
                     if (r == true)
-                        submitSetJogosultsagok(row['internal_id'], is_adminjog, is_muszjeljog, !is_pontlatjog)
+                        submitSetJogosultsagok(row['internal_id'], is_belephet, is_adminjog, is_muszjeljog, !is_pontlatjog)
                 }
             };
 
@@ -373,18 +405,25 @@ ob_start();
 
             td_toggle_jogosultsag.id = "td_toggle_jogosultsag" + row['internal_id'];
 
-            td_toggle_jogosultsag.setAttribute("muszjeljog", row['muszjeljog'].toString());
+            td_toggle_jogosultsag.setAttribute("belephet", row['belephet'].toString());
             td_toggle_jogosultsag.setAttribute("adminjog", row['adminjog'].toString());
+            td_toggle_jogosultsag.setAttribute("muszjeljog", row['muszjeljog'].toString());
             td_toggle_jogosultsag.setAttribute("pontlatjog", row['pontlatjog'].toString());
             td_toggle_jogosultsag.setAttribute("data-grouped_korertekelesek", JSON.stringify(row.grouped_korertekelesek));
             td_toggle_jogosultsag.setAttribute("data-acc_nev", escapeHtml(row['nev'].toString()));
             td_toggle_jogosultsag.setAttribute("data-acc_internalid", escapeHtml(row['internal_id'].toString()));
 
+            var div0 = jQuery.parseHTML('<div></div>')[0];
             var div1 = jQuery.parseHTML('<div></div>')[0];
             var div2 = jQuery.parseHTML('<div></div>')[0];
+            div0.style.display = 'inline-block';
             div1.style.display = 'inline-block';
             div2.style.display = 'inline-block';
+            div0.style.marginBottom = '10px';
             div1.style.marginBottom = '10px';
+
+            div0.appendChild(i_toggle_belephet);
+            div0.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
 
             div1.appendChild(i_toggle_adminjog);
             div1.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
@@ -396,6 +435,7 @@ ob_start();
             div2.appendChild(i_open_ertekelesjog_editor);
             div2.appendChild(jQuery.parseHTML(' &nbsp; ')[0]);
 
+            td_toggle_jogosultsag.appendChild(div0);
             td_toggle_jogosultsag.appendChild(div1);
             td_toggle_jogosultsag.appendChild(div2);
 
@@ -441,6 +481,16 @@ ob_start();
                 alert('Hiba: ' + fullres.error);
             else
             {
+                if (fullres.belephet == 1)
+                {
+                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("belephet", '1');
+                    $("#i_toggle_belephet" + fullres.internal_id).addClass('acc-jogosultsag-belephet-true').removeClass('acc-jogosultsag-belephet-false');
+                }
+                else
+                {
+                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("belephet", '0');
+                    $("#i_toggle_belephet" + fullres.internal_id).addClass('acc-jogosultsag-belephet-false').removeClass('acc-jogosultsag-belephet-true');
+                }
                 if (fullres.adminjog == 1)
                 {
                     $("#td_toggle_jogosultsag" + fullres.internal_id).attr("adminjog", '1');
@@ -471,16 +521,6 @@ ob_start();
                     $("#td_toggle_jogosultsag" + fullres.internal_id).attr("pontlatjog", '0');
                     $("#i_toggle_pontlatjog" + fullres.internal_id).addClass('acc-jogosultsag-pontlat-false').removeClass('acc-jogosultsag-pontlat-true');
                 }
-//                if (fullres.vanertekelokore == 1)
-//                {
-//                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("pontlatjog", '1');
-//                    $("#i_toggle_pontlatjog" + fullres.internal_id).addClass('acc-jogosultsag-pontlat-true').removeClass('acc-jogosultsag-pontlat-false');
-//                }
-//                else
-//                {
-//                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("pontlatjog", '0');
-//                    $("#i_toggle_pontlatjog" + fullres.internal_id).addClass('acc-jogosultsag-pontlat-false').removeClass('acc-jogosultsag-pontlat-true');
-//                }
             }
         }
         catch (e)
@@ -496,10 +536,11 @@ ob_start();
                 alert("Error at AJAX call!");
             });
     }
-    function submitSetJogosultsagok(internal_id, adminjog, muszjeljog, pontlatjog)
+    function submitSetJogosultsagok(internal_id, belephet,  adminjog, muszjeljog, pontlatjog)
     {
         callPHPPageSetJogosultsagok({
             int_id: internal_id,
+            belephet: belephet ? 1 : 0,
             adminjog: adminjog ? 1 : 0,
             muszjeljog: muszjeljog ? 1 : 0,
             pontlatjog: pontlatjog ? 1 : 0
