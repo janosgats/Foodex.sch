@@ -3,6 +3,7 @@ session_start();
 
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
+require_once __DIR__ . '/../Eszkozok/PicturesHelper.php';
 require_once __DIR__ . '/../Eszkozok/navbar.php';
 
 \Eszkozok\LoginValidator::PontLatJog_DiesToErrorrPage();
@@ -116,9 +117,14 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                         $sumpont = round($muszpont + $mospont + $komppont, 1);
                         ?>
                         <tr>
-                            <td>
 
-                                <a style="cursor: pointer" href="<?php echo '../profil/?mprof=' . $rowMuszak['internal_id']; ?>"><p><?php echo htmlentities($rowMuszak['nev']); ?></p></a>
+                            <td>
+                                <a style="cursor: pointer;display: inline-block" href="<?php echo '../profil/?mprof=' . $rowMuszak['internal_id']; ?>">
+                                    <img style="height: 50px;display: inline; align-self: center" src="<?= htmlentities(\Eszkozok\PicturesHelper::getProfilePicURLForInternalID($rowMuszak['internal_id'])); ?>"/>
+                                    <div style="display: inline-block">
+                                    <p style="display: inline"><?php echo htmlentities($rowMuszak['nev']); ?></p>
+                                    </div>
+                                </a>
                             </td>
                             <td>
                                 <a class="badge" href="userpont/?int_id=<?php echo $rowMuszak['internal_id']; ?>"><?php echo htmlentities($sumpont . ' pont = ' . $muszpont . (($mospont >= 0)?' + ':' - ') . abs($mospont) . (($komppont >= 0)?' + ':' - ') . abs($komppont)); ?></a>
