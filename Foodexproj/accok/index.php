@@ -30,6 +30,7 @@ ob_start();
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="collapsible.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
@@ -44,9 +45,6 @@ ob_start();
     <?php
     NavBar::echonavbar('accok');
     ?>
-    <div style="text-align: center; width: 100%; margin-top: -10px">
-        <p>A kiosztott Admin- és Műszakjelentkezési- jogok csak akkor vannak érvényben, mikor az adott tag aktuálisan Foodex körtag a PéK szerint.</p>
-    </div>
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -65,8 +63,8 @@ ob_start();
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div style="max-width: 100vw;" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" style="font-size: larger" id="exampleModalLongTitle">Modal title</h5>
@@ -75,6 +73,31 @@ ob_start();
                     </button>
                 </div>
                 <div class="modal-body">
+                    <button class="collapsible">Kattints ide az értékelési jogok leírásáért!</button>
+                    <div class="collapsiblecontent">
+                        <p style="color: #999999; text-align: justify;">Az egyes körökhöz írt értékelések később bármikor módosíthatók az értékelő által. Akkor is, ha az értékelőnek aktuálisan nincs joga az adott körhöz új értékelést írni.<br>Amennyiben
+                            viszont az értékelőnek aktuálisan egyetlen körhöz sincs értékelési joga, úgy egyeltalán nem módosíthatja a korábbi értékeléseit semmilyen körhöz.</p>
+                    </div>
+                    <script>
+                        var coll = document.getElementsByClassName("collapsible");
+                        var i;
+
+                        for (i = 0; i < coll.length; i++)
+                        {
+                            coll[i].addEventListener("click", function ()
+                            {
+                                this.classList.toggle("collapsibleactive");
+                                var content = this.nextElementSibling;
+                                if (content.style.maxHeight)
+                                {
+                                    content.style.maxHeight = null;
+                                } else
+                                {
+                                    content.style.maxHeight = content.scrollHeight + "px";
+                                }
+                            });
+                        }
+                    </script>
                     <form>
                         <?php
                         try
@@ -536,7 +559,7 @@ ob_start();
                 alert("Error at AJAX call!");
             });
     }
-    function submitSetJogosultsagok(internal_id, belephet,  adminjog, muszjeljog, pontlatjog)
+    function submitSetJogosultsagok(internal_id, belephet, adminjog, muszjeljog, pontlatjog)
     {
         callPHPPageSetJogosultsagok({
             int_id: internal_id,

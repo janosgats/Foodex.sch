@@ -57,6 +57,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
         <div class="panel-heading">Ponttáblázat</div>
         <div class="panel-body">
             <table class="table table-hover">
+                <tbody>
                 <?php
                 try
                 {
@@ -111,8 +112,8 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
 
                     while ($rowMuszak = $resMuszak->fetch_assoc())
                     {
-                        $muszpont =  round($rowMuszak['MuszakPont'] ?: 0, 1);
-                        $mospont = round($rowMuszak['MosogatasPont']?: 0, 1);
+                        $muszpont = round($rowMuszak['MuszakPont'] ?: 0, 1);
+                        $mospont = round($rowMuszak['MosogatasPont'] ?: 0, 1);
                         $komppont = round(isset($Kompenzalasok[$rowMuszak['internal_id']]) ? $Kompenzalasok[$rowMuszak['internal_id']] : 0, 1);
                         $sumpont = round($muszpont + $mospont + $komppont, 1);
                         ?>
@@ -121,13 +122,15 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                             <td>
                                 <a style="cursor: pointer;display: inline-block" href="<?php echo '../profil/?mprof=' . $rowMuszak['internal_id']; ?>">
                                     <img style="height: 50px;display: inline; align-self: center" src="<?= htmlentities(\Eszkozok\PicturesHelper::getProfilePicURLForInternalID($rowMuszak['internal_id'])); ?>"/>
+
                                     <div style="display: inline-block">
-                                    <p style="display: inline"><?php echo htmlentities($rowMuszak['nev']); ?></p>
+                                        <p style="display: inline"><?php echo htmlentities($rowMuszak['nev']); ?></p>
                                     </div>
                                 </a>
                             </td>
                             <td>
-                                <a class="badge" href="userpont/?int_id=<?php echo $rowMuszak['internal_id']; ?>"><?php echo htmlentities($sumpont . ' pont = ' . $muszpont . (($mospont >= 0)?' + ':' - ') . abs($mospont) . (($komppont >= 0)?' + ':' - ') . abs($komppont)); ?></a>
+                                <a class="badge"
+                                   href="userpont/?int_id=<?php echo $rowMuszak['internal_id']; ?>"><?php echo htmlentities($sumpont . ' pont = ' . $muszpont . (($mospont >= 0) ? ' + ' : ' - ') . abs($mospont) . (($komppont >= 0) ? ' + ' : ' - ') . abs($komppont)); ?></a>
                             </td>
                         </tr>
                         <?php
@@ -139,6 +142,7 @@ require_once __DIR__ . '/../Eszkozok/navbar.php';
                     Eszkozok\Eszk::dieToErrorPage('3018: ' . $e->getMessage());
                 }
                 ?>
+                </tbody>
             </table>
         </div>
     </div>
