@@ -83,6 +83,15 @@ if ($reason == 'ertekelojelentkezes')
 
                         <h1 style="text-align: center;color: #999999;">Sikeresen jelentkeztél!</h1>
                         <h2 style="text-align: center;color: #999999;">Hamarosan elbírálunk.</h2>
+
+                        <a href="<?= \Eszkozok\Eszk::GetRootURL(); ?>" style="color: white;text-decoration:none;">
+                            <div class="cube flip-to-bottom">
+                                <div class="default-state" style="background: #f46000">
+                                    <span>Vissza!</span>
+                                </div>
+                                <div class="active-state" style="background: #f46000"><span>A főoldalra...</span></div>
+                            </div>
+                        </a>
                         <?php
                     }
                     else
@@ -91,6 +100,15 @@ if ($reason == 'ertekelojelentkezes')
                         ?>
 
                         <h1 style="text-align: center;color: #999999;">A jelentkezés sikertelen.<br>Térj vissza később!</h1>
+
+                        <a href="<?= \Eszkozok\Eszk::GetRootURL(); ?>" style="color: white;text-decoration:none;">
+                            <div class="cube flip-to-bottom">
+                                <div class="default-state" style="background: #f46000">
+                                    <span>Vissza!</span>
+                                </div>
+                                <div class="active-state" style="background: #f46000"><span>A főoldalra...</span></div>
+                            </div>
+                        </a>
                         <?php
 
                     }
@@ -100,6 +118,15 @@ if ($reason == 'ertekelojelentkezes')
                 {
                     ?>
                     <h1 style="text-align: center;color: #999999;">Jelenleg nincs jogod a belépésre!</h1>
+
+                    <a href="<?= \Eszkozok\Eszk::GetRootURL(); ?>" style="color: white;text-decoration:none;">
+                        <div class="cube flip-to-bottom">
+                            <div class="default-state" style="background: #f46000">
+                                <span>Vissza!</span>
+                            </div>
+                            <div class="active-state" style="background: #f46000"><span>A főoldalra...</span></div>
+                        </div>
+                    </a>
                     <?php
                 }
                     break;
