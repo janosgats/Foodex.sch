@@ -119,7 +119,7 @@ require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
                 <div class="list-group" id="sidebar">
                     <a href="#pontozasiidoszak" class="list-group-item">Pontozási időszak</a>
                     <a href="#timezone" class="list-group-item">Time zone defaults</a>
-                    <a href="#timezone" class="list-group-item">Második műszak</a>
+                    <a href="#masodikmuszak" class="list-group-item">Második műszak</a>
                     <a href="#jeldelay" class="list-group-item">Jelentkezés delay</a>
                     <a href="#adatbazis" class="list-group-item">SAndor gyermeke</a>
                     <a href="#devlogin" class="list-group-item">Fejlesztői bejelentkezés</a>
