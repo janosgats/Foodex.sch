@@ -173,7 +173,7 @@ $Korok = array();
                         onclick="deleteMuszak()" type="button">Műszak törlése
                 </button>
                 <a class="btn btn-success pull-right" name="masolas" id="masolas" style="margin-bottom: 10px"
-                   href="../ujmuszak?<?php echo 'muszmasol=1&Muszid=' . urlencode($SzerkMuszak->ID); ?>" type="button">Műszak másolása
+                   href="../ujmuszak?<?php echo 'muszmasol=1&muszid=' . urlencode($SzerkMuszak->ID); ?>" type="button">Műszak másolása
                 </a>
             </div>
         </form>
