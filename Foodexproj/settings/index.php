@@ -122,6 +122,7 @@ require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
                     <a href="#masodikmuszak" class="list-group-item">Második műszak</a>
                     <a href="#jeldelay" class="list-group-item">Jelentkezés delay</a>
                     <a href="#adatbazis" class="list-group-item">SAndor gyermeke</a>
+                    <a href="#autoemailteszt" class="list-group-item">Auto e-mail teszt</a>
                     <a href="#devlogin" class="list-group-item">Fejlesztői bejelentkezés</a>
                 </div>
             </div>
@@ -276,6 +277,12 @@ require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
                     </a>
 
                     <hr class="col-md-12">
+                </div>
+
+                <div id="autoemailteszt">
+                    <h2>Auto E-mail Küldés</h2>
+
+                    <button class="btn custbtn" contenteditable="false" onclick="doAutoEmailTeszt()">Küldj nekem (<?php echo htmlspecialchars(\Eszkozok\Eszk::GetBejelentkezettProfilAdat()->getEmail()); ?>) egy e-mailt!</button>
                 </div>
 
                 <div id="devlogin">
@@ -544,6 +551,26 @@ require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
                 {
                     alert("Error at AJAX call!");
                     StartShowHiba();
+                });
+        }
+
+        function doAutoEmailTeszt()
+        {
+            $.post('sendtestmail.php', {},
+                function (ret)
+                {
+                    if (ret == "siker4567")
+                    {
+                        alert('Az e-mail elméletileg sikeresen el lett küldve.\nEllenőrizd a postaládádban!')
+                    }
+                    else
+                    {
+                        alert(escapeHtml(ret))
+                    }
+                }).fail(
+                function ()
+                {
+                    alert("Error at AJAX call!");
                 });
         }
 
