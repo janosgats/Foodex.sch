@@ -12,13 +12,10 @@ require_once __DIR__ . '/../Eszkozok/PicturesHelper.php';
 
 $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 
-if (IsURLParamSet('mprof'))
-{
+if (IsURLParamSet('mprof')) {
     $mprof_int_id = GetURLParam('mprof');
     $MegjProfil = \Eszkozok\Eszk::GetTaroltProfilAdat($mprof_int_id, true);
-}
-else
-{
+} else {
     $MegjProfil = $AktProfil;
 }
 
@@ -83,8 +80,7 @@ else
         <div style="display: inline-block;vertical-align:top; margin-right: 10px; margin-bottom: 5px">
             <div style="float: top; margin-top: 0; margin-bottom: auto">
                 <?php
-                if ($AktProfil->getInternalID() == $MegjProfil->getInternalID())
-                {
+                if ($AktProfil->getInternalID() == $MegjProfil->getInternalID()) {
                     ?>
                     <form action="AJAXprofilkepfeltolt.php" id="uj_profilkep_form" style="display: none">
                         <input type="file" name="uj_profilkep" id="uj_profilkep_input" accept=".jpg,.jpeg,.gif,.png" style="display:none" hidden="hidden">
@@ -159,19 +155,16 @@ else
                 <?php
                 if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehet pontja
                 {
-                    if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT() || ($MegjProfil->getInternalID() == $AktProfil->getInternalID()))
-                    {
+                    if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT() || ($MegjProfil->getInternalID() == $AktProfil->getInternalID())) {
                         ?>
 
                         <a style="cursor: pointer;" href="<?php echo '../pontok/userpont/?int_id=' . $MegjProfil->getInternalID(); ?>">
                             <p>Pontok: <b><?php
-                                    try
-                                    {
+                                    try {
                                         $buff = \Eszkozok\Eszk::GetAccPontok($MegjProfil->getInternalID());
                                         echo $buff;
                                     }
-                                    catch (\Exception $e)
-                                    {
+                                    catch (\Exception $e) {
                                         echo 'N/A';
                                     } ?> pont</b></p></a>
 
@@ -188,19 +181,18 @@ else
         <p style="display: inline">Kedvenc vicc: </p>
 
         <p style="display: inline;font-weight: bold" id="kedv_vicc_szoveg"><?php
-                $ProfInf = \Eszkozok\Eszk::GetTaroltProfilInfo($MegjProfil->getInternalID());
+            $ProfInf = \Eszkozok\Eszk::GetTaroltProfilInfo($MegjProfil->getInternalID());
 
-                if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
-                    echo htmlspecialchars($ProfInf->KedvencVicc);
-                else
-                    echo 'Semmi jó :(';
+            if (isset($ProfInf->KedvencVicc) && $ProfInf->KedvencVicc != '')
+                echo htmlspecialchars($ProfInf->KedvencVicc);
+            else
+                echo 'Semmi jó :(';
 
-                ?> </p>
+            ?> </p>
 
 
         <?php
-        if ($AktProfil->getInternalID() == $MegjProfil->getInternalID())
-        {
+        if ($AktProfil->getInternalID() == $MegjProfil->getInternalID()) {
             ?>
             <p id="ked_vicc_editgear" style="display: inline; font-size: x-large" onclick="StartEditKedvencVicc();"><i class="fa fa-cog fa settingsgear"></i></p>
             <?php
@@ -214,8 +206,7 @@ else
         <br><br>
 
         <?php
-        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-        {
+        if (\Eszkozok\LoginValidator::AdminJog_NOEXIT() && $MegjProfil->getFxTag() == 1) {
             ?>
             <a class="btn btn-primary pull-right" name="kompenz" id="kompenz" style="margin-right: 10px;"
                href="../ujkomp?<?php echo 'int_id=' . urlencode($MegjProfil->getInternalID()); ?>" type="button">Kompenzálás
@@ -334,8 +325,7 @@ else
     <?php
     if ($MegjProfil->getFxTag() == 1)//Ha a megjelenített profil NEM Fx tag, akkor NEM lehetnek kompenzációi
     {
-        if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT())
-        {
+        if (\Eszkozok\LoginValidator::PontLatJog_NOEXIT()) {
             ?>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -350,8 +340,7 @@ else
                             <th>Megjegyzés</th>
 
                             <?php
-                            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-                            {
+                            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
                                 ?>
                                 <th></th>
 
@@ -361,8 +350,7 @@ else
                         </tr>
                         </thead>
                         <?php
-                        try
-                        {
+                        try {
                             $conn = \Eszkozok\Eszk::initMySqliObject();
                             $stmt = $conn->prepare("SELECT * FROM `kompenz` WHERE `internal_id` = ? ORDER BY `ido` DESC;");
                             if (!$stmt)
@@ -371,13 +359,10 @@ else
                             $buffInt = $MegjProfil->getInternalID();
                             $stmt->bind_param('s', $buffInt);
 
-                            if ($stmt->execute())
-                            {
+                            if ($stmt->execute()) {
                                 $resultKomp = $stmt->get_result();
-                                if ($resultKomp->num_rows > 0)
-                                {
-                                    while ($rowKomp = $resultKomp->fetch_assoc())
-                                    {
+                                if ($resultKomp->num_rows > 0) {
+                                    while ($rowKomp = $resultKomp->fetch_assoc()) {
                                         ?>
 
                                         <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowKomp['ido'])) ? '' : 'style="background-color: #EEEEEE;color: grey"'; ?>>
@@ -389,8 +374,7 @@ else
                                             </td>
 
                                             <?php
-                                            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-                                            {
+                                            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
                                                 ?>
                                                 <td>
                                                     <p>
@@ -410,12 +394,10 @@ else
                                         <?php
                                     }
                                 }
-                            }
-                            else
+                            } else
                                 throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
                         }
-                        catch (\Exception $e)
-                        {
+                        catch (\Exception $e) {
                             \Eszkozok\Eszk::dieToErrorPage('45848: ' . $e->getMessage(), 'profil');
                         }
                         ?>
@@ -446,8 +428,7 @@ else
                     </tr>
                     </thead>
                     <?php
-                    try
-                    {
+                    try {
                         $conn = \Eszkozok\Eszk::initMySqliObject();
 
                         $stmt = $conn->prepare("SELECT
@@ -465,13 +446,10 @@ else
                         $stmt->bind_param('s', $buffInt);
 
 
-                        if ($stmt->execute())
-                        {
+                        if ($stmt->execute()) {
                             $resultErt = $stmt->get_result();
-                            if ($resultErt->num_rows > 0)
-                            {
-                                while ($rowErt = $resultErt->fetch_assoc())
-                                {
+                            if ($resultErt->num_rows > 0) {
+                                while ($rowErt = $resultErt->fetch_assoc()) {
                                     ?>
 
                                     <tr>
@@ -480,8 +458,7 @@ else
 
                                             <?php
 
-                                            if ($rowErt['MuszIdoKezd'])
-                                            {
+                                            if ($rowErt['MuszIdoKezd']) {
                                                 $MuszKezdDate = new DateTime($rowErt['MuszIdoKezd']);
                                                 ?>
                                                 <p><?php echo htmlentities($MuszKezdDate->format('Y-m-d')); ?></p>
@@ -545,12 +522,10 @@ else
                                     <?php
                                 }
                             }
-                        }
-                        else
+                        } else
                             throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
                     }
-                    catch (\Exception $e)
-                    {
+                    catch (\Exception $e) {
                         \Eszkozok\Eszk::dieToErrorPage('45842: ' . $e->getMessage(), 'profil');
                     }
                     ?>

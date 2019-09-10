@@ -64,15 +64,14 @@ if (isset($_REQUEST['osszert']) && $_REQUEST['osszert'] == 1)
 
         <div class="panel-heading" style="width:100%;justify-content: space-between;display: flex;flex-flow: row;align-items: center;">
             <a href="?osszert=0" style="text-decoration: none">
-                <button type="button" class="btn btn-<?= (!$OsszesEddigiErtekelesMegjelenit) ? 'default' : 'success '; ?>" <?= (!$OsszesEddigiErtekelesMegjelenit) ? ' disabled="disabled" ' : ''; ?>
+                <button type="button" class="btn btn-<?= (!$OsszesEddigiErtekelesMegjelenit) ? 'default' : 'primary '; ?>" <?= (!$OsszesEddigiErtekelesMegjelenit) ? ' disabled="disabled" ' : ''; ?>
                         style="<?= (!$OsszesEddigiErtekelesMegjelenit) ? ' border-color:black; ' : ''; ?>margin: 5px;white-space: normal; min-height: 70px;">
-                    Általad jelenleg értékelhető műszakok
+                    Kattints ide<br> az általad jelenleg értékelhető műszakokért
                 </button>
             </a>
             <a href="?osszert=1" style="text-decoration: none">
-                <button type="button" class="btn btn-<?= ($OsszesEddigiErtekelesMegjelenit) ? 'default' : 'success '; ?>" <?= ($OsszesEddigiErtekelesMegjelenit) ? ' disabled="disabled" ' : ''; ?>
-                        style="<?= ($OsszesEddigiErtekelesMegjelenit) ? ' border-color:black; ' : ''; ?>margin: 5px;white-space: normal; min-height: 70px;">Az
-                    általad eddig írt összes értékelés
+                <button type="button" class="btn btn-<?= ($OsszesEddigiErtekelesMegjelenit) ? 'default' : 'primary '; ?>" <?= ($OsszesEddigiErtekelesMegjelenit) ? ' disabled="disabled" ' : ''; ?>
+                        style="<?= ($OsszesEddigiErtekelesMegjelenit) ? ' border-color:black; ' : ''; ?>margin: 5px;white-space: normal; min-height: 70px;">Kattints ide<br> az általad eddig írt összes értékelésért
                 </button>
             </a>
 
