@@ -144,6 +144,9 @@ try
         if (!verifyDate($AktMuszak->idoveg))
             throw new \Exception('A vég idő nem megfelelő.');
 
+        if ($AktMuszak->idokezd >= $AktMuszak->idoveg)
+            throw new \Exception('A vég idő később kell, hogy legyen, mint a kezdési idő!');
+
 
         $conn = Eszkozok\Eszk::initMySqliObject();
 
