@@ -414,8 +414,7 @@ if (IsURLParamSet('mprof')) {
         ?>
         <div class="panel panel-default">
             <div class="panel-heading">
-
-                Értékelések
+                Kapott értékelések
             </div>
             <div class="panel-body">
                 <table class="table table-hover">
@@ -535,6 +534,127 @@ if (IsURLParamSet('mprof')) {
         <?php
     }
     ?>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Megírt értékelések
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="ErtekelesTableheader">Műszak</th>
+                    <th class="ErtekelesTableheader">Értékelt</th>
+                    <th class="" style="min-width: 200px;">Értékelés</th>
+
+                </tr>
+                </thead>
+                <?php
+                try {
+                    $conn = \Eszkozok\Eszk::initMySqliObject();
+
+                    $stmt = $conn->prepare("SELECT
+                        fxmuszakok.musznev AS MuszNev,
+                        fxmuszakok.idokezd AS MuszIdoKezd,
+                        fxmuszakok.id AS MuszId,
+                        ertekelesek.*,
+                        fxaccok.nev AS ErtekeltNev
+                        FROM `ertekelesek`
+                        JOIN `fxmuszakok` ON ertekelesek.Muszid = fxmuszakok.id
+                        JOIN fxaccok ON fxaccok.internal_id = ertekelesek.ertekelt
+                        WHERE `ertekelo` = ? ORDER BY `ertekelesek`.`id` DESC;");
+
+                    $buffInt = $MegjProfil->getInternalID();
+                    $stmt->bind_param('s', $buffInt);
+
+
+                    if ($stmt->execute()) {
+                        $resultErt = $stmt->get_result();
+                        if ($resultErt->num_rows > 0) {
+                            while ($rowErt = $resultErt->fetch_assoc()) {
+                                ?>
+
+                                <tr>
+                                    <td class="ErtekelesColumnMuszak">
+                                        <p><?php echo htmlentities($rowErt['MuszNev'] ?: 'N/A') . ' (' . htmlentities($rowErt['muszid'] ?: 'N/A') . ')'; ?></p>
+
+                                        <?php
+
+                                        if ($rowErt['MuszIdoKezd']) {
+                                            $MuszKezdDate = new DateTime($rowErt['MuszIdoKezd']);
+                                            ?>
+                                            <p><?php echo htmlentities($MuszKezdDate->format('Y-m-d')); ?></p>
+                                            <p><?php echo htmlentities($MuszKezdDate->format('H:i')); ?></p>
+                                            <?php
+                                        }
+                                        ?>
+                                    </td>
+                                    <td class="ErtekelesColumnErtekelo">
+                                        <?php echo htmlentities($rowErt['ErtekeltNev']); ?>
+                                    </td>
+                                    <td>
+                                        <div style="width: 100%;">
+                                            <div style="display: table; ">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p><b>Pontosság:&nbsp;&nbsp;&nbsp;</b></p>
+                                                        </td>
+                                                        <td class="ErtekelesTartalomPontokOszlop">
+                                                            <input class="rating-loading" value="<?php echo htmlentities($rowErt['e_pontossag'] ?: ''); ?>"
+                                                                   data-min="0" data-max="5" data-step="0.5" data-size="sm" data-language="hu" data-theme="krajee-fas">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <p><b>Pénzkezelés:</p>
+                                                        </td>
+                                                        <td class="ErtekelesTartalomPontokOszlop">
+                                                            <input class="rating-loading" value="<?php echo htmlentities($rowErt['e_penzkezeles'] ?: ''); ?>"
+                                                                   data-min="0" data-max="5" data-step="0.5" data-size="sm" data-language="hu" data-theme="krajee-fas">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <p><b>Szakértelem: </b></p>
+                                                        </td>
+                                                        <td class="ErtekelesTartalomPontokOszlop">
+                                                            <input class="rating-loading" value="<?php echo htmlentities($rowErt['e_szakertelem'] ?: ''); ?>"
+                                                                   data-min="0" data-max="5" data-step="0.5" data-size="sm" data-language="hu" data-theme="krajee-fas">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <p><b>Dugnám:&nbsp;&nbsp;&nbsp;&nbsp; </b></p>
+                                                        </td>
+                                                        <td class="ErtekelesTartalomPontokOszlop">
+                                                            <input class="rating-loading" value="<?php echo htmlentities($rowErt['e_dughatosag'] ?: ''); ?>"
+                                                                   data-min="0" data-max="5" data-step="0.5" data-size="sm" data-language="hu" data-theme="krajee-fas">
+                                                        </td>
+                                                    </tr>
+                                                    </tr>
+                                                </table>
+                                                <span><b>Szöveges értékelés:</b> <?php echo htmlentities($rowErt['e_szoveg'] ?: 'N/A'); ?></span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+                                <?php
+                            }
+                        }
+                    } else
+                        throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
+                }
+                catch (\Exception $e) {
+                    \Eszkozok\Eszk::dieToErrorPage('45842: ' . $e->getMessage(), 'profil');
+                }
+                ?>
+            </table>
+        </div>
+    </div>
+
 </div>
 
 <script>
