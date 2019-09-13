@@ -597,7 +597,7 @@ if (!$IsSecurimageCorrect)
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
 
-    function GetTimeDifFroModalVisszaszamlalo(d1, d2)
+    function GetTimeDifForModalVisszaszamlalo(d1, d2)
     {
         var dhours = Math.floor((d1.valueOf() - d2.valueOf()) / (3600 * 1000));
         var dmin = Math.floor((d1.valueOf() - d2.valueOf() - dhours * 3600 * 1000) / (60 * 1000));
@@ -620,7 +620,7 @@ if (!$IsSecurimageCorrect)
         }
         else
         {
-            document.getElementById('visszaszamlalodiv_text').innerHTML = GetTimeDifFroModalVisszaszamlalo(JelentkKezdeteDate, new Date());
+            document.getElementById('visszaszamlalodiv_text').innerHTML = GetTimeDifForModalVisszaszamlalo(JelentkKezdeteDate, new Date());
             setTimeout(function ()
             {
                 JelntKezdeteVisszaszamolo(JelentkKezdeteDate, id);
@@ -661,7 +661,8 @@ if (!$IsSecurimageCorrect)
         }
         else
         {
-            var JelentkKezdeteDate = new Date(jelentk_kezdete);
+            var iPhoneSafeDateArr = jelentk_kezdete.split(/[- :]/);
+            var JelentkKezdeteDate = new Date(iPhoneSafeDateArr[0], iPhoneSafeDateArr[1]-1, iPhoneSafeDateArr[2], iPhoneSafeDateArr[3], iPhoneSafeDateArr[4], iPhoneSafeDateArr[5]);
             if (felvetel == 0 || new Date() > JelentkKezdeteDate)
             {
                 document.getElementById('jelentkezgombdiv').style.display = 'block';
