@@ -435,7 +435,8 @@ if (IsURLParamSet('mprof')) {
                         fxmuszakok.idokezd AS MuszIdoKezd,
                         fxmuszakok.id AS MuszId,
                         ertekelesek.*,
-                        fxaccok.nev AS ErtekeloNev
+                        fxaccok.nev AS ErtekeloNev,
+                        fxaccok.internal_id AS ErtekeloInternalID
                         FROM `ertekelesek`
                         JOIN `fxmuszakok` ON ertekelesek.Muszid = fxmuszakok.id
                         JOIN fxaccok ON fxaccok.internal_id = ertekelesek.ertekelo
@@ -467,7 +468,9 @@ if (IsURLParamSet('mprof')) {
                                             ?>
                                         </td>
                                         <td class="ErtekelesColumnErtekelo">
-                                            <?php echo htmlentities($rowErt['ErtekeloNev']); ?>
+                                            <a style="cursor: pointer;display: inline-block" href="<?php echo '?mprof=' . $rowErt['ErtekeloInternalID']; ?>">
+                                                    <p style="display: inline"><?php echo htmlentities($rowErt['ErtekeloNev']); ?></p>
+                                            </a>
                                         </td>
                                         <td>
                                             <div style="width: 100%;">
@@ -558,7 +561,8 @@ if (IsURLParamSet('mprof')) {
                         fxmuszakok.idokezd AS MuszIdoKezd,
                         fxmuszakok.id AS MuszId,
                         ertekelesek.*,
-                        fxaccok.nev AS ErtekeltNev
+                        fxaccok.nev AS ErtekeltNev,
+                        fxaccok.internal_id AS ErtekeltInternalID
                         FROM `ertekelesek`
                         JOIN `fxmuszakok` ON ertekelesek.Muszid = fxmuszakok.id
                         JOIN fxaccok ON fxaccok.internal_id = ertekelesek.ertekelt
@@ -590,7 +594,9 @@ if (IsURLParamSet('mprof')) {
                                         ?>
                                     </td>
                                     <td class="ErtekelesColumnErtekelo">
-                                        <?php echo htmlentities($rowErt['ErtekeltNev']); ?>
+                                        <a style="cursor: pointer;display: inline-block" href="<?php echo '?mprof=' . $rowErt['ErtekeltInternalID']; ?>">
+                                            <p style="display: inline"><?php echo htmlentities($rowErt['ErtekeltNev']); ?></p>
+                                        </a>
                                     </td>
                                     <td>
                                         <div style="width: 100%;">
