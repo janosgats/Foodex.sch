@@ -69,7 +69,7 @@ if (\Eszkozok\LoginValidator::AccountSignedIn_NOEXIT())
             <div style="horiz-align: center; text-align: center;">
 
 
-                <a href="https://www.youtube.com/watch?v=FyYF7-W0AyQ" target="_blank"
+                <a href="https://www.youtube.com/watch?v=-8wH3GvPmUU" target="_blank"
                    style="text-decoration:none; display: inline-block">
                     <p style="color: #999999;font-size: larger; font-style: italic; padding-top: 0;margin-top: 0">Mi
                         vagyunk a
