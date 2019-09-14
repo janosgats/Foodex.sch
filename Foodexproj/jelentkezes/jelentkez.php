@@ -6,7 +6,7 @@ require_once '../Eszkozok/param.php';
 require_once '../3rdparty/reCaptcha/autoload.php';
 
 require_once __DIR__ . '/../Eszkozok/SMTPSender.php';
-require_once __DIR__ . '/../foodexpws.php';
+require_once __DIR__ . '/../../foodexpws.php';
 
 function isReCaptchaValid()
 {

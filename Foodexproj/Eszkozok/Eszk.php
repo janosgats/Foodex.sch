@@ -14,7 +14,7 @@ namespace Eszkozok
     require_once __DIR__ . '/../vendor/autoload.php';
 
     require_once __DIR__ . '/ini.php';
-    require_once __DIR__ . '/../foodexpws.php';
+    require_once __DIR__ . '/../../foodexpws.php';
 
     require_once __DIR__ . '/AuthSchProvider.php';
 
