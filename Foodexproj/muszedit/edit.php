@@ -158,7 +158,7 @@ try
         if (!$stmt)
             throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
-        $stmt->bind_param('ssisssidds', $_SESSION['profilint_id'], $AktMuszak->musznev, $AktMuszak->korID, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
+        $stmt->bind_param('ssissiddsi', $_SESSION['profilint_id'], $AktMuszak->musznev, $AktMuszak->korID, $AktMuszak->idokezd, $AktMuszak->idoveg, $AktMuszak->letszam, $AktMuszak->pont, $AktMuszak->mospont, $AktMuszak->megj, $AktMuszak->ID);
     }
 
     if ($stmt->execute())
