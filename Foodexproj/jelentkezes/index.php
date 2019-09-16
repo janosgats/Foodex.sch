@@ -20,13 +20,10 @@ $AktProfil = Eszkozok\Eszk::GetBejelentkezettProfilAdat();
 doJelentkezes();
 
 
-if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-{
-    if (IsURLParamSet('muszakokaktival') && GetURLParam('muszakokaktival') == 1)
-    {
+if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
+    if (IsURLParamSet('muszakokaktival') && GetURLParam('muszakokaktival') == 1) {
         $conn;
-        try
-        {
+        try {
             $conn = \Eszkozok\Eszk::initMySqliObject();
 
             if ($conn->multi_query("SET @uids := -99;
@@ -35,8 +32,7 @@ if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
                                      WHERE aktiv <> '1'
                                        AND ( SELECT @uids := CONCAT_WS(',', id, @uids) );
                                     SELECT @uids as modified_row_IDs;")
-            )
-            {
+            ) {
                 while ($conn->more_results())
                     $conn->next_result();
 
@@ -48,32 +44,25 @@ if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
 
                 //var_dump($modified_row_IDs);
 
-                foreach ($modified_row_IDs as $rowID)
-                {
-                    if ((int)$rowID != -99)
-                    {
+                foreach ($modified_row_IDs as $rowID) {
+                    if ((int)$rowID != -99) {
                         // var_dump($rowID);
                         $logger->info('Műszak lett aktiválva! MUSZAKTIVAL', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), (int)$rowID]);
                         $logger->info('MUSZAKTIVAL', [(int)$rowID]);
                     }
                 }
 
-            }
-            else
+            } else
                 throw new Exception('Error at $conn->multi_query()');
         }
-        catch (\Exception $e)
-        {
+        catch (\Exception $e) {
             \Eszkozok\Eszk::dieToErrorPage('76734: ' . $e->getMessage());
         }
-        finally
-        {
-            try
-            {
+        finally {
+            try {
                 $conn->close();
             }
-            catch (Exception $e)
-            {
+            catch (Exception $e) {
             }
         }
     }
@@ -87,22 +76,19 @@ if (isset($_POST['securimage_captcha_code']) && $image->check($_POST['securimage
     $IsSecurimageCorrect = true;
 }
 
-if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-{
+if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
     $IsSecurimageCorrect = true;
     $IsSecurimageBypassed = true;
 }
 
-try
-{
+try {
     /*
     FEATURE:   Ha elég idő telt el műszakkiírás után, akkor az oldal már semmiképp sem mutatná a captcha-t. (golbal_settings table-ből az értéket hozzáadná a legútóbbi kiírás idejéhez.)
     PROBLÉMA:  Ha kiírnak egy műszakot és e-miatt hirtelen megjelenik a captcha, abból egy crawling bot tudni forga, hogy új műszak lett kiírva, így küldhet a "hackernek" értesítést.
     KONKLÚZIÓ: Még NE implementáld, amíg NINCS a problémára megoldás!
     */
 }
-catch (\Exception $e)
-{
+catch (\Exception $e) {
 }
 
 ?>
@@ -159,8 +145,7 @@ catch (\Exception $e)
 
         <?php
 
-        if ($IsSecurimageBypassed)
-        {
+        if ($IsSecurimageBypassed) {
             ?>
             <div style="text-align: center; width: 100%; margin-top: -10px">
                 <p>Admin jogaid miatt a CAPTCHA-t számodra kikapcsoltuk.</p>
@@ -168,10 +153,8 @@ catch (\Exception $e)
             <?php
         }
 
-        if ($IsSecurimageCorrect)
-        {
-            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-            {
+        if ($IsSecurimageCorrect) {
+            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
                 ?>
                 <form method="POST" action="" id="hiddenmuszakokaktivalpostform" hidden>
                     <input name="muszakokaktival" value="1" hidden/>
@@ -188,10 +171,8 @@ catch (\Exception $e)
 
             $OsszesMuszakMutat = false;
 
-            try
-            {
-                if (IsURLParamSet('osszmusz') && GetURLParam('osszmusz') == 1)
-                {
+            try {
+                if (IsURLParamSet('osszmusz') && GetURLParam('osszmusz') == 1) {
                     $OsszesMuszakMutat = true;
                     ?>
 
@@ -199,17 +180,14 @@ catch (\Exception $e)
                     <a class="btn btn-primary pull-left" href="?osszmusz=0" type="button">Csak az aktuális műszakokat mutasd!</a>
                     <br><br>
                     <?php
-                }
-                else
-                {
+                } else {
                     ?>
                     <a class="btn btn-primary pull-left" href="?osszmusz=1" type="button">Mutasd az összes műszakot!</a>
                     <br><br>
                     <?php
                 }
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
         }
         ?>
@@ -219,8 +197,7 @@ catch (\Exception $e)
 </div>
 
 <?php
-if ($IsSecurimageCorrect)
-{
+if ($IsSecurimageCorrect) {
     ?>
     <div id="osszhastablazat" class="tablaDiv" style="margin-top: 1.5%;">
 
@@ -232,8 +209,7 @@ if ($IsSecurimageCorrect)
                 <col span="1" style="width: 4%;">
                 <col span="1" style="width: 56%;">
                 <?php
-                if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-                {
+                if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
                     ?>
 
                     <col span="1" style="width: 2%;">
@@ -246,8 +222,7 @@ if ($IsSecurimageCorrect)
             <?php
 
 
-            try
-            {
+            try {
                 $conn = Eszkozok\Eszk::initMySqliObject();
 
                 $AktUserJelentkezesDelayInSeconds = \Eszkozok\Eszk::GetJelDelayTimeByPontWithConn(\Eszkozok\Eszk::GetAccKompenzaltPontokWithConn($_SESSION['profilint_id'], $conn), $conn);
@@ -263,14 +238,11 @@ if ($IsSecurimageCorrect)
                     throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
 
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $result = $stmt->get_result();
 
-                    if ($result->num_rows > 0)
-                    {
-                        while ($row = $result->fetch_assoc())
-                        {
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
                             if (\Eszkozok\LoginValidator::AdminJog_NOEXIT() == false && $row['aktiv'] != 1)
                                 continue;
 
@@ -278,37 +250,28 @@ if ($IsSecurimageCorrect)
 
 
                             $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan = null;
-                            if (isset($row['aktivalas_ideje']))
-                            {
+                            if (isset($row['aktivalas_ideje'])) {
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan = \DateTime::createFromFormat('Y-m-d H:i:s', $row['aktivalas_ideje']);
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan->add(\DateInterval::createFromDateString($AktUserJelentkezesDelayInSeconds . ' seconds'));
-                            }
-                            else
-                            {
+                            } else {
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan = DateTime::createFromFormat('Y-m-d H:i:s', '1998-10-01 00:00:00');
                             }
 
 
                             $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan = null;
-                            if ($DoesAktUserHaveAktivJelentkezes)
-                            {
+                            if ($DoesAktUserHaveAktivJelentkezes) {
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan = \DateTime::createFromFormat('Y-m-d H:i:s', $row['idokezd']);
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan->sub(\DateInterval::createFromDateString(\Eszkozok\GlobalSettings::GetSetting('mas_muszakra_ennyivel_elotte_jelentkezhet') . ' seconds'));
-                            }
-                            else
-                            {
+                            } else {
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan = DateTime::createFromFormat('Y-m-d H:i:s', '1998-10-01 00:00:00');
                             }
 
                             $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges = null;
                             $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas = null;
-                            if ($AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan > $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan)
-                            {
+                            if ($AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan > $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan) {
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges = $AktMuszakFelvetelKezdete_AktUserSzamara_PontszamAlapjan;
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas = 'pontszam';
-                            }
-                            else
-                            {
+                            } else {
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges = $AktMuszakFelvetelKezdete_AktUserSzamara_FelvettMuszakAlapjan;
                                 $AktMuszakFelvetelKezdete_AktUserSzamara_Vegleges_Indoklas = 'felvettmuszak';
                             }
@@ -357,8 +320,7 @@ if ($IsSecurimageCorrect)
 
                             $jelnevstring = '';
 
-                            for ($i = 0; $i < count($jelnevtomb);)
-                            {
+                            for ($i = 0; $i < count($jelnevtomb);) {
                                 $jelnevstring .= '<a style="cursor: pointer;text-decoration: none; color: inherited" href="../profil/?mprof=' . $jelintidtomb[$i] . '" >';
 
 
@@ -403,8 +365,7 @@ if ($IsSecurimageCorrect)
                                 </td>
 
                                 <?php
-                                if (\Eszkozok\LoginValidator::AdminJog_NOEXIT())
-                                {
+                                if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
                                     ?>
                                     <td class="tablaCella oszlopReszletek">
                                         <p>
@@ -426,15 +387,12 @@ if ($IsSecurimageCorrect)
 
                     }
 
-                }
-                else
-                {
+                } else {
                     throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
                 }
 
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 ob_clean();
                 Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
             }
@@ -471,8 +429,7 @@ if ($IsSecurimageCorrect)
 ?>
 
 <?php
-if (!$IsSecurimageCorrect)
-{
+if (!$IsSecurimageCorrect) {
     ?>
     <div class="bootstrap-iso" style="text-align: center; width: 100%">
 
@@ -497,8 +454,7 @@ if (!$IsSecurimageCorrect)
                     <?php
                     //Az aktuális lekérés GET paramétereit beletesszük a captcha-val submitolando formba.
                     //Így azok továbbítódnak az oldal felé a captcha-val együtt, hogy aztán kiértékelődjenek, mint ha nem is lenne captcha.
-                    foreach ($_GET as $key => $value)
-                    {
+                    foreach ($_GET as $key => $value) {
                         echo '<input name="' . $key . '" value="' . $value . '" >';
                     }
 
@@ -521,8 +477,7 @@ if (!$IsSecurimageCorrect)
     <div class="modal-content">
         <div class="modal-header">
             <span class="close">&times;</span>
-
-            <h2 id="modalheadertext">Jelentkezés</h2>
+            <a href="../muszedit" style="text-decoration: none" id="modalheaderlink"><h2 id="modalheadertext" style="color: white;text-decoration: none">Jelentkezés</h2></a>
         </div>
         <div class="modal-body" id=modalbody">
             <p id="modalkiirta">Kiírta: </p>
@@ -631,6 +586,7 @@ if (!$IsSecurimageCorrect)
     function ShowModal(id, kiirta, musznev, idokezd, idoveg, letszam, pont, mospont, kornev, megj, jelaktiv, jelentk_kezdete, jelentk_visszaszaml_indok, felvetel)
     {
         document.getElementById('modalheadertext').innerHTML = musznev + ' Jelentkezés';
+        document.getElementById('modalheaderlink').href = '/muszedit/?muszid=' + id;
         document.getElementById('modalkiirta').innerHTML = 'Kiírta: ' + kiirta;
         document.getElementById('modalidokezd').innerHTML = 'Kezdet: ' + idokezd;
         document.getElementById('modalidovegERTEK').innerHTML = idoveg;
@@ -662,7 +618,7 @@ if (!$IsSecurimageCorrect)
         else
         {
             var iPhoneSafeDateArr = jelentk_kezdete.split(/[- :]/);
-            var JelentkKezdeteDate = new Date(iPhoneSafeDateArr[0], iPhoneSafeDateArr[1]-1, iPhoneSafeDateArr[2], iPhoneSafeDateArr[3], iPhoneSafeDateArr[4], iPhoneSafeDateArr[5]);
+            var JelentkKezdeteDate = new Date(iPhoneSafeDateArr[0], iPhoneSafeDateArr[1] - 1, iPhoneSafeDateArr[2], iPhoneSafeDateArr[3], iPhoneSafeDateArr[4], iPhoneSafeDateArr[5]);
             if (felvetel == 0 || new Date() > JelentkKezdeteDate)
             {
                 document.getElementById('jelentkezgombdiv').style.display = 'block';

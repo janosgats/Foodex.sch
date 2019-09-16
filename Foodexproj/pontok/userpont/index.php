@@ -334,7 +334,7 @@ if ($mosfoglalt)
 
                                             <tr <?php echo (\Eszkozok\Eszk::IsDatestringInPontozasiIdoszak($rowMuszak['idokezd'])) ? '' : 'style="background-color: #EEEEEE;color: grey"'; ?>>
                                                 <td>
-                                                    <?php echo htmlspecialchars($rowMuszak['musznev']) . '  <span>(' . htmlspecialchars($rowMuszak['ID']) . ')</span>'; ?>
+                                                    <a href="/muszedit/?muszid=<?= $rowMuszak['ID']; ?>"><?php echo htmlentities($rowMuszak['musznev'] ?: 'N/A'); ?></a>
                                                 </td>
                                                 <td><?php echo $idostringbuff; ?></td>
                                                 <td>

@@ -454,7 +454,7 @@ if (IsURLParamSet('mprof')) {
 
                                     <tr>
                                         <td class="ErtekelesColumnMuszak">
-                                            <p><?php echo htmlentities($rowErt['MuszNev'] ?: 'N/A') . ' (' . htmlentities($rowErt['muszid'] ?: 'N/A') . ')'; ?></p>
+                                            <a href="/muszedit/?muszid=<?= $rowErt['muszid']; ?>"><?php echo htmlentities($rowErt['MuszNev'] ?: 'N/A'); ?></a>
 
                                             <?php
 
@@ -469,7 +469,7 @@ if (IsURLParamSet('mprof')) {
                                         </td>
                                         <td class="ErtekelesColumnErtekelo">
                                             <a style="cursor: pointer;display: inline-block" href="<?php echo '?mprof=' . $rowErt['ErtekeloInternalID']; ?>">
-                                                    <p style="display: inline"><?php echo htmlentities($rowErt['ErtekeloNev']); ?></p>
+                                                <p style="display: inline"><?php echo htmlentities($rowErt['ErtekeloNev']); ?></p>
                                             </a>
                                         </td>
                                         <td>
@@ -580,7 +580,7 @@ if (IsURLParamSet('mprof')) {
 
                                 <tr>
                                     <td class="ErtekelesColumnMuszak">
-                                        <p><?php echo htmlentities($rowErt['MuszNev'] ?: 'N/A') . ' (' . htmlentities($rowErt['muszid'] ?: 'N/A') . ')'; ?></p>
+                                        <a href="/muszedit/?muszid=<?= $rowErt['muszid']; ?>"><?php echo htmlentities($rowErt['MuszNev'] ?: 'N/A'); ?></a>
 
                                         <?php
 

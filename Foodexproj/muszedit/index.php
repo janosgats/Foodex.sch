@@ -8,7 +8,7 @@ require_once '../Eszkozok/entitas/Muszak.php';
 require_once '../Eszkozok/param.php';
 require_once '../Eszkozok/navbar.php';
 
-\Eszkozok\LoginValidator::AdminJog_DiesToErrorrPage();
+\Eszkozok\LoginValidator::AccountSignedIn_RedirectsToRoot();
 
 if (IsURLParamSet('muszid') == false)
     Eszkozok\Eszk::dieToErrorPage('19975: Muszid URL param is not set!');
@@ -29,13 +29,11 @@ $Korok = array();
         \Eszkozok\Eszk::dieToErrorPage('34254: $conn is false!');
 
     $stmt = $conn->prepare("SELECT * FROM korok ORDER BY nev ASC;");
-    if ($stmt->execute())
-    {
+    if ($stmt->execute()) {
         $res = $stmt->get_result();
         while ($row = $res->fetch_assoc())
             $Korok[] = $row;
-    }
-    else
+    } else
         \Eszkozok\Eszk::dieToErrorPage('34254: $stmt->execute() is false!');
 }
 
@@ -60,7 +58,17 @@ $Korok = array();
     </script>
 
     <meta charset="UTF-8">
-    <title>Fx - Műszak szerkesztése</title>
+    <?php
+    if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
+        ?>
+        <title>Fx - Műszak szerkesztése</title>
+        <?php
+    } else {
+        ?>
+        <title>Fx - Műszak részletei</title>
+        <?php
+    }
+    ?>
 
     <link rel="icon" href="../res/kepek/favicon1_64p.png">
 
@@ -77,25 +85,35 @@ $Korok = array();
 <div class="container">
 
     <?php
-    NavBar::echonavbar( '')
+    NavBar::echonavbar('')
     ?>
 
     <div class="jumbotron" style="padding-top:10px">
         <form method="get">
             <div style="width: 100%; text-align: center">
-                <h1 style="color: darkgray; font-family: 'Arial'; font-size: xx-large">Műszak szerkesztése</h1>
+                <?php
+                if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
+                    ?>
+                    <h1 style="color: darkgray; font-family: 'Arial'; font-size: xx-large">Műszak szerkesztése</h1>
+                    <?php
+                } else {
+                    ?>
+                    <h1 style="color: darkgray; font-family: 'Arial'; font-size: xx-large">Részletek</h1>
+                    <?php
+                }
+                ?>
                 <br><br>
             </div>
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="musznev">Név</label>
                     <input id="musznev" name="musznev" type="text" placeholder="pl. Pizzásch 1"
-                           value="<?php echo $SzerkMuszak->musznev ?>" class="form-control">
+                           value="<?php echo $SzerkMuszak->musznev ?>" class="form-control" <?= (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) ? '' : ' disabled '; ?>>
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="letszam">Létszám</label>
                     <input id="letszam" name="letszam" type="text" placeholder="pl. 2"
-                           value="<?php echo $SzerkMuszak->letszam ?>" class="form-control">
+                           value="<?php echo $SzerkMuszak->letszam ?>" class="form-control" <?= (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) ? '' : ' disabled '; ?>>
                 </div>
             </div>
             <div class="row">
@@ -104,7 +122,7 @@ $Korok = array();
 
                     <div class="input-group date">
                         <input type="text" class="form-control" id="idokezd" name="idokezd"
-                               placeholder="YYYY-MM-DD HH:mm" value='<?php echo $SzerkMuszak->idokezd; ?>'/>
+                               placeholder="YYYY-MM-DD HH:mm" value='<?php echo $SzerkMuszak->idokezd; ?>'  <?= (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) ? '' : ' disabled '; ?>/>
                         <span class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </span>
@@ -116,7 +134,7 @@ $Korok = array();
                     <div class="input-group date">
                         <input class="form-control" id="idoveg" name="idoveg" placeholder="YYYY-MM-DD HH:mm"
                                value="<?php echo $SzerkMuszak->idoveg; ?>"
-                               type="text"/>
+                               type="text" <?= (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) ? '' : ' disabled '; ?> />
 
                         <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                     </div>
@@ -125,7 +143,7 @@ $Korok = array();
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="pont">Pont</label>
-                    <select id="pont" name="pont" class="form-control">
+                    <select id="pont" name="pont" class="form-control" <?= (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) ? '' : ' disabled '; ?>>
                         <option <?php if ($SzerkMuszak->pont == 1) echo ' selected="selected" '; ?> >1</option>
                         <option <?php if ($SzerkMuszak->pont == 2) echo ' selected="selected" '; ?>>2</option>
                         <option <?php if ($SzerkMuszak->pont == 3) echo ' selected="selected" '; ?>>3</option>
@@ -133,7 +151,7 @@ $Korok = array();
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="mospont">Mosogatás pont</label>
-                    <select id="mospont" name="pont" class="form-control">
+                    <select id="mospont" name="pont" class="form-control" <?= (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) ? '' : ' disabled '; ?>>
                         <option <?php if ($SzerkMuszak->mospont == 0) echo ' selected="selected" '; ?>>0</option>
                         <option <?php if ($SzerkMuszak->mospont == 0.5) echo ' selected="selected" '; ?>>0.5</option>
                         <option <?php if ($SzerkMuszak->mospont == 1) echo ' selected="selected" '; ?>>1</option>
@@ -143,12 +161,11 @@ $Korok = array();
             <div class="row">
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="korid">Értékelő kör</label>
-                    <select id="korid" name="korid" class="form-control">
+                    <select id="korid" name="korid" class="form-control" <?= (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) ? '' : ' disabled '; ?>>
                         <option <?php if ($SzerkMuszak->korID == null) echo ' selected="selected" '; ?> value="NINCS">Nincs</option>
 
                         <?php
-                        foreach ($Korok as $kor)
-                        {
+                        foreach ($Korok as $kor) {
                             ?>
 
                             <option <?php if ($SzerkMuszak->korID == $kor['id']) echo ' selected="selected" '; ?> value="<?= $kor['id']; ?>"><?= htmlentities($kor['nev']); ?></option>
@@ -161,21 +178,26 @@ $Korok = array();
                 <div class="form-group col-md-6 col-sm-12">
                     <label for="megj">Megjegyzés</label>
                     <input id="megj" name="megj" type="text" placeholder="pl. Börgör"
-                           value="<?php echo $SzerkMuszak->megj; ?>" class="form-control">
+                           value="<?php echo $SzerkMuszak->megj; ?>" class="form-control" <?= (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) ? '' : ' disabled '; ?>>
                 </div>
             </div>
-
-            <div class="row" style="padding-right: 7%">
-                <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="submitMuszak()" type="button" style="margin-left: 10px; margin-bottom: 10px">
-                    Mentés
-                </button>
-                <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-left: 10px; margin-bottom: 10px"
-                        onclick="deleteMuszak()" type="button">Műszak törlése
-                </button>
-                <a class="btn btn-success pull-right" name="masolas" id="masolas" style="margin-bottom: 10px"
-                   href="../ujmuszak?<?php echo 'muszmasol=1&muszid=' . urlencode($SzerkMuszak->ID); ?>" type="button">Műszak másolása
-                </a>
-            </div>
+            <?php
+            if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
+                ?>
+                <div class="row" style="padding-right: 7%">
+                    <button class="btn btn-primary pull-right" name="mentes" id="mentes" onclick="submitMuszak()" type="button" style="margin-left: 10px; margin-bottom: 10px">
+                        Mentés
+                    </button>
+                    <button class="btn btn-danger pull-right" name="torles" id="torles" style="margin-left: 10px; margin-bottom: 10px"
+                            onclick="deleteMuszak()" type="button">Műszak törlése
+                    </button>
+                    <a class="btn btn-success pull-right" name="masolas" id="masolas" style="margin-bottom: 10px"
+                       href="../ujmuszak?<?php echo 'muszmasol=1&muszid=' . urlencode($SzerkMuszak->ID); ?>" type="button">Műszak másolása
+                    </a>
+                </div>
+                <?php
+            }
+            ?>
         </form>
     </div>
 </div>
