@@ -35,12 +35,10 @@ namespace Eszkozok
 
             $ki = self::BenneVanEAKeretbenWithConn($muszid, $int_id, $conn);
 
-            try
-            {
+            try {
                 $conn->close();
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
 
             return $ki;
@@ -51,8 +49,7 @@ namespace Eszkozok
          */
         static public function BenneVanEAKeretbenWithConn($muszid, $int_id, $conn)
         {
-            try
-            {
+            try {
                 if (!$conn)
                     throw new \Exception('SQL hiba: $conn is \'false\'');
 
@@ -66,25 +63,20 @@ namespace Eszkozok
 
                 $stmt->bind_param('i', $muszid);
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $resultKeret = $stmt->get_result();
-                    if ($resultKeret->num_rows > 0)
-                    {
-                        for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && $i < $MuszakLetszam; ++$i)
-                        {
+                    if ($resultKeret->num_rows > 0) {
+                        for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && $i < $MuszakLetszam; ++$i) {
                             if ($int_id == $rowKeret['jelentkezo'])
                                 return true;
 
                         }
                     }
-                }
-                else
+                } else
                     throw new \Exception('$stmt->execute() nem sikerült' . ' :' . $conn->error);
 
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 ob_clean();
                 self::dieToErrorPage('4015: ' . $e->getMessage());
             }
@@ -128,12 +120,9 @@ namespace Eszkozok
             $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
             // Validate e-mail
-            if (filter_var($email, FILTER_VALIDATE_EMAIL))
-            {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
@@ -141,20 +130,16 @@ namespace Eszkozok
         public static function executeAsyncShellCommand($command)
         {
             // If windows, else
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-            {
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
                 system($command . " > NUL");
-            }
-            else
-            {
+            } else {
                 shell_exec("/usr/bin/nohup " . $command . " >/dev/null 2>&1 &");
             }
         }
 
         public static function getNameOfDayOfWeek($nth_day, $teljesnev)
         {
-            switch ($nth_day)
-            {
+            switch ($nth_day) {
                 case 1:
                     if ($teljesnev)
                         return 'Hétfő';
@@ -194,18 +179,74 @@ namespace Eszkozok
             return '';
         }
 
+        public static function GetAdminAccounts($statpageerr)
+        {
+            $conn = self::initMySqliObject();
+            $ki = self::GetAdminAccountsWithConn($statpageerr, $conn);
+
+            try {
+                $conn->close();
+            }
+            catch (\Exception $e) {
+            }
+
+            return $ki;
+        }
+
+        public static function GetAdminAccountsWithConn($statpageerr, \mysqli $conn)
+        {
+            try {
+                $ki = [];
+
+                if (!$conn)
+                    throw new \Exception('SQL hiba: $conn is \'false\'');
+
+                $stmt = $conn->prepare("SELECT * FROM `fxaccok` WHERE `adminjog` = 1;");
+                if (!$stmt)
+                    throw new \Exception('SQL hiba: $stmt is \'false\'' . ' :' . $conn->error);
+
+
+                if ($stmt->execute()) {
+                    $result = $stmt->get_result();
+                    while ($row = $result->fetch_assoc()) {
+                        $acc = new Profil();
+
+                        $acc->setID($row['ID']);
+                        $acc->setInternalID($row['internal_id']);
+                        $acc->setNev($row['nev']);
+                        $acc->setFxTag($row['fxtag']);
+                        $acc->setAdminJog($row['adminjog']);
+                        $acc->setMuszJelJog($row['muszjeljog']);
+                        $acc->setPontLatJog($row['pontlatjog']);
+                        $acc->setEmail($row['email']);
+                        $acc->setSessionToken($row['sessin_token']);
+
+                        $ki[] = $acc;
+                    }
+
+                } else {
+                    throw new \Exception('$stmt->execute() is false');
+                }
+            }
+            catch (\Exception $e) {
+                if ($statpageerr)
+                    self::dieToErrorPage('8591: ' . $e->getMessage());
+                else
+                    return null;
+            }
+
+            return $ki;
+        }
 
         public static function GetTaroltMuszakAdat($muszakid, $statpageerr)
         {
             $conn = self::initMySqliObject();
             $ki = self::GetTaroltMuszakAdatWithConn($muszakid, $statpageerr, $conn);
 
-            try
-            {
+            try {
                 $conn->close();
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
 
             return $ki;
@@ -213,8 +254,7 @@ namespace Eszkozok
 
         public static function GetTaroltMuszakAdatWithConn($muszakid, $statpageerr, \mysqli $conn)
         {
-            try
-            {
+            try {
                 $ki = new Muszak();
 
                 if (!$conn)
@@ -226,12 +266,10 @@ namespace Eszkozok
 
                 $stmt->bind_param('i', $muszakid);
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $result = $stmt->get_result();
 
-                    if ($result->num_rows == 1)
-                    {
+                    if ($result->num_rows == 1) {
                         $row = $result->fetch_assoc();
 
 
@@ -247,19 +285,14 @@ namespace Eszkozok
                         $ki->megj = $row['megj'];
 
                         return $ki;
-                    }
-                    else
-                    {
+                    } else {
                         throw new \Exception('$result->num_rows != 1');
                     }
-                }
-                else
-                {
+                } else {
                     throw new \Exception('$stmt->execute() is false');
                 }
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 if ($statpageerr)
                     self::dieToErrorPage('8591: ' . $e->getMessage());
                 else
@@ -272,12 +305,10 @@ namespace Eszkozok
             $conn = self::initMySqliObject();
             $ki = self::GetTaroltKompenzAdatWithConn($kompid, $statpageerr, $conn);
 
-            try
-            {
+            try {
                 $conn->close();
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
 
             return $ki;
@@ -285,8 +316,7 @@ namespace Eszkozok
 
         public static function GetTaroltKompenzAdatWithConn($kompid, $statpageerr, $conn)
         {
-            try
-            {
+            try {
                 $ki = new Kompenz();
 
                 if (!$conn)
@@ -298,12 +328,10 @@ namespace Eszkozok
 
                 $stmt->bind_param('i', $kompid);
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $result = $stmt->get_result();
 
-                    if ($result->num_rows == 1)
-                    {
+                    if ($result->num_rows == 1) {
                         $row = $result->fetch_assoc();
 
 
@@ -313,19 +341,14 @@ namespace Eszkozok
                         $ki->megj = $row['megj'];
 
                         return $ki;
-                    }
-                    else
-                    {
+                    } else {
                         throw new \Exception('$result->num_rows != 1');
                     }
-                }
-                else
-                {
+                } else {
                     throw new \Exception('$stmt->execute() is false');
                 }
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 if ($statpageerr)
                     self::dieToErrorPage('8692: ' . $e->getMessage());
             }
@@ -335,12 +358,10 @@ namespace Eszkozok
         {
             $conn = self::initMySqliObject();
             $ki = self::getColumnAdatTombFromInternalIdTombWithConn($internidTomb, $oszlopnev, $conn);
-            try
-            {
+            try {
                 $conn->close();
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
 
             return $ki;
@@ -348,8 +369,7 @@ namespace Eszkozok
 
         public static function getColumnAdatTombFromInternalIdTombWithConn($internidTomb, $oszlopnev, $conn)
         {
-            try
-            {
+            try {
                 $oszlopnev = $conn->escape_string($oszlopnev);//Mert oszlop nevet nem lehet bindelni
 
                 $kimenet = array();
@@ -358,8 +378,7 @@ namespace Eszkozok
                 if (!$conn)
                     throw new \Exception('SQL hiba: $conn is \'false\'');
 
-                for ($index = 0; $index < count($internidTomb); ++$index)
-                {
+                for ($index = 0; $index < count($internidTomb); ++$index) {
 
 
                     $stmt = $conn->prepare("SELECT $oszlopnev FROM `fxaccok` WHERE `internal_id` = ?;");
@@ -369,35 +388,26 @@ namespace Eszkozok
                     $stmt->bind_param('s', $internidTomb[$index]);
 
 
-                    if ($stmt->execute())
-                    {
+                    if ($stmt->execute()) {
                         $result = $stmt->get_result();
 
-                        if ($result->num_rows == 0)
-                        {
+                        if ($result->num_rows == 0) {
                             $kimenet[$index] = 'N/A';
-                        }
-                        else if ($result->num_rows == 1)
-                        {
+                        } else if ($result->num_rows == 1) {
                             $row = $result->fetch_assoc();
 
                             $kimenet[$index] = $row[$oszlopnev];
-                        }
-                        else
-                        {
+                        } else {
                             throw new \Exception('Tobb, mint egy acc ugyan azzal az internal_id-vel.');
                         }
-                    }
-                    else
-                    {
+                    } else {
                         throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
                     }
                 }
 
                 return $kimenet;
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 self::dieToErrorPage('8531: ' . $e->getMessage());
             }
         }
@@ -407,12 +417,10 @@ namespace Eszkozok
             $conn = self::initMySqliObject();
 
             $ki = getJelentkezokListajaWithConn($muszakid, $conn);
-            try
-            {
+            try {
                 $conn->close();
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
 
             return $ki;
@@ -421,8 +429,7 @@ namespace Eszkozok
 
         public static function getJelentkezokListajaWithConn($muszakid, $conn)
         {
-            try
-            {
+            try {
                 $kimenet = array();
 
 
@@ -437,30 +444,24 @@ namespace Eszkozok
                 $stmt->bind_param('s', $muszakid);
 
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $result = $stmt->get_result();
 
-                    if ($result->num_rows > 0)
-                    {
+                    if ($result->num_rows > 0) {
                         $index = 0;
-                        while ($row = $result->fetch_assoc())
-                        {
+                        while ($row = $result->fetch_assoc()) {
                             $kimenet[$index] = $row['jelentkezo'];
                             ++$index;
                         }
                     }
-                }
-                else
-                {
+                } else {
                     throw new \Exception('Az SQL parancs végrehajtása nem sikerült.' . ' :' . $conn->error);
                 }
 
                 return $kimenet;
 
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 self::dieToErrorPage('8512: ' . $e->getMessage());
             }
         }
@@ -470,12 +471,10 @@ namespace Eszkozok
             $conn = self::initMySqliObject();
             $ki = self::GetTaroltKorAdatWithConn($korid, $statpageerr, $conn);
 
-            try
-            {
+            try {
                 $conn->close();
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
 
             return $ki;
@@ -483,8 +482,7 @@ namespace Eszkozok
 
         public static function GetTaroltKorAdatWithConn($korid, $statpageerr, \mysqli $conn)
         {
-            try
-            {
+            try {
                 $ki = new Kor();
 
                 if (!$conn)
@@ -496,12 +494,10 @@ namespace Eszkozok
 
                 $stmt->bind_param('i', $korid);
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $result = $stmt->get_result();
 
-                    if ($result->num_rows == 1)
-                    {
+                    if ($result->num_rows == 1) {
                         $row = $result->fetch_assoc();
 
 
@@ -509,19 +505,14 @@ namespace Eszkozok
                         $ki->nev = $row['nev'];
 
                         return $ki;
-                    }
-                    else
-                    {
+                    } else {
                         throw new \Exception('$result->num_rows != 1');
                     }
-                }
-                else
-                {
+                } else {
                     throw new \Exception('$stmt->execute() is false');
                 }
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 if ($statpageerr)
                     self::dieToErrorPage('8492: ' . $e->getMessage());
             }
@@ -534,20 +525,15 @@ namespace Eszkozok
             $dbname = "fxtestdb";
 
             $servername = "gjani.sch.bme.hu:3306";
-            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme.hu') !== false)
-            {
+            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme.hu') !== false) {
                 $username = \Eszkozok\FoodexPWs::$FoodexSchDBUser;
                 $password = \Eszkozok\FoodexPWs::$FoodexSchDBPassword;
                 $dbname = "wadon_foodex";
                 $servername = "hal-9000.sch.bme.hu:3306";
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
-            {
+            } else if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false) {
                 $servername = "gjani.sch.bme.hu:3306";
                 $servername = "localhost:3306";
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false || strpos($_SERVER["HTTP_HOST"], 'localhost') !== false)
-            {
+            } else if (strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false || strpos($_SERVER["HTTP_HOST"], 'localhost') !== false) {
                 $servername = "gjani.ddns.net:3306";
                 $servername = "localhost:3306";//Mert a ddns-es címmel elérve nagyon lassú
             }
@@ -557,8 +543,7 @@ namespace Eszkozok
 
             $conn->set_charset("utf8");
 
-            if ($conn->connect_errno)
-            {
+            if ($conn->connect_errno) {
                 throw new \Exception('3219: ' . $conn->connect_error);
             }
 
@@ -582,17 +567,14 @@ namespace Eszkozok
 
             $queryTables = $mysqli->query('SHOW TABLES');
 
-            while ($row = $queryTables->fetch_row())
-            {
+            while ($row = $queryTables->fetch_row()) {
                 $target_tables[] = $row[0];
             }
-            if ($tables !== false)
-            {
+            if ($tables !== false) {
                 $target_tables = array_intersect($target_tables, $tables);
             }
 
-            foreach ($target_tables as $table)
-            {
+            foreach ($target_tables as $table) {
                 $content .= "\n\nDROP TABLE IF EXISTS " . $table . ";\n";
 
                 $result = $mysqli->query('SELECT * FROM ' . $table);
@@ -602,39 +584,28 @@ namespace Eszkozok
                 $TableMLine = $res->fetch_row();
                 $content .= "\n" . $TableMLine[1] . ";\n\n";
 
-                for ($i = 0, $st_counter = 0; $i < $fields_amount; $i++, $st_counter = 0)
-                {
-                    while ($row = $result->fetch_row())
-                    { //when started (and every after 100 command cycle):
-                        if ($st_counter % 100 == 0 || $st_counter == 0)
-                        {
+                for ($i = 0, $st_counter = 0; $i < $fields_amount; $i++, $st_counter = 0) {
+                    while ($row = $result->fetch_row()) { //when started (and every after 100 command cycle):
+                        if ($st_counter % 100 == 0 || $st_counter == 0) {
                             $content .= "\nINSERT INTO " . $table . " VALUES";
                         }
                         $content .= "\n(";
-                        for ($j = 0; $j < $fields_amount; $j++)
-                        {
-                            if (isset($row[$j]))
-                            {
+                        for ($j = 0; $j < $fields_amount; $j++) {
+                            if (isset($row[$j])) {
                                 $row[$j] = str_replace("\n", "\\n", addslashes($row[$j]));
                                 $content .= '"' . $row[$j] . '"';
-                            }
-                            else
-                            {
+                            } else {
                                 $content .= 'NULL';
                             }
-                            if ($j < ($fields_amount - 1))
-                            {
+                            if ($j < ($fields_amount - 1)) {
                                 $content .= ',';
                             }
                         }
                         $content .= ")";
                         //every after 100 command cycle [or at last line] ....p.s. but should be inserted 1 cycle eariler
-                        if ((($st_counter + 1) % 100 == 0 && $st_counter != 0) || $st_counter + 1 == $rows_num)
-                        {
+                        if ((($st_counter + 1) % 100 == 0 && $st_counter != 0) || $st_counter + 1 == $rows_num) {
                             $content .= ";";
-                        }
-                        else
-                        {
+                        } else {
                             $content .= ",";
                         }
                         $st_counter = $st_counter + 1;
@@ -672,8 +643,7 @@ namespace Eszkozok
             $ProfInf = new ProfilInfo();
 
             $conn = 0;
-            try
-            {
+            try {
                 $conn = self::initMySqliObject();
 
                 if (!$conn)
@@ -685,39 +655,29 @@ namespace Eszkozok
 
                 $stmt->bind_param('s', $internal_id);
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $result = $stmt->get_result();
-                    if ($result->num_rows == 0)
-                    {
+                    if ($result->num_rows == 0) {
                         //throw new \Exception('A felhasználó nem található!');
-                    }
-                    else if ($result->num_rows == 1)
-                    {
+                    } else if ($result->num_rows == 1) {
                         $row = $result->fetch_assoc();
 
                         if (isset($row['kedv_vicc']))
                             $ProfInf->KedvencVicc = $row['kedv_vicc'];
 
-                    }
-                    else
-                    {
+                    } else {
                         throw new \Exception('$result->num_rows != 1');
                     }
                 }
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 self::dieToErrorPage('1420: ' . $e->getMessage());
             }
-            finally
-            {
-                try
-                {
+            finally {
+                try {
                     $conn->close();
                 }
-                catch (\Exception $e)
-                {
+                catch (\Exception $e) {
                 }
             }
 
@@ -730,8 +690,7 @@ namespace Eszkozok
 
 
             $conn = 0;
-            try
-            {
+            try {
                 $conn = self::initMySqliObject();
 
                 if (!$conn)
@@ -743,15 +702,11 @@ namespace Eszkozok
 
                 $stmt->bind_param('s', $internal_id);
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $result = $stmt->get_result();
-                    if ($result->num_rows == 0)
-                    {
+                    if ($result->num_rows == 0) {
                         throw new \Exception('A felhasználó nem található!');
-                    }
-                    else if ($result->num_rows == 1)
-                    {
+                    } else if ($result->num_rows == 1) {
                         $row = $result->fetch_assoc();
 
                         if (isset($row['ID']))
@@ -773,28 +728,22 @@ namespace Eszkozok
                         if (isset($row['sessin_token']))
                             $profKi->setSessionToken($row['sessin_token']);
 
-                    }
-                    else
-                    {
+                    } else {
                         throw new \Exception('$result->num_rows != 1');
                     }
                 }
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 if ($dieto_errorpage)
                     self::dieToErrorPage('1220: ' . $e->getMessage());
                 else
                     return null;
             }
-            finally
-            {
-                try
-                {
+            finally {
+                try {
                     $conn->close();
                 }
-                catch (\Exception $e)
-                {
+                catch (\Exception $e) {
                 }
             }
 
@@ -807,25 +756,20 @@ namespace Eszkozok
             $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_Feverkill;
             $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_Feverkill;
 
-            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme.hu') !== false)
-            {
+            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme.hu') !== false) {
                 $redirectUri = "https://foodex.sch.bme.hu/login.php";
                 $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_FoodexSCH;
                 $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_FoodexSCH;
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false)
-            {
+            } else if (strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false) {
                 $redirectUri = "http://gjani.sch.bme.hu/foodex/login.php";
                 $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_GjaniSCH;
                 $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_GjaniSCH;
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)//Contains()
+            } else if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)//Contains()
             {
                 $redirectUri = "http://gjani.ddns.net/foodex/login.php";
                 $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_GjaniDDNS;
                 $clientSecret = \Eszkozok\FoodexPWs::$AuthSCH_ClientSecret_GjaniDDNS;
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
+            } else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
             {
                 $redirectUri = "https://feverkill.com/bme/foodex/login.php";
                 $clientId = \Eszkozok\FoodexPWs::$AuthSCH_ClientID_Feverkill;
@@ -850,8 +794,7 @@ namespace Eszkozok
          */
         public static function testFoodexKortagsag($kortagsagok)
         {
-            foreach ($kortagsagok as $kor)
-            {
+            foreach ($kortagsagok as $kor) {
                 if ($kor['name'] == 'FoodEx')
                     return $kor;
             }
@@ -894,8 +837,7 @@ namespace Eszkozok
 
 
             // If we don't have an authorization code then get one
-            if (!isset($_GET['code']))
-            {
+            if (!isset($_GET['code'])) {
 
                 // Fetch the authorization URL from the provider; this returns the
                 // urlAuthorize option and generates and applies any necessary parameters
@@ -915,37 +857,28 @@ namespace Eszkozok
                 exit;
 
                 // Check given state against previously stored one to mitigate CSRF attack
-            }
-            elseif (empty($_GET['state']) || (isset($_SESSION['oauth2state']) && $_GET['state'] !== $_SESSION['oauth2state']))
-            {
+            } elseif (empty($_GET['state']) || (isset($_SESSION['oauth2state']) && $_GET['state'] !== $_SESSION['oauth2state'])) {
 
-                if (isset($_SESSION['oauth2state']))
-                {
+                if (isset($_SESSION['oauth2state'])) {
                     unset($_SESSION['oauth2state']);
                 }
 
                 session_start();
 
-                if (!isset($_SESSION["InvalidStateCounter"]))
-                {
+                if (!isset($_SESSION["InvalidStateCounter"])) {
                     $_SESSION["InvalidStateCounter"] = 0;
                 }
 
                 $_SESSION["InvalidStateCounter"] += 1;
 
-                if ($_SESSION["InvalidStateCounter"] > 4)
-                {
+                if ($_SESSION["InvalidStateCounter"] > 4) {
                     unset($_SESSION["InvalidStateCounter"]);
                     self::dieToErrorPage('991: Invalid state');
-                }
-                else
+                } else
                     self::RedirectUnderRoot('login.php');
 
-            }
-            else
-            {
-                try
-                {
+            } else {
+                try {
                     unset($_SESSION["InvalidStateCounter"]);
 
 
@@ -965,8 +898,7 @@ namespace Eszkozok
                     // Using the access token, we may look up details about the
                     // resource owner.
 
-                    if ($accessToken->hasExpired() != 'expired')
-                    {
+                    if ($accessToken->hasExpired() != 'expired') {
                         $resp = \Eszkozok\AuthSchProvider::getResourceResponse($accessToken);
 
                         if (!isset($resp) || $resp == '')
@@ -993,8 +925,7 @@ namespace Eszkozok
 //        var_dump($response);
 
                 }
-                catch (\Exception $e)
-                {
+                catch (\Exception $e) {
 
                     // Failed to get the access token or user details.
 
@@ -1011,19 +942,16 @@ namespace Eszkozok
         static function FxLoginMuvelet($resresp)
         {
             $conn = new \mysqli();
-            try
-            {
+            try {
                 $logger = new \MonologHelper('Eszk::FxLoginMuvelet()');
 
 
                 $fxtagsag = false;
-                try
-                {
+                try {
                     $kortagsagok = $resresp['eduPersonEntitlement'];
                     $fxtagsag = self::testFoodexKortagsag($kortagsagok);
                 }
-                catch (\Exception $e)
-                {
+                catch (\Exception $e) {
                     self::dieToErrorPage('53464: ' . $e->getMessage());
                 }
 
@@ -1053,15 +981,12 @@ namespace Eszkozok
 
                 $stmt->bind_param('s', $internal_id);
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $result = $stmt->get_result();
 
-                    if ($result->num_rows == 0)
-                    {//Még NEM regisztrált, új acc
+                    if ($result->num_rows == 0) {//Még NEM regisztrált, új acc
 
-                        if ($fxtagsag)
-                        {
+                        if ($fxtagsag) {
                             $belephet_buff = 1;
                             $fxtagsag_buff = 1;
                             $muszjeljog_buff = 1;
@@ -1073,9 +998,7 @@ namespace Eszkozok
 
                             if (!$stmt->execute())
                                 throw new \Exception('');
-                        }
-                        else
-                        {
+                        } else {
                             $_SESSION['BelepesjogKero-internal_id'] = $internal_id;
                             $_SESSION['BelepesjogKero-nev'] = $displayName;
                             $_SESSION['BelepesjogKero-email'] = $email;
@@ -1084,22 +1007,18 @@ namespace Eszkozok
                             self::RedirectUnderRoot('nemkortag.php?reason=nemkortag');
                         }
 
-                    }
-                    else
-                    {//Már regisztrált acc
+                    } else {//Már regisztrált acc
 
                         $row = $result->fetch_assoc();
 
-                        if ($row['belephet'] != 1)
-                        {
+                        if ($row['belephet'] != 1) {
                             $logger->notice('Login attempt failed: belephet != 1 , nemkortag.php', [$resresp['internal_id'], (($resresp['displayName']) ?: 'No DisplayName'), self::get_client_ip_address()]);
                             self::RedirectUnderRoot('nemkortag.php?reason=nembelephet');
                             return;
                         }
 
 
-                        if ($displayName != null && $displayName !== $row['nev'])
-                        {//Frissítjük a nevet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
+                        if ($displayName != null && $displayName !== $row['nev']) {//Frissítjük a nevet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
 
                             $stmt = $conn->prepare("UPDATE `fxaccok` SET `nev` = ? WHERE `fxaccok`.`internal_id` = ?");
                             $stmt->bind_param('ss', $displayName, $internal_id);
@@ -1111,8 +1030,7 @@ namespace Eszkozok
 
                         }
 
-                        if ($email != null && $email !== $row['email'])
-                        {//Frissítjük az e-mail címet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
+                        if ($email != null && $email !== $row['email']) {//Frissítjük az e-mail címet az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
 
                             $stmt = $conn->prepare("UPDATE `fxaccok` SET `email` = ? WHERE `fxaccok`.`internal_id` = ?");
                             $stmt->bind_param('ss', $email, $internal_id);
@@ -1124,8 +1042,7 @@ namespace Eszkozok
 
                         }
 
-                        if ($fxtagsag != null && $fxtagsag !== $row['fxtag'])
-                        {//Frissítjük az fxtag-ot az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
+                        if ($fxtagsag != null && $fxtagsag !== $row['fxtag']) {//Frissítjük az fxtag-ot az adatbázisban, mert a mostani AuthSCH-s eltér a régitől
 
                             $fxtagsagbuff = ($fxtagsag) ? 1 : 0;
                             $stmt = $conn->prepare("UPDATE `fxaccok` SET `fxtag` = ? WHERE `fxaccok`.`internal_id` = ?");
@@ -1144,9 +1061,7 @@ namespace Eszkozok
 
                     if (!$stmt->execute())
                         throw new \Exception('Hiba a session_token frissítése során');
-                }
-                else
-                {
+                } else {
                     throw new \Exception('$stmt->execute() returns false');
                 }
 
@@ -1158,35 +1073,28 @@ namespace Eszkozok
                 self::RedirectUnderRoot('profil');
 
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 self::dieToErrorPage("1009: " . $e->getMessage());
             }
-            finally
-            {
-                try
-                {
+            finally {
+                try {
                     $conn->close();
                 }
-                catch (\Exception $e)
-                {
+                catch (\Exception $e) {
                 }
             }
         }
 
         public static function dieToErrorPage($errcode, $retryurl = null)
         {
-            try
-            {
+            try {
                 $logger = new \MonologHelper('Eszk::dieToErrorPage()');
                 $logger->error('$errcode: ' . $errcode, [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', self::get_client_ip_address()]);
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
             $celparam = '';
-            if ($retryurl != null)
-            {
+            if ($retryurl != null) {
                 $celparam = '&retryurl=' . urlencode($retryurl);
             }
             self::RedirectUnderRoot('statuspages/error.php?code=' . urlencode($errcode) . $celparam);
@@ -1194,16 +1102,14 @@ namespace Eszkozok
 
         public static function RedirectUnderRoot($relurl)
         {
-            try
-            {
+            try {
                 if (ob_get_length())
                     ob_clean();
 
                 $rooturl = self::GetRootURL();
                 $url = $rooturl . $relurl;
 
-                try
-                {
+                try {
                     $tort = explode('?', $relurl);
                     $relurlcsakurl = $tort[0];
 
@@ -1216,14 +1122,12 @@ namespace Eszkozok
                         $params = explode('&', $tort[1]);
 
                     $parampairs = [];
-                    for ($i = 0; $i < count($params); ++$i)
-                    {
+                    for ($i = 0; $i < count($params); ++$i) {
                         $parampairs[$i] = explode('=', $params[$i]);
                     }
 
                 }
-                catch (\Exception $e)
-                {
+                catch (\Exception $e) {
                     echo $e->getMessage();
                 }
 
@@ -1237,12 +1141,9 @@ namespace Eszkozok
                 </script>
                 <form id="formtosubmitabc9871215487" action="<?php echo $urlparamnelkul; ?>" style="display: none">
                     <?php
-                    if (isset($parampairs))
-                    {
-                        foreach ($parampairs as $pair)
-                        {
-                            if (isset($pair[0]) && isset($pair[1]))
-                            {
+                    if (isset($parampairs)) {
+                        foreach ($parampairs as $pair) {
+                            if (isset($pair[0]) && isset($pair[1])) {
                                 ?>
                                 <input type="input" name="<?php echo $pair[0]; ?>" value="<?php echo $pair[1]; ?>"
                                        hidden>
@@ -1269,8 +1170,7 @@ namespace Eszkozok
                 </script>
                 <?php
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
             die('Navigate to: <a href="' . $url . '">' . $url . '</a>!');
         }
@@ -1279,15 +1179,11 @@ namespace Eszkozok
         {
             $ret = $_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER["HTTP_HOST"] . "/";
 
-            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme') !== false)
-            {
+            if (strpos($_SERVER["HTTP_HOST"], 'foodex.sch.bme') !== false) {
                 $ret .= "";
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false)
-            {
+            } else if (strpos($_SERVER["HTTP_HOST"], 'localhost') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.sch.bme.hu') !== false || strpos($_SERVER["HTTP_HOST"], 'gjani.ddns.net') !== false) {
                 $ret .= "foodex/";
-            }
-            else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
+            } else if (strpos($_SERVER["HTTP_HOST"], 'feverkill.com') !== false)//Contains()
             {
                 $ret .= "bme/foodex/";
             }
@@ -1302,12 +1198,10 @@ namespace Eszkozok
             $conn = self::initMySqliObject();
             $ki = self::GetAccPontokWithConn($int_id, $conn);
 
-            try
-            {
+            try {
                 $conn->close();
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
 
             return $ki;
@@ -1315,8 +1209,7 @@ namespace Eszkozok
 
         public static function GetAccPontokWithConn($int_id, $conn)
         {
-            try
-            {
+            try {
 
                 $MuszakLetszamok = array();//Cacheli az Muszid - Létszám párokat a műszakok közül, hogy ne kelljen minden műszaknál új lekérdezés a létszámért
 
@@ -1328,16 +1221,13 @@ namespace Eszkozok
 
                 $stmt->bind_param('s', $int_id);
 
-                if ($stmt->execute())
-                {
+                if ($stmt->execute()) {
                     $resultJelentk = $stmt->get_result();
-                    if ($resultJelentk->num_rows > 0)
-                    {
+                    if ($resultJelentk->num_rows > 0) {
                         $jelMuszakIDk = array();//Jelentkezett műszakok ID-i a $int_id-hoz
                         $jelMosogatasok = array();
 
-                        while ($rowJelentk = $resultJelentk->fetch_assoc())
-                        {
+                        while ($rowJelentk = $resultJelentk->fetch_assoc()) {
                             $aktmuszidBuff = $conn->escape_string($rowJelentk['muszid']);
                             $jelMuszakIDk[] = $aktmuszidBuff;
                             $jelMosogatasok[$aktmuszidBuff] = $conn->escape_string($rowJelentk['mosogat']);
@@ -1348,10 +1238,8 @@ namespace Eszkozok
                         $vittMuszakIDk = array();
                         $vittMosogatasok = array();
 
-                        foreach ($jelMuszakIDk as $muszidakt)
-                        {
-                            if (!array_key_exists($muszidakt, $MuszakLetszamok))
-                            {
+                        foreach ($jelMuszakIDk as $muszidakt) {
+                            if (!array_key_exists($muszidakt, $MuszakLetszamok)) {
                                 $buff = self::GetTaroltMuszakAdatWithConn($muszidakt, false, $conn);
                                 if ($buff != false)
                                     $MuszakLetszamok[$muszidakt] = $buff->letszam;
@@ -1364,19 +1252,15 @@ namespace Eszkozok
 
                             $stmt->bind_param('i', $muszidakt);
 
-                            if ($stmt->execute())
-                            {
+                            if ($stmt->execute()) {
                                 $resultKeret = $stmt->get_result();
-                                if ($resultKeret->num_rows > 0)
-                                {
+                                if ($resultKeret->num_rows > 0) {
 
-                                    for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && isset($MuszakLetszamok[$muszidakt]) && $i < $MuszakLetszamok[$muszidakt]; ++$i)
-                                    {
+                                    for ($i = 0; ($rowKeret = $resultKeret->fetch_assoc()) && isset($MuszakLetszamok[$muszidakt]) && $i < $MuszakLetszamok[$muszidakt]; ++$i) {
                                         //echo $i . ' - ' . $muszidakt . '<br>';
 
 
-                                        if ($int_id == $rowKeret['jelentkezo'])
-                                        {
+                                        if ($int_id == $rowKeret['jelentkezo']) {
                                             $vittMuszakIDk[] = $muszidakt;
                                             if ($jelMosogatasok[$muszidakt] == 1)//Ha az aktuálisan vitt műszakban mosogatott
                                                 $vittMosogatasok[] = $muszidakt;
@@ -1387,13 +1271,11 @@ namespace Eszkozok
 
                                     }
                                 }
-                            }
-                            else
+                            } else
                                 throw new \Exception('$stmt->execute() 5 nem sikerült' . ' :' . $conn->error);
                         }
 
-                        if (count($vittMuszakIDk) > 0)
-                        {
+                        if (count($vittMuszakIDk) > 0) {
                             //`idoveg` < NOW() : Csak arra a műszakra kap pontot, ami már lezárult
 
 
@@ -1401,47 +1283,38 @@ namespace Eszkozok
                             if (!$stmt)
                                 throw new \Exception('SQL hiba: $stmt 3 is \'false\'' . ' :' . $conn->error);
 
-                            if ($stmt->execute())
-                            {
+                            if ($stmt->execute()) {
                                 $resultMuszak = $stmt->get_result();
-                                if ($resultMuszak->num_rows == 1)
-                                {
+                                if ($resultMuszak->num_rows == 1) {
                                     $rowMuszak = $resultMuszak->fetch_assoc();
                                     $pontszam += $rowMuszak['OsszPontszam'];
                                 }
-                                if (count($vittMosogatasok) > 0)
-                                {
+                                if (count($vittMosogatasok) > 0) {
                                     $stmt = $conn->prepare("SELECT SUM(`mospont`) AS OsszPontszam FROM `fxmuszakok` WHERE (FALSE || `idoveg` < NOW()) AND ( `idokezd` BETWEEN '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_kezdete') . "' AND '" . \Eszkozok\GlobalSettings::GetSetting('pontozasi_idoszak_vege') . "' ) AND `ID` IN (" . implode(',', $vittMosogatasok) . ");");
                                     if (!$stmt)
                                         throw new \Exception('SQL hiba: $stmt 4 is \'false\'' . ' :' . $conn->error);
 
-                                    if ($stmt->execute())
-                                    {
+                                    if ($stmt->execute()) {
                                         $resultMuszak = $stmt->get_result();
-                                        if ($resultMuszak->num_rows == 1)
-                                        {
+                                        if ($resultMuszak->num_rows == 1) {
                                             $rowMuszak = $resultMuszak->fetch_assoc();
                                             $pontszam += $rowMuszak['OsszPontszam'];
                                         }
-                                    }
-                                    else
+                                    } else
                                         throw new \Exception('$stmt->execute() 4 nem sikerült' . ' :' . $conn->error);
                                 }
-                            }
-                            else
+                            } else
                                 throw new \Exception('$stmt->execute() 3 nem sikerült' . ' :' . $conn->error);
                         }
                     }
-                }
-                else
+                } else
                     throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
 
                 return round($pontszam + self::GetAccKompenzaltPontokWithConn($int_id, $conn), 1);
 
 
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
                 throw $e;
                 //ob_clean();
                 //Eszkozok\Eszk::dieToErrorPage('3014: ' . $e->getMessage());
@@ -1458,19 +1331,16 @@ namespace Eszkozok
             $buffInt = $int_id;
             $stmt->bind_param('s', $buffInt);
 
-            if ($stmt->execute())
-            {
+            if ($stmt->execute()) {
                 $kipont = 0;
 
                 $resultKomp = $stmt->get_result();
-                while ($rowKomp = $resultKomp->fetch_assoc())
-                {
+                while ($rowKomp = $resultKomp->fetch_assoc()) {
                     $kipont += $rowKomp['pont'];
                 }
 
                 return $kipont;
-            }
-            else
+            } else
                 throw new \Exception('$stmt->execute() 2 nem sikerült' . ' :' . $conn->error);
         }
 
@@ -1598,12 +1468,10 @@ namespace Eszkozok
             $conn = self::initMySqliObject();
             $ki = self::GetJelDelayTimeByPontWithConn($pontszam, $conn);
 
-            try
-            {
+            try {
                 $conn->close();
             }
-            catch (\Exception $e)
-            {
+            catch (\Exception $e) {
             }
 
             return $ki;
@@ -1614,17 +1482,14 @@ namespace Eszkozok
             $stmt = $conn->prepare("SELECT delay FROM pontjeldelay WHERE minpont <= ? ORDER BY minpont DESC LIMIT 1;");
             $stmt->bind_param("d", $pontszam);
 
-            if ($stmt->execute())
-            {
+            if ($stmt->execute()) {
                 $result = $stmt->get_result();
                 if ($result->num_rows == 0)
                     return 0;//no delay time
-                else
-                {
+                else {
                     return $result->fetch_assoc()['delay'];
                 }
-            }
-            else
+            } else
                 throw new \Exception('34525: Cannot calculate delay time for score. $stmt->execute() is false');
         }
 
@@ -1633,11 +1498,9 @@ namespace Eszkozok
             $stmt = $conn->prepare("SELECT `datetime` FROM `logs` WHERE `message` = 'MUSZAKTIVAL' AND `context` = CONCAT('[',  ?, ']' );");
             $stmt->bind_param("i", $muszid);
 
-            if ($stmt->execute())
-            {
+            if ($stmt->execute()) {
                 $result = $stmt->get_result();
-                if ($result->num_rows == 1)
-                {
+                if ($result->num_rows == 1) {
                     return $result->fetch_assoc()['datetime'];
                 }
             }

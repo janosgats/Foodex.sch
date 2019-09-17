@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../Eszkozok/Eszk.php';
+require_once __DIR__ . '/../Eszkozok/entitas/Profil.php';
 
 require_once __DIR__ . '/../../foodexpws.php';
 
@@ -86,6 +87,30 @@ class SMTPSender
             $mail->Subject = "=?UTF-8?B?" . base64_encode('Fx test e-mail!') . "?=";
             $mail->Body = 'This is a message with the purpose of testing mail sending functionality of foodex.sch.bme.hu.<br><br>éőűúáóüöí!\'"+';
             $mail->addAddress($emailAddress);
+
+
+            if (!$mail->send()) {
+                throw new \Exception('Az e-mail elküldése nem sikerült!');
+            }
+        }
+        catch (\Exception $e) {
+            \Eszkozok\Eszk::dieToErrorPage('4615: ' . $e->getMessage());
+        }
+    }
+
+    public static function sendNewErtekeloJelentkezesMailToAdmins($jelentkezoNeve)
+    {
+        try {
+            $mail = self::initPMPMailer();
+            $mail->isHTML(true);
+            $mail->Subject = "=?UTF-8?B?" . base64_encode('Foodex - Új jelentkezés értékelőnek') . "?=";
+            $mail->Body = "Yo!<br><br>Ez a boi értékelési jogot szeretne a foodex.sch-n: $jelentkezoNeve<br><a href='foodex.sch.bme.hu/accok'>Kattints ide<a> a jogosultságok kezeléséhez!";
+
+            $adminAccok = \Eszkozok\Eszk::GetAdminAccounts(true);
+
+            foreach ($adminAccok as $acc) {
+                $mail->addAddress($acc->getEmail());
+            }
 
 
             if (!$mail->send()) {

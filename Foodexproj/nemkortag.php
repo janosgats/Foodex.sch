@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/Eszkozok/Eszk.php';
+require_once __DIR__ . '/Eszkozok/SMTPSender.php';
 
 $reason = null;
 
@@ -42,6 +43,8 @@ if ($reason == 'ertekelojelentkezes') {
 
         if ($stmt->affected_rows != 1)
             throw new Exception();
+
+        SMTPSender::sendNewErtekeloJelentkezesMailToAdmins($_SESSION['BelepesjogKero-nev']);
 
         $JelentkezesEredmeny = 'siker';
     }
