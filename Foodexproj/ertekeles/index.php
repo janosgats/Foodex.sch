@@ -143,7 +143,7 @@ if (isset($_REQUEST['osszert']) && $_REQUEST['osszert'] == 1)
                             <td>
                                 <div style="width: 100%">
                                     <div style="width: 100%; text-align: center">
-                                        <h3 style="margin: 0"><?= $row['musznev']; ?></h3>
+                                        <a href="/muszedit/?muszid=<?= $row['ID']; ?>"><h3 style="margin: 0"><?= $row['musznev']; ?></h3></a>
 
                                         <p><?= $row['idokezd']; ?></p>
                                     </div>
@@ -230,8 +230,7 @@ if (isset($_REQUEST['osszert']) && $_REQUEST['osszert'] == 1)
         <td>
             <div style="width: 100%">
                 <div style="width: 100%; text-align: center">
-                    <h3 style="margin: 0"><?= $row['musznev']; ?></h3>
-
+                    <a href="/muszedit/?muszid=<?= $row['muszid']; ?>"><h3 style="margin: 0"><?= $row['musznev']; ?></h3></a>
                     <p><?= $row['idokezd']; ?></p>
                 </div>
                 <div style="width: 100%; text-align: center;">
