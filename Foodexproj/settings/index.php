@@ -207,7 +207,7 @@ require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
                 <div id="jeldelay">
                     <h2>Jelentkezés Delay</h2>
 
-                    <p>Állítsd be, hogy milyen pontszám felett mennyi idővel a műszak aktiválása után jelentkezhet a műszakra egy tag!</p>
+                    <p>Állítsd be, hogy milyen pontszámtól leghamarabb mennyi idővel a műszak aktiválása után jelentkezhet a műszakra egy tag!</p>
 
                     <table class="table" name="jeldelaytable" id="jeldelaytable" style="background-color: transparent; min-width: 360px">
                         <thead>
@@ -284,7 +284,7 @@ require_once __DIR__ . '/../Eszkozok/GlobalSettings.php';
 
                     <button class="btn custbtn" contenteditable="false" onclick="doAutoEmailTeszt()">Küldj nekem (<?php echo htmlspecialchars(\Eszkozok\Eszk::GetBejelentkezettProfilAdat()->getEmail()); ?>) egy e-mailt!</button>
                 </div>
-
+                <hr class="col-md-12">
                 <div id="devlogin">
                     <h2>Fejlesztői Bejelentkezés</h2>
 
