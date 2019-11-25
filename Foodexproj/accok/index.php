@@ -31,6 +31,7 @@ ob_start();
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="collapsible.css">
+    <link rel="stylesheet" href="toggleSwitch.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
@@ -50,9 +51,15 @@ ob_start();
         <div class="panel-heading">
 
             <label for="exampleInputEmail1">Keresés:</label>
-            <input onkeyup="keresesFgv(this);" type="text" class="form-control" id="kereses" aria-describedby="emailHelp" placeholder="Pl. Végh Béla" autofocus>
-            <small id="emailHelp" class="form-text text-muted">Kezdd gépelni a tag nevét!</small>
+            <input onkeyup="keresesFgv();" type="text" class="form-control" id="keresesInput" aria-describedby="emailHelp" placeholder="Pl. Végh Béla" autofocus>
 
+            <br>
+
+            <span>Mutasd az archivált tagokat is!</span>
+            <label class="switch">
+                <input type="checkbox" id="checkboxMutasdAzArchivaltTagokat" onchange="keresesFgv()">
+                <span class="slider round"></span>
+            </label>
         </div>
 
         <div class="panel-body">
@@ -485,10 +492,18 @@ ob_start();
                 alert("Error at AJAX call!");
             });
     }
-    function keresesFgv(keresesmezo)
+    function keresesFgv()
     {
+        let keresesText = $('#keresesInput').val();
+        let showArchived = 0;
+
+        if($("#checkboxMutasdAzArchivaltTagokat").is(':checked'))
+            showArchived = 1;
+        console.log(keresesText);
+        console.log(showArchived);
         callPHPPage({
-            keresett: keresesmezo.value
+            keresett: keresesText,
+            show_archived: showArchived
         });
     }
 
