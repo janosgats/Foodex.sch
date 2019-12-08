@@ -322,10 +322,10 @@ class LoginValidator
             if (!isset($_SESSION['profilint_id']) || $_SESSION['profilint_id'] == '')
                 throw new \Exception();
 
-            if (!isset($_SESSION['session_token']) || $_SESSION['session_token'] == '' || $_SESSION['session_token'] == 'kijelentkezve')
-                throw new \Exception();
+//            if (!isset($_SESSION['session_token']) || $_SESSION['session_token'] == '' || $_SESSION['session_token'] == 'kijelentkezve')
+//                throw new \Exception();
 
-            if (self::$cached_Belephet == null || self::$cached_AdminJog == null || self::$cached_MuszJelJog == null || self::$cached_SessionToken == null || self::$cached_PontLatJog == null || self::$cached_FxTag == null)
+            if (self::$cached_Belephet == null || self::$cached_AdminJog == null || self::$cached_MuszJelJog == null /*|| self::$cached_SessionToken == null*/ || self::$cached_PontLatJog == null || self::$cached_FxTag == null)
             {
 
                 $stmt = self::GetConn()->prepare("SELECT * FROM fxaccok WHERE internal_id = ?");
@@ -350,13 +350,13 @@ class LoginValidator
                 self::$cached_SessionToken = $row['session_token'];
             }
 
-            if (self::$cached_SessionToken == null || self::$cached_SessionToken == 'kijelentkezve')
-                throw new \Exception();
+//            if (self::$cached_SessionToken == null || self::$cached_SessionToken == 'kijelentkezve')
+//                throw new \Exception();
 
             if(self::$cached_Belephet != 1)
                 throw new \Exception();
 
-            if ($_SESSION['session_token'] == self::$cached_SessionToken)
+            if (/*$_SESSION['session_token'] == self::$cached_SessionToken*/ true)
             {
                 switch ($logintype)
                 {
