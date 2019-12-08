@@ -427,7 +427,7 @@ ob_start();
                 }
             };
 
-            var i_toggle_archiv = jQuery.parseHTML('<i id="i_toggle_archiv' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Archiválva van-e? (Azaz nem léphet be és el van rejtve a listában.)"  class="acc-jogosultsag ' + ((row['archiv'] == 1) ? 'acc-archiv-true' : 'acc-archiv-false') + ' far fa-2x fa-trash-alt"></i>')[0];
+            var i_toggle_archiv = jQuery.parseHTML('<i id="i_toggle_archiv' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Archiválva van-e? (Azaz nem léphet be és el van rejtve a listában.) Az archiválás bármikor visszavonható."  class="acc-jogosultsag ' + ((row['archiv'] == 1) ? 'acc-archiv-true' : 'acc-archiv-false') + ' far fa-2x fa-trash-alt"></i>')[0];
             i_toggle_archiv.onclick = function ()
             {
                 var is_archiv = getArchivFromNode(this);
