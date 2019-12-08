@@ -282,6 +282,10 @@ ob_start();
     }
 
 
+    function getArchivFromNode(node)
+    {
+        return (node.parentElement.parentElement.getAttribute("archiv") == '1') ? 1 : 0;
+    }
     function getBelephetFromNode(node)
     {
         return (node.parentElement.parentElement.getAttribute("belephet") == '1') ? 1 : 0;
@@ -305,7 +309,7 @@ ob_start();
 //        console.log(ret);
         var fullres = JSON.parse(ret);
 
-        var thead = jQuery.parseHTML('<thead><tr><th>Név</th><th>Fx tag</th><th>Jogosultságok</th></tr></thead>')[0];
+        var thead = jQuery.parseHTML('<thead><tr><th>Név</th><th>Fx tag</th><th>Jogosultságok</th><th>Archív</th></tr></thead>')[0];
         var tbody = jQuery.parseHTML('<tbody></tbody>')[0];
 
         fullres.forEach(function (row)
@@ -423,15 +427,38 @@ ob_start();
                 }
             };
 
+            var i_toggle_archiv = jQuery.parseHTML('<i id="i_toggle_archiv' + row['internal_id'] + '" data-toggle="tooltip" data-container="body" data-placement="right"  title="Archiválva van-e? (Azaz nem léphet be és el van rejtve a listában.)"  class="acc-jogosultsag ' + ((row['archiv'] == 1) ? 'acc-archiv-true' : 'acc-archiv-false') + ' far fa-2x fa-trash-alt"></i>')[0];
+            i_toggle_archiv.onclick = function ()
+            {
+                var is_archiv = getArchivFromNode(this);
+
+                var r;
+                if (is_archiv)
+                {
+                    r = confirm("Biztosan visszavonod az archiválását: " + row['nev'] + "?");
+                    if (r == true)
+                        submitArchivalas(row['internal_id'], 'visszavon')
+                }
+                else
+                {
+                    r = confirm("Biztosan archiválod őt: " + row['nev'] + "? Ezzel az oldalra való belépési jogosultságát is elveszed.");
+                    if (r == true)
+                        submitArchivalas(row['internal_id'], 'archival')
+                }
+            };
             var i_open_ertekelesjog_editor = jQuery.parseHTML('<i id="i_open_ertekelesjog_editor' + row['internal_id'] + '" onclick="ShowKorErtekelSzerkModal(this);" data-toggle="tooltip" data-container="body" data-placement="right"  title="Értékelési jogok szerkesztése"  class="acc-jogosultsag ' + ((row['grouped_korertekelesek'] != null) ? 'acc-jogosultsag-korertekelesek-true' : 'acc-jogosultsag-korertekelesek-false') + ' fas fa-2x fa-star-half-alt"></i>')[0];
 
             var td_user_nev = jQuery.parseHTML('<td></td>')[0];
             var td_fx_tag = jQuery.parseHTML('<td></td>')[0];
             var td_toggle_jogosultsag = jQuery.parseHTML('<td></td>')[0];
+            var td_toggle_archiv = jQuery.parseHTML('<td></td>')[0];
 
             td_user_nev.appendChild(a_user_nev);
 
             td_fx_tag.appendChild(i_fx_tag);
+
+            td_toggle_archiv.id = "td_toggle_archiv" + row['internal_id'];
+            td_toggle_archiv.setAttribute("archiv", row['archiv'].toString());
 
             td_toggle_jogosultsag.id = "td_toggle_jogosultsag" + row['internal_id'];
 
@@ -469,12 +496,19 @@ ob_start();
             td_toggle_jogosultsag.appendChild(div1);
             td_toggle_jogosultsag.appendChild(div2);
 
-            var tr = jQuery.parseHTML('<tr></tr>')[0];
-            tr.appendChild(td_user_nev);
-            tr.appendChild(td_fx_tag);
-            tr.appendChild(td_toggle_jogosultsag);
+            var divX = jQuery.parseHTML('<div></div>')[0];
 
-            tbody.appendChild(tr);
+            divX.appendChild(i_toggle_archiv);
+            td_toggle_archiv.appendChild(divX);
+
+            var tr_account = jQuery.parseHTML('<tr></tr>')[0];
+            tr_account.id = "tr_account" + row['internal_id'];
+            tr_account.appendChild(td_user_nev);
+            tr_account.appendChild(td_fx_tag);
+            tr_account.appendChild(td_toggle_jogosultsag);
+            tr_account.appendChild(td_toggle_archiv);
+
+            tbody.appendChild(tr_account);
         });
         accoktable.innerHTML = '';
 
@@ -566,6 +600,40 @@ ob_start();
             alert('Hiba: ' + e.message)
         }
     }
+
+    function HandleAJAXarchivalasPHPPageData(ret)
+    {
+        try
+        {
+            console.log(ret);
+            var fullres = JSON.parse(ret);
+
+            if (fullres.status != 'siker2345')
+                alert('Hiba: ' + fullres.error);
+            else
+            {
+                    $("#td_toggle_jogosultsag" + fullres.internal_id).attr("belephet", '0');
+                    $("#i_toggle_belephet" + fullres.internal_id).addClass('acc-jogosultsag-belephet-false').removeClass('acc-jogosultsag-belephet-true');
+
+                    if (fullres.action == 'archival'){
+                        $("#td_toggle_archiv" + fullres.internal_id).attr("archiv", '1');
+                        $("#i_toggle_archiv" + fullres.internal_id).addClass('acc-archiv-true').removeClass('acc-archiv-false');
+
+                        if(!$("#checkboxMutasdAzArchivaltTagokat").is(':checked')){
+                            $("#tr_account" + fullres.internal_id).css("display", 'none');
+                        }
+                    }
+                    else if (fullres.action == 'visszavon'){
+                        $("#td_toggle_archiv" + fullres.internal_id).attr("archiv", '0');
+                        $("#i_toggle_archiv" + fullres.internal_id).addClass('acc-archiv-false').removeClass('acc-archiv-true');
+                    }
+            }
+        }
+        catch (e)
+        {
+            alert('Hiba: ' + e.message)
+        }
+    }
     function callPHPPageSetJogosultsagok(postdata)
     {
         $.post('AJAXjogosultsagok.php', postdata, HandleAJAXjogosultsagokPHPPageData).fail(
@@ -582,6 +650,22 @@ ob_start();
             adminjog: adminjog ? 1 : 0,
             muszjeljog: muszjeljog ? 1 : 0,
             pontlatjog: pontlatjog ? 1 : 0
+        });
+    }
+
+    function callPHPPageArchivalas(postdata)
+    {console.log(postdata);
+        $.post('AJAXarchivalas.php', postdata, HandleAJAXarchivalasPHPPageData).fail(
+            function ()
+            {
+                alert("Error at AJAX call!");
+            });
+    }
+    function submitArchivalas(internal_id, action)
+    {
+        callPHPPageArchivalas({
+            int_id: internal_id,
+            action: action
         });
     }
 

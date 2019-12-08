@@ -725,8 +725,10 @@ namespace Eszkozok
                             $profKi->setPontLatJog($row['pontlatjog']);
                         if (isset($row['email']))
                             $profKi->setEmail($row['email']);
-                        if (isset($row['sessin_token']))
-                            $profKi->setSessionToken($row['sessin_token']);
+                        if (isset($row['session_token']))
+                            $profKi->setSessionToken($row['session_token']);
+                        if (isset($row['archiv']))
+                            $profKi->setArchiv($row['archiv']);
 
                     } else {
                         throw new \Exception('$result->num_rows != 1');

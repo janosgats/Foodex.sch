@@ -159,6 +159,14 @@ table {
 {
     color: #3355ff;
 }
+.acc-archiv-true
+{
+    color: red;
+}
+.acc-archiv-false
+{
+    color: #3355ff;
+}
 .acc-jogosultsag-korertekelesek-true
 {
     color: #FFEE44;

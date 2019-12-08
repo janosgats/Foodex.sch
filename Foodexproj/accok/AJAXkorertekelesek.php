@@ -18,7 +18,7 @@ try
 
     $internal_id_of_Acc = $_REQUEST['int_id'];
     if (Eszkozok\Eszk::GetTaroltProfilAdat($internal_id_of_Acc) == null)
-        throw new \Exception('Nem létező felhasználót adatait próbálod módosítani!');
+        throw new \Exception('Nem létező felhasználó adatait próbálod módosítani!');
 
     $korokJogokToDelete = [];
     $korokJogokToAdd = [];

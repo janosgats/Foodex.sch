@@ -39,7 +39,7 @@ else
 
         $fullres = array();
         while( $row = $result->fetch_assoc()){
-            $fullres[] = $row; // Inside while loop
+            $fullres[] = $row;
         }
         echo json_encode($fullres);
 

@@ -7,8 +7,7 @@ require_once __DIR__ . '/../Eszkozok/Eszk.php';
 require_once __DIR__ . '/../Eszkozok/LoginValidator.php';
 
 $conn = new mysqli();
-try
-{
+try {
     \Eszkozok\LoginValidator::AdminJog_ThrowsException();
 
     if (!isset($_REQUEST['int_id']) || !isset($_REQUEST['belephet']) || !isset($_REQUEST['adminjog']) || !isset($_REQUEST['muszjeljog']) || !isset($_REQUEST['pontlatjog']) || $_REQUEST['int_id'] == '' || $_REQUEST['adminjog'] == '' || $_REQUEST['muszjeljog'] == '' || $_REQUEST['pontlatjog'] == '')
@@ -32,7 +31,13 @@ try
     if (!($pontlatjogtoset === '0' || $pontlatjogtoset === '1'))
         throw new \Exception('Hibás paraméter: $pontlatjog!');
 
-    if (($adminjogtoset === '1' || $muszjeljogtoset === '1') && (Eszkozok\Eszk::GetTaroltProfilAdat($internal_id_of_Acc)->getFxTag() != 1))
+
+    $taroltProfilAdat = Eszkozok\Eszk::GetTaroltProfilAdat($internal_id_of_Acc);
+
+    if (($belephettoset === '1') && ($taroltProfilAdat->getArchiv() != 0))
+        throw new \Exception('Archív tagoknak nem lehet belépési jogosultságot adni!');
+
+    if (($adminjogtoset === '1' || $muszjeljogtoset === '1') && ($taroltProfilAdat->getFxTag() != 1))
         throw new \Exception('Admin és Műszakjelentkezési jogosultságot csak Foodex körtagoknak lehet adni!');
 
     $conn = \Eszkozok\Eszk::initMySqliObject();
@@ -59,9 +64,7 @@ try
     echo json_encode($ki);
     $conn->close();
 
-}
-catch (\Exception $e)
-{
+} catch (\Exception $e) {
 
     $ki = Array();
     $ki['status'] = 'hiba';

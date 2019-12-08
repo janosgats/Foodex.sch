@@ -10,6 +10,7 @@ class Profil
     private $InternalID = '';
     private $Nev = '';
     private $FxTag = 0;
+    private $Archiv = 0;
     private $AdminJog = 0;
     private $MuszJelJog = 0;
     private $PontLatJog = 0;
@@ -126,5 +127,21 @@ class Profil
     public function setPontLatJog($PontLatJog)
     {
         $this->PontLatJog = $PontLatJog;
+    }
+
+    /**
+     * @return int
+     */
+    public function getArchiv(): int
+    {
+        return $this->Archiv;
+    }
+
+    /**
+     * @param int $Archiv
+     */
+    public function setArchiv(int $Archiv)
+    {
+        $this->Archiv = $Archiv;
     }
 }
