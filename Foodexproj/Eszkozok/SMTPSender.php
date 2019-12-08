@@ -85,7 +85,7 @@ class SMTPSender
             $mail = self::initPMPMailer();
             $mail->isHTML(true);
             $mail->Subject = "=?UTF-8?B?" . base64_encode('Fx test e-mail!') . "?=";
-            $mail->Body = 'This is a message with the purpose of testing mail sending functionality of foodex.sch.bme.hu.<br><br>éőűúáóüöí!\'"+';
+            $mail->Body = 'This is a message with the purpose of manually testing mail sending functionality of foodex.sch.bme.hu.<br><br>éőűúáóüöí!\'"+';
             $mail->addAddress($emailAddress);
 
 
@@ -98,13 +98,13 @@ class SMTPSender
         }
     }
 
-    public static function sendNewErtekeloJelentkezesMailToAdmins($jelentkezoNeve)
+    public static function sendNewErtekeloJelentkezesMailToAdmins($jelentkezoNeve, $jelentkezoEmailcime)
     {
         try {
             $mail = self::initPMPMailer();
             $mail->isHTML(true);
             $mail->Subject = "=?UTF-8?B?" . base64_encode('Foodex - Új jelentkezés értékelőnek') . "?=";
-            $mail->Body = "Yo!<br><br>Ez a boi értékelési jogot szeretne a foodex.sch-n: $jelentkezoNeve<br><a href='foodex.sch.bme.hu/accok'>Kattints ide<a> a jogosultságok kezeléséhez!";
+            $mail->Body = "Yo!<br><br>Ez a boi(ina) értékelési jogot szeretne a foodex.sch-n: $jelentkezoNeve ($jelentkezoEmailcime)<br><a href='foodex.sch.bme.hu/accok'>Kattints ide<a> a jogosultságok kezeléséhez!";
 
             $adminAccok = \Eszkozok\Eszk::GetAdminAccounts(true);
 

@@ -44,7 +44,10 @@ if ($reason == 'ertekelojelentkezes') {
         if ($stmt->affected_rows != 1)
             throw new Exception();
 
-        SMTPSender::sendNewErtekeloJelentkezesMailToAdmins($_SESSION['BelepesjogKero-nev']);
+        $logger = new \MonologHelper('nemkortag.php');
+        $logger->notice('Jelentkezés értékelőnek', [$_SESSION['BelepesjogKero-nev'], $_SESSION['BelepesjogKero-email']]);
+
+        SMTPSender::sendNewErtekeloJelentkezesMailToAdmins($_SESSION['BelepesjogKero-nev'], $_SESSION['BelepesjogKero-email']);
 
         $JelentkezesEredmeny = 'siker';
     }
