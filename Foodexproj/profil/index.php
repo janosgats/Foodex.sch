@@ -71,7 +71,7 @@ if (IsURLParamSet('mprof')) {
 
 <body style="background-color: #de520d">
 
-<div class="container" style="min-width: 520px">
+<div class="container">
 
     <?php
     NavBar::echonavbar('');
