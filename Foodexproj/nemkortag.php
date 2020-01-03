@@ -161,7 +161,7 @@ if ($reason == 'ertekelojelentkezes') {
                     </h1>
                     <br><br>
 
-                    <a href="mailto:foodex@sch.bme.hu" style="color: white;text-decoration:none;">
+                    <a href="mailto:cactusss09@gmail.com" style="color: white;text-decoration:none;">
                         <div class="cube flip-to-bottom">
                             <div class="default-state">
                                 <span>Csatlakozz!</span>

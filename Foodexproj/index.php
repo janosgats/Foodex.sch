@@ -47,7 +47,7 @@ if (\Eszkozok\LoginValidator::AccountSignedIn_NOEXIT())
 <script>
     function startgp()
     {
-        window.open('https://www.pornhub.com/gayporn','_blank')
+        window.open('https://www.youtube.com/watch?v=N3VtrNX5dPI','_blank')
     }
 </script>
 
