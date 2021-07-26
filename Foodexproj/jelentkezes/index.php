@@ -26,27 +26,28 @@ if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
         try {
             $conn = \Eszkozok\Eszk::initMySqliObject();
 
-            if ($conn->multi_query("SET @uids := -99;
-                                    UPDATE `fxmuszakok`
+            $IDsToActivate = [];
+
+            if(!$conn->query("SELECT ID
+                                FROM `fxmuszakok` 
+                                WHERE aktiv <> '1'")){
+                throw new Exception('Error at $conn->query()');
+            }
+
+            $IDsToActivate[] = intval($conn->store_result()->fetch_assoc()['ID']);
+            while ($conn->more_results()) {
+                $conn->next_result();
+                $IDsToActivate[] = intval($conn->store_result()->fetch_assoc()['ID']);
+            }
+
+            $implodedIdsToActivate = implode(",", $IDsToActivate);
+
+            if ($conn->query("UPDATE `fxmuszakok`
                                        SET aktiv = '1'
-                                     WHERE aktiv <> '1'
-                                       AND ( SELECT @uids := CONCAT_WS(',', id, @uids) );
-                                    SELECT @uids as modified_row_IDs;")
+                                     WHERE ID in ({$implodedIdsToActivate})")
             ) {
-                while ($conn->more_results())
-                    $conn->next_result();
-
-                $lastres = $conn->store_result();
-                $row = $lastres->fetch_assoc();
-                //var_dump($row);
-
-                $modified_row_IDs = explode(",", $row['modified_row_IDs']);
-
-                //var_dump($modified_row_IDs);
-
-                foreach ($modified_row_IDs as $rowID) {
+                foreach ($IDsToActivate as $rowID) {
                     if ((int)$rowID != -99) {
-                        // var_dump($rowID);
                         $logger->info('Műszak lett aktiválva! MUSZAKTIVAL', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), (int)$rowID]);
                         $logger->info('MUSZAKTIVAL', [(int)$rowID]);
                     }
