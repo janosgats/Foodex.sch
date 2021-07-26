@@ -28,11 +28,13 @@ if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
 
             $IDsToActivate = [];
 
+            echo 'muszakokaktival started<br>';
             if(!$conn->query("SELECT ID
                                 FROM `fxmuszakok` 
                                 WHERE aktiv <> '1'")){
                 throw new Exception('Error at $conn->query()');
             }
+            echo 'muszakokaktival first query done<br>';
 
             $IDsToActivate[] = intval($conn->store_result()->fetch_assoc()['ID']);
             while ($conn->more_results()) {
@@ -40,13 +42,19 @@ if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
                 $IDsToActivate[] = intval($conn->store_result()->fetch_assoc()['ID']);
             }
 
+            echo 'muszakokaktival first query fetched<br>';
+            var_dump($IDsToActivate);
+
             $implodedIdsToActivate = implode(",", $IDsToActivate);
+            var_dump($IDsToActivate);
 
             if ($conn->query("UPDATE `fxmuszakok`
                                        SET aktiv = '1'
                                      WHERE ID in ({$implodedIdsToActivate})")
             ) {
+                echo 'muszakokaktival second query done<br>';
                 foreach ($IDsToActivate as $rowID) {
+                    var_dump($rowID);
                     if ((int)$rowID != -99) {
                         $logger->info('Műszak lett aktiválva! MUSZAKTIVAL', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), (int)$rowID]);
                         $logger->info('MUSZAKTIVAL', [(int)$rowID]);
