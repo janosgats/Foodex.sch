@@ -22,20 +22,19 @@ doJelentkezes();
 
 if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
     if (IsURLParamSet('muszakokaktival') && GetURLParam('muszakokaktival') == 1) {
-        $conn;
+        $conn = null;
         try {
             $conn = \Eszkozok\Eszk::initMySqliObject();
-
-            $IDsToActivate = [];
 
             echo 'muszakokaktival started<br>';
             if(!$conn->query("SELECT ID
                                 FROM `fxmuszakok` 
                                 WHERE aktiv <> '1'")){
-                throw new Exception('Error at $conn->query()');
+                throw new Exception('Error in first DB query');
             }
             echo 'muszakokaktival first query done<br>';
 
+            $IDsToActivate = [];
             $IDsToActivate[] = intval($conn->store_result()->fetch_assoc()['ID']);
             while ($conn->more_results()) {
                 $conn->next_result();
@@ -43,26 +42,31 @@ if (\Eszkozok\LoginValidator::AdminJog_NOEXIT()) {
             }
 
             echo 'muszakokaktival first query fetched<br>';
+            echo 'muszakokaktival IDsToActivate count: ' . count($IDsToActivate) . '<br>';
             var_dump($IDsToActivate);
 
             $implodedIdsToActivate = implode(",", $IDsToActivate);
             var_dump($IDsToActivate);
 
-            if ($conn->query("UPDATE `fxmuszakok`
+            if(count($IDsToActivate) > 0) {
+                echo 'muszakokaktival more than 0 IDs to activate<br>';
+                if ($conn->query("UPDATE `fxmuszakok`
                                        SET aktiv = '1'
-                                     WHERE ID in ({$implodedIdsToActivate})")
-            ) {
-                echo 'muszakokaktival second query done<br>';
-                foreach ($IDsToActivate as $rowID) {
-                    var_dump($rowID);
-                    if ((int)$rowID != -99) {
-                        $logger->info('Műszak lett aktiválva! MUSZAKTIVAL', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), (int)$rowID]);
-                        $logger->info('MUSZAKTIVAL', [(int)$rowID]);
+                                       WHERE ID IN ({$implodedIdsToActivate})")
+                ) {
+                    echo 'muszakokaktival second query done<br>';
+                    foreach ($IDsToActivate as $rowID) {
+                        var_dump($rowID);
+                        if ((int)$rowID != -99) {
+                            $logger->info('Műszak lett aktiválva! MUSZAKTIVAL', [(isset($_SESSION['profilint_id'])) ? $_SESSION['profilint_id'] : 'No Internal ID', \Eszkozok\Eszk::get_client_ip_address(), (int)$rowID]);
+                            $logger->info('MUSZAKTIVAL', [(int)$rowID]);
+                        }
                     }
-                }
 
-            } else
-                throw new Exception('Error at $conn->multi_query()');
+                } else {
+                    throw new Exception('Error in second DB query');
+                }
+            }
         }
         catch (\Exception $e) {
             \Eszkozok\Eszk::dieToErrorPage('76734: ' . $e->getMessage());
